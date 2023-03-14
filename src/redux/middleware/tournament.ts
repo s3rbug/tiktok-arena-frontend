@@ -1,4 +1,4 @@
-import { tournamentApi } from "../../api/tournament"
+import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament"
 import { AppThunkType } from "../store"
 
@@ -11,7 +11,18 @@ export const getAllTournaments = (): AppThunkType => async (dispatch) => {
 			}
 		})
 		.catch((error) => {
-			//  TODO error handling
 			console.log(error)
 		})
 }
+
+export const getContest =
+	({ tournamentId, tounamentFormat }: GetContestPayloadType): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.getContest({ tournamentId, tounamentFormat })
+			.then((newContest) => {
+				if (newContest) {
+					dispatch(tournamentActions.setContest({ newContest }))
+				}
+			})
+	}

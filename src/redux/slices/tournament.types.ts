@@ -6,13 +6,13 @@ export type TournamentType = {
 }
 
 export enum TournamentFormat {
-	SINGLE_ELIMINATION = "single elimination",
+	SINGLE_ELIMINATION = "single_elimination",
 }
 
 export type TournamentSize = 8 | 16 | 32
 
 export type ContestType = {
-	ContestSize: number
+	CountMatches: number
 	Rounds: ContestRound[]
 }
 
@@ -24,12 +24,12 @@ export type ContestRound = {
 export type ContestMatch = {
 	MatchID: string
 	FirstOption: {
-		TikTokURL?: string
-		OptionID?: string
+		TiktokURL?: string
+		MatchID?: string
 	}
 	SecondOption: {
-		TikTokURL?: string
-		OptionID?: string
+		TiktokURL?: string
+		MatchID?: string
 	}
 	firstOptionChosen?: boolean
 }

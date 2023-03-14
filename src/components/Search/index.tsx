@@ -7,7 +7,7 @@ export function Search() {
 			<Input
 				borderColor={"blue.300"}
 				variant="flushed"
-				placeholder="Пошук турніру"
+				placeholder="Search tournament"
 			/>
 			<Button colorScheme="telegram">
 				<Search2Icon />

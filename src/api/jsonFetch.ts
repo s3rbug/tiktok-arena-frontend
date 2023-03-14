@@ -7,47 +7,33 @@ function urlWithPrefix(baseUrl: string, url: string) {
 
 const fetchConfig = {
 	baseUrl: "http://127.0.0.1:8000/api",
+	headers: {
+		Accept: "application/json",
+		"Content-Type": "application/json",
+	},
 }
 
+const requestTemplate = (method: "GET" | "POST" | "PUT" | "DELETE") =>
+	async function <T>(url: string, config?: RequestInit): Promise<T> {
+		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
+			...config,
+			headers: {
+				...config?.headers,
+				...fetchConfig.headers,
+			},
+			method,
+		})
+		if (!response.ok) {
+			return response.text().then((text) => {
+				throw new Error(text)
+			})
+		}
+		return await response.json()
+	}
+
 export const jsonFetch = {
-	get: async function <T>(url: string, config?: RequestInit): Promise<T> {
-		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
-			...config,
-			method: "GET",
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
-		}
-		return await response.json()
-	},
-	post: async function <T>(url: string, config?: RequestInit): Promise<T> {
-		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
-			...config,
-			method: "POST",
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
-		}
-		return await response.json()
-	},
-	put: async function <T>(url: string, config?: RequestInit): Promise<T> {
-		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
-			...config,
-			method: "PUT",
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
-		}
-		return await response.json()
-	},
-	delete: async function <T>(url: string, config?: RequestInit): Promise<T> {
-		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
-			...config,
-			method: "DELETE",
-		})
-		if (!response.ok) {
-			throw new Error(response.statusText)
-		}
-		return await response.json()
-	},
+	get: requestTemplate("GET"),
+	post: requestTemplate("POST"),
+	put: requestTemplate("PUT"),
+	delete: requestTemplate("DELETE"),
 }

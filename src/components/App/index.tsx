@@ -7,19 +7,15 @@ import {
 	AboutPage,
 	NotFoundPage,
 	TournamentPage,
+	LoginPage,
+	RegisterPage,
 } from "../../pages"
-import { getAllTournaments } from "../../redux/middleware/tournament"
-import { useTypedDispatch } from "../../redux/store"
 
 export function App() {
-	const dispatch = useTypedDispatch()
-	useEffect(() => {
-		dispatch(getAllTournaments())
-	}, [])
 	return (
 		<>
 			<Header />
-			<Box p={4}>
+			<Box>
 				<Routes>
 					<Route path="/tournaments" element={<TournamentsListPage />} />
 					<Route
@@ -27,6 +23,8 @@ export function App() {
 						element={<TournamentPage />}
 					/>
 					<Route path="/about" element={<AboutPage />} />
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/*" element={<NotFoundPage />} />
 				</Routes>
 			</Box>

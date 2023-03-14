@@ -12,7 +12,7 @@ export function TournamentCard({ id, title }: PropsType) {
 		navigate(`/tournaments/${id}`)
 	}
 	return (
-		<Card maxW="sm" outline={"2px dashed indigo"} onClick={handleClick}>
+		<Card maxW="sm" outline={"2px solid grey"} onClick={handleClick}>
 			<CardBody>
 				<Image
 					cursor="pointer"

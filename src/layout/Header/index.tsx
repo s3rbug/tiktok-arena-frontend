@@ -1,13 +1,22 @@
-import { Box, Flex, Avatar, HStack, Button } from "@chakra-ui/react"
+import { Box, Flex, HStack, Button } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
 import { useNavigate } from "react-router-dom"
+import { useTypedSelector } from "../../redux/store"
 
 export function Header() {
 	const navigate = useNavigate()
+
+	const user = useTypedSelector((state) => state.auth.user)
+
 	function handleLogoClick() {
 		navigate("/tournaments")
 	}
+
+	function handleLoginButton() {
+		navigate("/login")
+	}
+
 	return (
 		<>
 			<Box px={4}>
@@ -19,14 +28,17 @@ export function Header() {
 					</HStack>
 					<HStack spacing={12} alignItems={"center"}>
 						<Search />
-						<Button variant={"link"} cursor={"pointer"} minW={0}>
-							<Avatar
-								size="md"
-								src={
-									"https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-								}
-							/>
-						</Button>
+						{user ? (
+							<Box>{user.name}</Box>
+						) : (
+							<Button
+								onClick={handleLoginButton}
+								variant={"solid"}
+								colorScheme="blue"
+							>
+								Login
+							</Button>
+						)}
 					</HStack>
 				</Flex>
 			</Box>

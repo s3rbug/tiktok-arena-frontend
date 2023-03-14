@@ -22,12 +22,12 @@ type PropsType = {
 }
 
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
-	const tournaments = useTypedSelector(state => state.arena.tournaments)
+	const tournaments = useTypedSelector((state) => state.arena.tournaments)
 	const [tournament, setTournament] = useState<undefined | TournamentType>(
 		undefined
 	)
 	useEffect(() => {
-		const newTournament = tournaments.find(t => t.ID === tournamentId)
+		const newTournament = tournaments.find((t) => t.ID === tournamentId)
 		if (!tournament || tournament.ID !== newTournament?.ID) {
 			setTournament(newTournament)
 		}
@@ -64,7 +64,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						}}
 						colorScheme={"whatsapp"}
 					>
-						Король гори
+						Класичний з нижньою сіткою
 					</Button>
 				</CardFooter>
 			</Card>

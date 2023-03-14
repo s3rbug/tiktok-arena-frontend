@@ -3,9 +3,10 @@ import { ThunkAction } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { tournamentReducer } from "./slices/tournament"
+import { authReducer } from "./slices/auth"
 
 export const store = configureStore({
-	reducer: { arena: tournamentReducer },
+	reducer: { arena: tournamentReducer, auth: authReducer },
 })
 
 export type AppDispatchType = typeof store.dispatch
