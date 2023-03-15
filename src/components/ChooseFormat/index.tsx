@@ -1,3 +1,4 @@
+import { QuestionOutlineIcon } from "@chakra-ui/icons"
 import {
 	Box,
 	Card,
@@ -7,14 +8,15 @@ import {
 	Image,
 	Stack,
 	Button,
+	CircularProgress,
+	Flex,
+	Tooltip,
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-
-import {
-	TournamentFormat,
-	TournamentType,
-} from "../../redux/slices/tournament.types"
-import { useTypedSelector } from "../../redux/store"
+import { useEffect } from "react"
+import { getTournament } from "../../redux/middleware/tournament"
+import { TournamentFormat } from "../../redux/slices/tournament.types"
+import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import { FormatButton } from "./FormatButton"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat) => void
@@ -22,20 +24,26 @@ type PropsType = {
 }
 
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
-	const tournaments = useTypedSelector((state) => state.arena.tournaments)
-	const [tournament, setTournament] = useState<undefined | TournamentType>(
-		undefined
-	)
+	const dispatch = useTypedDispatch()
+	const tournament = useTypedSelector((state) => state.arena.tournament)
+
 	useEffect(() => {
-		const newTournament = tournaments.find((t) => t.ID === tournamentId)
-		if (!tournament || tournament.ID !== newTournament?.ID) {
-			setTournament(newTournament)
+		if (tournamentId !== tournament?.ID && tournamentId) {
+			dispatch(getTournament({ tournamentId }))
 		}
-	}, [tournaments])
+	}, [])
+
+	if (!tournament) {
+		return (
+			<Flex justifyContent={"center"} mt={8}>
+				<CircularProgress isIndeterminate color="blue.300" />
+			</Flex>
+		)
+	}
 
 	return (
 		<Box display={"flex"} justifyContent={"center"}>
-			<Card>
+			<Card p={8}>
 				<CardBody>
 					<Image
 						src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
@@ -49,24 +57,20 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						</Heading>
 					</Stack>
 				</CardBody>
-				<CardFooter display={"flex"} justifyContent={"space-around"}>
-					<Button
-						onClick={() => {
-							setFormat(TournamentFormat.SINGLE_ELIMINATION)
-						}}
-						colorScheme={"whatsapp"}
+				<Flex justifyContent={"space-around"}>
+					<FormatButton
+						format={TournamentFormat.SINGLE_ELIMINATION}
+						setFormat={setFormat}
 					>
-						Класичний
-					</Button>
-					<Button
-						onClick={() => {
-							setFormat(TournamentFormat.SINGLE_ELIMINATION)
-						}}
-						colorScheme={"whatsapp"}
+						Standart
+					</FormatButton>
+					<FormatButton
+						format={TournamentFormat.KING_OF_THE_HILL}
+						setFormat={setFormat}
 					>
-						Класичний з нижньою сіткою
-					</Button>
-				</CardFooter>
+						King of the hill
+					</FormatButton>
+				</Flex>
 			</Card>
 		</Box>
 	)

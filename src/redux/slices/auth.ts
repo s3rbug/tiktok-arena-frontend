@@ -33,6 +33,9 @@ const authSlice = createSlice({
 			const { error } = action.payload
 			state.error.register = error
 		},
+		logout: (state) => {
+			state.token = state.user = null
+		},
 	},
 })
 

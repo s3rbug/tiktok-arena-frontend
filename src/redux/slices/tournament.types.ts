@@ -1,15 +1,14 @@
 export type TournamentType = {
 	ID: string
 	Name: string
-	Size: TournamentSize
+	Size: number
 	UserId: string
 }
 
 export enum TournamentFormat {
 	SINGLE_ELIMINATION = "single_elimination",
+	KING_OF_THE_HILL = "king_of_the_hill",
 }
-
-export type TournamentSize = 8 | 16 | 32
 
 export type ContestType = {
 	CountMatches: number

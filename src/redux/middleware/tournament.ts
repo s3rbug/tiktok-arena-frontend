@@ -1,3 +1,4 @@
+import { GetTournamentPayloadType } from "./../../api/tournament"
 import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament"
 import { AppThunkType } from "../store"
@@ -24,5 +25,20 @@ export const getContest =
 				if (newContest) {
 					dispatch(tournamentActions.setContest({ newContest }))
 				}
+			})
+	}
+
+export const getTournament =
+	({ tournamentId }: GetTournamentPayloadType): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.getTournament({ tournamentId })
+			.then((tournament) => {
+				if (tournament) {
+					dispatch(tournamentActions.setTournament({ tournament }))
+				}
+			})
+			.catch(() => {
+				dispatch(tournamentActions.setTournament({ tournament: null }))
 			})
 	}

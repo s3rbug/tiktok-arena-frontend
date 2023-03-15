@@ -14,7 +14,10 @@ const fetchConfig = {
 }
 
 const requestTemplate = (method: "GET" | "POST" | "PUT" | "DELETE") =>
-	async function <T>(url: string, config?: RequestInit): Promise<T> {
+	async function <T>(
+		url: string,
+		config?: RequestInit
+	): Promise<T | undefined> {
 		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
 			...config,
 			headers: {

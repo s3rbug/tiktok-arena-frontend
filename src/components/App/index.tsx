@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import { Header } from "../../layout"
+import { localToken } from "../../localStorage/token"
 import {
 	TournamentsListPage,
 	AboutPage,
@@ -10,8 +11,17 @@ import {
 	LoginPage,
 	RegisterPage,
 } from "../../pages"
+import { whoami } from "../../redux/middleware/auth"
+import { useTypedDispatch } from "../../redux/store"
 
 export function App() {
+	const dispatch = useTypedDispatch()
+	useEffect(() => {
+		const token = localToken.getToken()
+		if (token) {
+			dispatch(whoami({ token }))
+		}
+	}, [])
 	return (
 		<>
 			<Header />

@@ -60,11 +60,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 		const winnerURL = currentMatch.firstOptionChosen
 			? currentMatch.FirstOption.TiktokURL
 			: currentMatch.SecondOption.TiktokURL
-		return (
-			<div>
-				<TikTokVideo tiktokVideoURL={winnerURL} />
-			</div>
-		)
+		return <TikTokVideo tiktokVideoURL={winnerURL} />
 	}
 
 	return (
@@ -73,7 +69,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 				<TikTokVideo tiktokVideoURL={firstTikTokURL} />
 				<Button
 					onClick={handleChooseButton(firstTikTokURL)}
-					colorScheme={"linkedin"}
+					colorScheme={"blue"}
 				>
 					Обрати
 				</Button>
@@ -82,7 +78,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 				<TikTokVideo tiktokVideoURL={secondTikTokURL} />
 				<Button
 					onClick={handleChooseButton(secondTikTokURL)}
-					colorScheme={"linkedin"}
+					colorScheme={"blue"}
 				>
 					Обрати
 				</Button>

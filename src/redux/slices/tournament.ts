@@ -13,6 +13,7 @@ const initialContestProgress: ContestProgressType = {
 
 const initialState = {
 	tournaments: [] as TournamentType[],
+	tournament: null as TournamentType | null,
 	contest: {} as ContestType,
 	contestProgress: { ...initialContestProgress } as ContestProgressType,
 }
@@ -91,6 +92,13 @@ const tournamentSlice = createSlice({
 
 			state.contestProgress.roundIndex++
 			state.contestProgress.matchIndex = 0
+		},
+		setTournament: (
+			state,
+			action: PayloadAction<{ tournament: TournamentType | null }>
+		) => {
+			const { tournament } = action.payload
+			state.tournament = tournament
 		},
 	},
 })

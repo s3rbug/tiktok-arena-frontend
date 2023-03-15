@@ -1,5 +1,5 @@
 import { SubmitHandler } from "react-hook-form"
-import { Navigate, redirect, useNavigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import { Auth } from "../../components"
 import { FormInputType } from "../../components"
 import { login } from "../../redux/middleware/auth"

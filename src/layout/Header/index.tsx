@@ -2,9 +2,12 @@ import { Box, Flex, HStack, Button } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
 import { useNavigate } from "react-router-dom"
-import { useTypedSelector } from "../../redux/store"
+import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import { authActions } from "../../redux/slices/auth"
+import { localToken } from "../../localStorage/token"
 
 export function Header() {
+	const dispatch = useTypedDispatch()
 	const navigate = useNavigate()
 
 	const user = useTypedSelector((state) => state.auth.user)
@@ -15,6 +18,11 @@ export function Header() {
 
 	function handleLoginButton() {
 		navigate("/login")
+	}
+
+	function handleLogout() {
+		localToken.clearToken()
+		dispatch(authActions.logout())
 	}
 
 	return (
@@ -29,7 +37,12 @@ export function Header() {
 					<HStack spacing={12} alignItems={"center"}>
 						<Search />
 						{user ? (
-							<Box>{user.name}</Box>
+							<Flex alignItems={"center"} gap={8}>
+								<Box>{user.name}</Box>
+								<Button onClick={handleLogout} colorScheme={"blue"}>
+									Logout
+								</Button>
+							</Flex>
 						) : (
 							<Button
 								onClick={handleLoginButton}
