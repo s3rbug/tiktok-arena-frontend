@@ -17,6 +17,7 @@ export function TikTokVideo({ url, minWidth }: PropsType) {
 
 	return (
 		<iframe
+			title="tiktok"
 			src={TiktokUrl.toEmbeded(url)}
 			style={{
 				width: "100%",

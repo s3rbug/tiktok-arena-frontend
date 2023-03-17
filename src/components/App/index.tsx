@@ -22,7 +22,7 @@ export function App() {
 		if (token) {
 			dispatch(whoami({ token }))
 		}
-	}, [])
+	}, [dispatch])
 	return (
 		<>
 			<Header />

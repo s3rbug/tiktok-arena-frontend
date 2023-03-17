@@ -18,7 +18,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 		if (tournamentId) {
 			dispatch(getContest({ tournamentId, tounamentFormat: format }))
 		}
-	}, [])
+	}, [dispatch, format, tournamentId])
 
 	const contestProgress = useTypedSelector(
 		(state) => state.arena.contestProgress
@@ -63,7 +63,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 	return (
 		<HStack justifyContent={"space-evenly"} p={0}>
 			<VStack alignItems="stretch">
-				<TikTokVideo url={firstTikTokURL} />
+				<TikTokVideo minWidth url={firstTikTokURL} />
 				<Button
 					onClick={handleChooseButton(firstTikTokURL)}
 					colorScheme={"blue"}
@@ -72,7 +72,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 				</Button>
 			</VStack>
 			<VStack alignItems="stretch">
-				<TikTokVideo url={secondTikTokURL} />
+				<TikTokVideo minWidth url={secondTikTokURL} />
 				<Button
 					onClick={handleChooseButton(secondTikTokURL)}
 					colorScheme={"blue"}

@@ -3,13 +3,12 @@ import {
 	Button,
 	CircularProgress,
 	Flex,
+	FormControl,
+	FormErrorMessage,
 	Input,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
 	useToast,
 } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
 	useFieldArray,
 	useForm,
@@ -18,13 +17,13 @@ import {
 	ControllerRenderProps,
 } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { TikTokVideo } from "../../components"
 import { TiktokUrl } from "../../components/TikTokVideo/TikTokUrl"
 import { useAuth } from "../../hooks/useAuth"
 import { createTournament } from "../../redux/middleware/tournament"
 import { CreateTournamentType } from "../../redux/slices/tournament/tournament.types"
 import { uiActions } from "../../redux/slices/ui/ui"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import { TournamentFields } from "./TournamentFields"
 
 export function CreateTournamentPage() {
 	const [minTiktoksCount, maxTiktoksCount] = [4, 64]
@@ -33,7 +32,6 @@ export function CreateTournamentPage() {
 	const {
 		control,
 		handleSubmit,
-		setError,
 		formState: { errors },
 	} = useForm<CreateTournamentType>({
 		defaultValues: {
@@ -52,25 +50,39 @@ export function CreateTournamentPage() {
 		name: "tiktoks",
 	})
 
+	const [errorUnique, setErrorUnique] = useState<null | string>(null)
+
 	const dispatch = useTypedDispatch()
 
 	const toast = useToast()
 
 	const navigate = useNavigate()
 
-	const uiError = useTypedSelector((state) => state.ui.errors?.createTournament)
+	const serverError = useTypedSelector(
+		(state) => state.ui.errors?.createTournament
+	)
+
 	const success = useTypedSelector(
 		(state) => state.ui.success?.createTournament
 	)
 
 	const user = useAuth()
 
+	const clearErrors = useCallback(() => {
+		dispatch(uiActions.setSuccess({ success: { createTournament: null } }))
+		dispatch(uiActions.setError({ errors: { createTournament: null } }))
+		setErrorUnique(null)
+	}, [dispatch])
+
 	useEffect(() => {
 		if (success) {
-			dispatch(uiActions.setSuccess({ success: { createTournament: null } }))
+			clearErrors()
 			navigate("/tournaments")
 		}
-	}, [success])
+		return () => {
+			clearErrors()
+		}
+	}, [success, dispatch, navigate, clearErrors])
 
 	if (!user) {
 		return <CircularProgress isIndeterminate />
@@ -91,8 +103,7 @@ export function CreateTournamentPage() {
 		event: React.FormEvent<HTMLInputElement>,
 		field: ControllerRenderProps<CreateTournamentType, `tiktoks.${number}.url`>
 	) {
-		setError("root.unique", {})
-		dispatch(uiActions.setError({ errors: { createTournament: null } }))
+		clearErrors()
 
 		return field.onChange(event)
 	}
@@ -103,11 +114,10 @@ export function CreateTournamentPage() {
 		)
 
 		if (uniqueValues.size !== fields.length) {
-			setError("root.unique", {
-				type: "duplicate",
-				message: "Duplicate tiktoks",
-			})
+			setErrorUnique("Duplicate tiktoks")
 		} else {
+			clearErrors()
+
 			dispatch(
 				createTournament({
 					...data,
@@ -142,7 +152,12 @@ export function CreateTournamentPage() {
 	return (
 		<Box p={8}>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Flex flexDirection={"column"} gap={4}>
+				<FormControl
+					isInvalid={!!serverError || !!errorUnique}
+					display={"flex"}
+					flexDirection={"column"}
+					gap={4}
+				>
 					<Flex flexDirection="column">
 						<Controller
 							name={"name"}
@@ -169,81 +184,20 @@ export function CreateTournamentPage() {
 							)}
 						/>
 						{!!errors?.name && (
-							<Box pl={6} color="red.500">
-								{errors?.name?.message}
-							</Box>
+							<FormErrorMessage>{errors?.name?.message}</FormErrorMessage>
 						)}
 					</Flex>
-					{fields.map((field, index) => {
-						return (
-							<Flex key={field.id} gap={4}>
-								<Flex w={"100%"} flexDirection="column">
-									<Controller
-										name={`tiktoks.${index}.url`}
-										control={control}
-										rules={{
-											required: "TikTok URL is required",
-											validate: {
-												correctTikTokUrl: (value) =>
-													TiktokUrl.isCorrectUrl(value) ||
-													"Incorrect TikTok URL",
-											},
-										}}
-										render={({ field }) => (
-											<Input
-												tabIndex={index + 2}
-												isInvalid={!!errors?.tiktoks?.[index]?.url}
-												errorBorderColor="crimson"
-												placeholder="TikTok URL"
-												{...field}
-												onChange={(e) => customOnChange(e, field)}
-											/>
-										)}
-									/>
-									{!!errors?.tiktoks?.[index]?.url && (
-										<Box pl={6} color="red.500">
-											{errors?.tiktoks?.[index]?.url?.message}
-										</Box>
-									)}
-								</Flex>
-								<Popover placement="left" isLazy closeOnBlur={false}>
-									{({ isOpen }) => (
-										<>
-											<PopoverTrigger>
-												<Button
-													variant={"outline"}
-													colorScheme={"blue"}
-													w={"100px"}
-												>
-													{isOpen ? "Close" : "Preview"}
-												</Button>
-											</PopoverTrigger>
-											<PopoverContent>
-												<TikTokVideo url={tiktoks[index]?.url} />
-											</PopoverContent>
-										</>
-									)}
-								</Popover>
-								<Button
-									onClick={() => handleDeleteTiktok(index)}
-									colorScheme={"blue"}
-								>
-									Delete
-								</Button>
-							</Flex>
-						)
-					})}
-					{!!errors?.root?.unique && (
-						<Box pl={6} color="red.500">
-							{errors?.root?.unique?.message}
-						</Box>
-					)}
-					{!!uiError && (
-						<Box pl={6} color="red.500">
-							{uiError}
-						</Box>
-					)}
-				</Flex>
+					<TournamentFields
+						control={control}
+						customOnChange={customOnChange}
+						errors={errors}
+						fields={fields}
+						handleDeleteTiktok={handleDeleteTiktok}
+						tiktoks={tiktoks}
+					/>
+					{!!errorUnique && <FormErrorMessage>{errorUnique}</FormErrorMessage>}
+					{!!serverError && <FormErrorMessage>{serverError}</FormErrorMessage>}
+				</FormControl>
 				<Flex justifyContent={"space-between"} align="flex-start" mt={6}>
 					<Button type="submit" colorScheme={"blue"}>
 						Create tournament

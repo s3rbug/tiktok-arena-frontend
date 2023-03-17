@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom"
 import { UserType } from "../redux/slices/auth/auth.types"
 import { useTypedSelector } from "./../redux/store"
 

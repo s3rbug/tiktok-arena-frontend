@@ -4,22 +4,20 @@ import {
 	Flex,
 	FormControl,
 	FormErrorMessage,
-	FormLabel,
 	Heading,
-	IconButton,
-	Input,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { useForm, Controller, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { authActions } from "../../redux/slices/auth/auth"
 import { uiActions } from "../../redux/slices/ui/ui"
+import { AuthInput } from "./AuthInput"
+import { AuthRedirectButton } from "./AuthRedirectButton"
 
 export type FormInputType = {
 	name: string
 	password: string
+	confirmPassword?: string
 }
 
 type PropsType = {
@@ -33,16 +31,17 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 	const [passwordMinLength, passwordMaxLength] = [5, 16]
 
 	const [focus, setFocus] = useState(false)
-	const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
 	const {
 		control,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
 			name: "",
 			password: "",
+			confirmPassword: "",
 		} as FormInputType,
 	})
 
@@ -66,14 +65,14 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 		navigate("/register")
 	}
 
+	const handleLoginButton = () => {
+		navigate("/login")
+	}
+
 	const changeFocus = (newFocus: boolean) => {
 		return () => {
 			setFocus(newFocus)
 		}
-	}
-
-	const togglePasswordHidden = () => {
-		setIsPasswordHidden(!isPasswordHidden)
 	}
 
 	return (
@@ -88,96 +87,58 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 					boxShadow: "2xl",
 				}}
 			>
-				<Box textAlign="center" py={4}>
+				<Box textAlign="center" py={6}>
 					<Heading size={"xl"}>{title}</Heading>
 				</Box>
 				<Box as="form" p={8} onSubmit={handleSubmit(onSubmit)}>
-					<FormControl isRequired isInvalid={!!errors.name}>
-						<FormLabel>Username</FormLabel>
-						<Controller
-							name="name"
+					<AuthInput
+						title="Username"
+						name="name"
+						changeFocus={changeFocus}
+						clearAuthError={clearAuthError}
+						control={control}
+						maxLength={usernameMaxLength}
+						minLength={usernameMinLength}
+						error={errors?.name}
+					/>
+					<AuthInput
+						title="Password"
+						name="password"
+						changeFocus={changeFocus}
+						clearAuthError={clearAuthError}
+						control={control}
+						maxLength={passwordMaxLength}
+						minLength={passwordMinLength}
+						error={errors?.password}
+						isPassword
+					/>
+					{isRegister && (
+						<AuthInput
+							title="Confirm password"
+							name="confirmPassword"
+							changeFocus={changeFocus}
+							clearAuthError={clearAuthError}
 							control={control}
-							rules={{
-								required: "Username is required",
-								minLength: {
-									value: usernameMinLength,
-									message: `Minimum username length is ${usernameMinLength}`,
-								},
-								maxLength: {
-									value: usernameMaxLength,
-									message: `Maximum username length is ${usernameMaxLength}`,
-								},
-							}}
-							render={({ field }) => (
-								<Input
-									{...field}
-									onBlur={changeFocus(false)}
-									onFocus={changeFocus(true)}
-									onChange={(e) => {
-										clearAuthError()
-
-										return field.onChange(e)
-									}}
-								/>
-							)}
+							maxLength={passwordMaxLength}
+							minLength={passwordMinLength}
+							error={errors?.confirmPassword}
+							watch={watch}
+							isPassword
 						/>
-						<FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-					</FormControl>
-					<FormControl isRequired isInvalid={!!errors.password}>
-						<FormLabel mt={4}>Password</FormLabel>
-						<Flex>
-							<Controller
-								name={"password"}
-								control={control}
-								rules={{
-									required: "Password is required",
-									minLength: {
-										value: passwordMinLength,
-										message: `Minimum password length is ${passwordMinLength}`,
-									},
-									maxLength: {
-										value: passwordMaxLength,
-										message: `Maximum password length is ${passwordMaxLength}`,
-									},
-								}}
-								render={({ field }) => (
-									<Input
-										{...field}
-										type={isPasswordHidden ? "password" : "text"}
-										onBlur={changeFocus(false)}
-										onFocus={changeFocus(true)}
-										onChange={(e) => {
-											clearAuthError()
-
-											return field.onChange(e)
-										}}
-									/>
-								)}
-							/>
-							<IconButton
-								aria-label="view icon"
-								icon={isPasswordHidden ? <ViewOffIcon /> : <ViewIcon />}
-								onClick={togglePasswordHidden}
-							/>
-						</Flex>
-						<FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-					</FormControl>
+					)}
 					<FormControl isInvalid={!!authErrorMessage}>
 						<FormErrorMessage>{authErrorMessage}</FormErrorMessage>
-						<Button width="full" mt={8} type="submit" colorScheme={"blue"}>
+						<Button width="full" mt={6} type="submit" colorScheme={"blue"}>
 							{title}
 						</Button>
 					</FormControl>
-					{!isRegister && (
-						<Flex justify={"center"} mt={4}>
-							<Button
-								onClick={handleRegisterButton}
-								variant="link"
-								colorScheme={"blue"}
-							>
-								Register
-							</Button>
-						</Flex>
+					{isRegister ? (
+						<AuthRedirectButton handleClick={handleLoginButton} title="Login" />
+					) : (
+						<AuthRedirectButton
+							handleClick={handleRegisterButton}
+							title="Register"
+						/>
 					)}
 				</Box>
 			</Box>

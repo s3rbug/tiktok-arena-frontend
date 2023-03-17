@@ -1,16 +1,12 @@
-import { QuestionOutlineIcon } from "@chakra-ui/icons"
 import {
 	Box,
 	Card,
 	CardBody,
-	CardFooter,
 	Heading,
 	Image,
 	Stack,
-	Button,
 	CircularProgress,
 	Flex,
-	Tooltip,
 } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
@@ -31,7 +27,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 		if (tournamentId !== tournament?.ID && tournamentId) {
 			dispatch(getTournament({ tournamentId }))
 		}
-	}, [])
+	}, [dispatch, tournament?.ID, tournamentId])
 
 	if (!tournament) {
 		return (
