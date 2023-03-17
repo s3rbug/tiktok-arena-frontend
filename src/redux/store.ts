@@ -1,12 +1,13 @@
+import { uiReducer } from "./slices/ui/ui"
 import { AnyAction } from "redux"
 import { ThunkAction } from "redux-thunk"
 import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
-import { tournamentReducer } from "./slices/tournament"
-import { authReducer } from "./slices/auth"
+import { tournamentReducer } from "./slices/tournament/tournament"
+import { authReducer } from "./slices/auth/auth"
 
 export const store = configureStore({
-	reducer: { arena: tournamentReducer, auth: authReducer },
+	reducer: { arena: tournamentReducer, auth: authReducer, ui: uiReducer },
 })
 
 export type AppDispatchType = typeof store.dispatch

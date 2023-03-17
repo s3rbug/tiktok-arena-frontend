@@ -1,13 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { UserType, AuthErrorType } from "./auth.types"
+import { UserType } from "./auth.types"
 
 const initialState = {
 	token: null as null | string,
 	user: null as UserType,
-	error: {
-		login: null,
-		register: null,
-	} as AuthErrorType,
 }
 
 const authSlice = createSlice({
@@ -21,17 +17,6 @@ const authSlice = createSlice({
 		setUser: (state, action: PayloadAction<{ user: UserType }>) => {
 			const { user } = action.payload
 			state.user = user
-		},
-		setLoginError: (state, action: PayloadAction<{ error: string | null }>) => {
-			const { error } = action.payload
-			state.error.login = error
-		},
-		setRegisterError: (
-			state,
-			action: PayloadAction<{ error: string | null }>
-		) => {
-			const { error } = action.payload
-			state.error.register = error
 		},
 		logout: (state) => {
 			state.token = state.user = null

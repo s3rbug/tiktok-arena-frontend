@@ -1,4 +1,4 @@
-import { UserAuthDetailsType } from "../redux/slices/auth.types"
+import { UserAuthDetailsType } from "../redux/slices/auth/auth.types"
 import { jsonFetch } from "./jsonFetch"
 
 export type LoginPayloadType = {
@@ -6,7 +6,7 @@ export type LoginPayloadType = {
 	password: string
 }
 
-export type WhoamiPayloadType = {
+export type AuthPayloadType = {
 	token: string
 }
 
@@ -19,7 +19,7 @@ export const authApi = {
 			}),
 		})
 	},
-	whoami: async ({ token }: WhoamiPayloadType) => {
+	whoami: async ({ token }: AuthPayloadType) => {
 		return jsonFetch.get<UserAuthDetailsType>("/auth/whoami", {
 			headers: {
 				Authorization: `Bearer ${token}`,

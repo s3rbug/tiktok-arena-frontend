@@ -1,11 +1,8 @@
-import {
-	ContestType,
-	TournamentFormat,
-} from "../../redux/slices/tournament.types"
+import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { TikTokVideo } from "../"
-import { Box, Button, CircularProgress, HStack, VStack } from "@chakra-ui/react"
+import { Button, CircularProgress, HStack, VStack } from "@chakra-ui/react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { tournamentActions } from "../../redux/slices/tournament"
+import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useEffect } from "react"
 import { getContest } from "../../redux/middleware/tournament"
 
@@ -60,13 +57,13 @@ export function Arena({ tournamentId, format }: PropsType) {
 		const winnerURL = currentMatch.firstOptionChosen
 			? currentMatch.FirstOption.TiktokURL
 			: currentMatch.SecondOption.TiktokURL
-		return <TikTokVideo tiktokVideoURL={winnerURL} />
+		return <TikTokVideo url={winnerURL} />
 	}
 
 	return (
 		<HStack justifyContent={"space-evenly"} p={0}>
 			<VStack alignItems="stretch">
-				<TikTokVideo tiktokVideoURL={firstTikTokURL} />
+				<TikTokVideo url={firstTikTokURL} />
 				<Button
 					onClick={handleChooseButton(firstTikTokURL)}
 					colorScheme={"blue"}
@@ -75,7 +72,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 				</Button>
 			</VStack>
 			<VStack alignItems="stretch">
-				<TikTokVideo tiktokVideoURL={secondTikTokURL} />
+				<TikTokVideo url={secondTikTokURL} />
 				<Button
 					onClick={handleChooseButton(secondTikTokURL)}
 					colorScheme={"blue"}

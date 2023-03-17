@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
-import { TournamentFormat } from "../../redux/slices/tournament.types"
+import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { FormatButton } from "./FormatButton"
 
@@ -47,7 +47,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 				<CardBody>
 					<Image
 						src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-						alt="Green double couch with wooden legs"
+						alt="Tournament"
 						borderRadius="lg"
 						maxH="md"
 					/>

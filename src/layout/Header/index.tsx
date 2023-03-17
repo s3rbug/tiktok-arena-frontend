@@ -1,16 +1,27 @@
-import { Box, Flex, HStack, Button } from "@chakra-ui/react"
+import {
+	Box,
+	Flex,
+	HStack,
+	Button,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	Avatar,
+} from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
-import { useNavigate } from "react-router-dom"
-import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { authActions } from "../../redux/slices/auth"
+import { Link, useNavigate } from "react-router-dom"
+import { useTypedDispatch } from "../../redux/store"
+import { authActions } from "../../redux/slices/auth/auth"
 import { localToken } from "../../localStorage/token"
+import { useAuth } from "../../hooks/useAuth"
 
 export function Header() {
 	const dispatch = useTypedDispatch()
 	const navigate = useNavigate()
 
-	const user = useTypedSelector((state) => state.auth.user)
+	const user = useAuth()
 
 	function handleLogoClick() {
 		navigate("/tournaments")
@@ -25,24 +36,46 @@ export function Header() {
 		dispatch(authActions.logout())
 	}
 
+	function handleCreateTournament() {
+		navigate("/user/create")
+	}
+
+	function handleProfile() {
+		navigate("/user")
+	}
+
 	return (
 		<>
 			<Box px={4}>
 				<Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
 					<HStack spacing={8} alignItems={"center"}>
 						<Box cursor={"pointer"}>
-							<img src={LogoSvg} alt="logo" onClick={handleLogoClick} />
+							<Link replace to="/tournaments">
+								<img src={LogoSvg} alt="logo" onClick={handleLogoClick} />
+							</Link>
 						</Box>
 					</HStack>
 					<HStack spacing={12} alignItems={"center"}>
 						<Search />
 						{user ? (
-							<Flex alignItems={"center"} gap={8}>
-								<Box>{user.name}</Box>
-								<Button onClick={handleLogout} colorScheme={"blue"}>
-									Logout
-								</Button>
-							</Flex>
+							<Box>
+								<Menu>
+									{() => (
+										<>
+											<MenuButton>
+												<Avatar src="https://bit.ly/kent-c-dodds" />
+											</MenuButton>
+											<MenuList>
+												<MenuItem onClick={handleProfile}>My profile</MenuItem>
+												<MenuItem onClick={handleCreateTournament}>
+													Create tournament
+												</MenuItem>
+												<MenuItem onClick={handleLogout}>Logout</MenuItem>
+											</MenuList>
+										</>
+									)}
+								</Menu>
+							</Box>
 						) : (
 							<Button
 								onClick={handleLoginButton}

@@ -1,8 +1,9 @@
+import { uiActions } from "./../slices/ui/ui"
 import { AppThunkType } from "./../store"
-import { WhoamiPayloadType } from "./../../api/auth"
-import { UserType } from "./../slices/auth.types"
+import { AuthPayloadType } from "./../../api/auth"
+import { UserType } from "../slices/auth/auth.types"
 import { authApi, LoginPayloadType } from "../../api/auth"
-import { authActions } from "../slices/auth"
+import { authActions } from "../slices/auth/auth"
 import { localToken } from "../../localStorage/token"
 
 export const login =
@@ -28,17 +29,17 @@ export const login =
 				const message: string | undefined = JSON.parse(error.message)?.message
 
 				if (message) {
-					dispatch(authActions.setLoginError({ error: message }))
+					dispatch(uiActions.setError({ errors: { login: message } }))
 				} else {
 					dispatch(
-						authActions.setLoginError({ error: "Server connection error" })
+						uiActions.setError({ errors: { login: "Server connection error" } })
 					)
 				}
 			})
 	}
 
 export const whoami =
-	({ token }: WhoamiPayloadType): AppThunkType =>
+	({ token }: AuthPayloadType): AppThunkType =>
 	async (dispatch) => {
 		return authApi
 			.whoami({ token })
@@ -57,6 +58,5 @@ export const whoami =
 			})
 			.catch((error) => {
 				localToken.clearToken()
-				console.log(error)
 			})
 	}

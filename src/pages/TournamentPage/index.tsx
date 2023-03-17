@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { ChooseFormat, Arena } from "../../components"
-import { TournamentFormat } from "../../redux/slices/tournament.types"
+import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 
 export function TournamentPage() {
 	const { tournamentId } = useParams()

@@ -38,3 +38,10 @@ export type ContestProgressType = {
 	matchIndex: number
 	isContestOver: boolean
 }
+
+export type CreateTournamentType = {
+	name: string
+	tiktoks: {
+		url: string
+	}[]
+}

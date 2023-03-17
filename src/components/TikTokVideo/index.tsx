@@ -1,26 +1,28 @@
+import { Box } from "@chakra-ui/react"
+import { TiktokUrl } from "./TikTokUrl"
+
 type PropsType = {
-	tiktokVideoURL?: string
+	url?: string
+	minWidth?: boolean
 }
 
-export function TikTokVideo({ tiktokVideoURL }: PropsType) {
-	function isIncorrectURL(url: string): boolean {
-		const regex = /^https:\/\/www\.tiktok\.com\/embed\/v2\/[0-9]+$/gm
-		return !regex.test(url)
+export function TikTokVideo({ url, minWidth }: PropsType) {
+	if (!url) {
+		return <Box p={2}>No url given</Box>
 	}
 
-	if (!tiktokVideoURL) {
-		return <div>No url given</div>
-	}
-
-	if (isIncorrectURL(tiktokVideoURL)) {
-		return <div>Incorrect tiktok URL</div>
+	if (!TiktokUrl.isCorrectUrl(url)) {
+		return <Box p={2}>Incorrect tiktok URL</Box>
 	}
 
 	return (
 		<iframe
-			src={tiktokVideoURL}
-			width="100%"
-			height="770px"
+			src={TiktokUrl.toEmbeded(url)}
+			style={{
+				width: "100%",
+				height: "770px",
+				minWidth: minWidth ? "400px" : "auto",
+			}}
 			allowFullScreen
 			allow="accelerometer; autoplay; encrypted-media; gyroscope"
 		/>

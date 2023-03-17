@@ -10,6 +10,7 @@ import {
 	TournamentPage,
 	LoginPage,
 	RegisterPage,
+	CreateTournamentPage,
 } from "../../pages"
 import { whoami } from "../../redux/middleware/auth"
 import { useTypedDispatch } from "../../redux/store"
@@ -35,6 +36,7 @@ export function App() {
 					<Route path="/about" element={<AboutPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/user/create" element={<CreateTournamentPage />} />
 					<Route path="/*" element={<NotFoundPage />} />
 				</Routes>
 			</Box>

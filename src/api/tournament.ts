@@ -2,7 +2,7 @@ import {
 	TournamentType,
 	ContestType,
 	TournamentFormat,
-} from "./../redux/slices/tournament.types"
+} from "../redux/slices/tournament/tournament.types"
 import { jsonFetch } from "./jsonFetch"
 
 export type GetContestPayloadType = {
@@ -12,6 +12,14 @@ export type GetContestPayloadType = {
 
 export type GetTournamentPayloadType = {
 	tournamentId: string
+}
+
+export type CreateTournamentPayloadType = {
+	name: string
+	size: number
+	tiktoks: {
+		url: string
+	}[]
 }
 
 export const tournamentApi = {
@@ -28,5 +36,16 @@ export const tournamentApi = {
 	},
 	getTournament: async function ({ tournamentId }: GetTournamentPayloadType) {
 		return jsonFetch.get<TournamentType>(`/tournament/${tournamentId}`)
+	},
+	createTournament: async function (
+		data: CreateTournamentPayloadType,
+		token: string | null
+	) {
+		return jsonFetch.post("/tournament", {
+			body: JSON.stringify(data),
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
 	},
 }

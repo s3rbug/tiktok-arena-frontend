@@ -9,7 +9,7 @@ export type UserAuthDetailsType = {
 	Token: string
 }
 
-export type AuthErrorType = {
-	login: null | string
-	register: null | string
-}
+// export type AuthErrorType = {
+// 	login: null | string
+// 	register: null | string
+// }

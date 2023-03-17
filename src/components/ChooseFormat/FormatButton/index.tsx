@@ -1,7 +1,7 @@
 import { QuestionOutlineIcon } from "@chakra-ui/icons"
 import { Box, Button, Tooltip } from "@chakra-ui/react"
 import { ReactNode } from "react"
-import { TournamentFormat } from "../../../redux/slices/tournament.types"
+import { TournamentFormat } from "../../../redux/slices/tournament/tournament.types"
 
 type PropsType = {
 	format: TournamentFormat

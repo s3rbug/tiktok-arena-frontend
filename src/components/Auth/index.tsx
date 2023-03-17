@@ -14,7 +14,8 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { authActions } from "../../redux/slices/auth"
+import { authActions } from "../../redux/slices/auth/auth"
+import { uiActions } from "../../redux/slices/ui/ui"
 
 export type FormInputType = {
 	name: string
@@ -38,7 +39,6 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 		control,
 		handleSubmit,
 		formState: { errors },
-		setError,
 	} = useForm({
 		defaultValues: {
 			name: "",
@@ -46,19 +46,19 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 		} as FormInputType,
 	})
 
-	const authError = useTypedSelector((state) => state.auth.error)
-	const authErrorMessage: string | null = isRegister
-		? authError.register
-		: authError.login
+	const uiErrors = useTypedSelector((state) => state.ui.errors)
+	const authErrorMessage: string | null | undefined = isRegister
+		? uiErrors?.register
+		: uiErrors?.login
 
 	const dispatch = useTypedDispatch()
 	const navigate = useNavigate()
 
 	const clearAuthError = () => {
 		if (isRegister && authErrorMessage) {
-			dispatch(authActions.setRegisterError({ error: null }))
+			dispatch(uiActions.setError({ errors: { register: null } }))
 		} else {
-			dispatch(authActions.setLoginError({ error: null }))
+			dispatch(uiActions.setError({ errors: { login: null } }))
 		}
 	}
 
