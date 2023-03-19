@@ -3,6 +3,7 @@ export type TournamentType = {
 	Name: string
 	Size: number
 	UserId: string
+	checked?: boolean
 }
 
 export enum TournamentFormat {

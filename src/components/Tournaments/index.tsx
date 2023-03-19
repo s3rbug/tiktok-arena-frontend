@@ -1,19 +1,28 @@
 import { Grid, GridItem } from "@chakra-ui/react"
-import { useTypedSelector } from "../../redux/store"
+import { TournamentType } from "../../redux/slices/tournament/tournament.types"
 import { TournamentCard } from "./TournamentCard"
 
-export function Tournaments() {
-	const tournaments = useTypedSelector((state) => state.arena.tournaments)
+type PropsType = {
+	tournaments: TournamentType[] | null
+	editable?: boolean
+}
 
+export function Tournaments({ tournaments, editable }: PropsType) {
 	return (
-		<Grid templateColumns="repeat(4, 1fr)" gap={6} p={6}>
-			{tournaments.map((tournament) => {
-				return (
-					<GridItem key={tournament.ID}>
-						<TournamentCard id={tournament.ID} title={tournament.Name} />
-					</GridItem>
-				)
-			})}
+		<Grid templateColumns="repeat(4, 1fr)" gap={6}>
+			{tournaments &&
+				tournaments.map((tournament) => {
+					return (
+						<GridItem key={tournament.ID}>
+							<TournamentCard
+								id={tournament.ID}
+								title={tournament.Name}
+								editable={editable}
+								checked={tournament?.checked}
+							/>
+						</GridItem>
+					)
+				})}
 		</Grid>
 	)
 }

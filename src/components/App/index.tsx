@@ -12,17 +12,20 @@ import {
 	RegisterPage,
 	CreateTournamentPage,
 } from "../../pages"
+import { ProfilePage } from "../../pages/ProfilePage"
 import { whoami } from "../../redux/middleware/auth"
 import { useTypedDispatch } from "../../redux/store"
 
 export function App() {
 	const dispatch = useTypedDispatch()
+
 	useEffect(() => {
 		const token = localToken.getToken()
 		if (token) {
 			dispatch(whoami({ token }))
 		}
 	}, [dispatch])
+
 	return (
 		<>
 			<Header />
@@ -36,6 +39,7 @@ export function App() {
 					<Route path="/about" element={<AboutPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/user" element={<ProfilePage />} />
 					<Route path="/user/create" element={<CreateTournamentPage />} />
 					<Route path="/*" element={<NotFoundPage />} />
 				</Routes>

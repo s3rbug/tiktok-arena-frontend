@@ -14,6 +14,7 @@ const initialContestProgress: ContestProgressType = {
 const initialState = {
 	tournaments: [] as TournamentType[],
 	tournament: null as TournamentType | null,
+	userTournaments: null as TournamentType[] | null,
 	contest: {} as ContestType,
 	contestProgress: { ...initialContestProgress } as ContestProgressType,
 }
@@ -29,11 +30,35 @@ const tournamentSlice = createSlice({
 			const { newTounaments } = action.payload
 			state.tournaments = newTounaments
 		},
+		setUserTournaments(
+			state,
+			action: PayloadAction<{ tournaments: TournamentType[] }>
+		) {
+			const { tournaments } = action.payload
+			state.userTournaments = tournaments.map((tournament) => ({
+				...tournament,
+				checked: false,
+			}))
+		},
 		setContest(state, action: PayloadAction<{ newContest: ContestType }>) {
 			const { newContest } = action.payload
 			state.contestProgress = { ...initialContestProgress }
 
 			state.contest = newContest
+		},
+		setChecked(
+			state,
+			action: PayloadAction<{ tournamentId: string; checked: boolean }>
+		) {
+			const { tournamentId, checked } = action.payload
+
+			if (state.userTournaments) {
+				state.userTournaments = state.userTournaments.map((tournament) => ({
+					...tournament,
+					checked:
+						tournament.ID === tournamentId ? checked : tournament.checked,
+				}))
+			}
 		},
 		contestChoiceMade(state, action: PayloadAction<{ winnerURL: string }>) {
 			const { winnerURL } = action.payload

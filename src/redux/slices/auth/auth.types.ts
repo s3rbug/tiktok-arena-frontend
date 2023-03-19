@@ -1,6 +1,7 @@
 export type UserType = {
 	id: string
 	name: string
+	token: null | string
 } | null
 
 export type UserAuthDetailsType = {
@@ -8,8 +9,3 @@ export type UserAuthDetailsType = {
 	Username: string
 	Token: string
 }
-
-// export type AuthErrorType = {
-// 	login: null | string
-// 	register: null | string
-// }

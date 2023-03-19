@@ -5,6 +5,7 @@ import { UserType } from "../slices/auth/auth.types"
 import { authApi, AuthPayloadType } from "../../api/auth"
 import { authActions } from "../slices/auth/auth"
 import { localToken } from "../../localStorage/token"
+import { getErrorMessage } from "../../api/jsonFetch"
 
 export const login =
 	({ name, password }: AuthPayloadType): AppThunkType =>
@@ -18,15 +19,15 @@ export const login =
 							user: {
 								id: userDetails.ID,
 								name: userDetails.Username,
+								token: userDetails.Token,
 							} as UserType,
-							token: userDetails.Token,
 						})
 					)
 					localToken.setToken(userDetails.Token)
 				}
 			})
 			.catch((error: Error) => {
-				const message: string | undefined = JSON.parse(error.message)?.message
+				const message = getErrorMessage(error)
 
 				if (message) {
 					dispatch(uiActions.setError({ errors: { login: message } }))
@@ -50,15 +51,15 @@ export const register =
 							user: {
 								id: userDetails.ID,
 								name: userDetails.Username,
+								token: userDetails.Token,
 							} as UserType,
-							token: userDetails.Token,
 						})
 					)
 					localToken.setToken(userDetails.Token)
 				}
 			})
 			.catch((error: Error) => {
-				const message: string | undefined = JSON.parse(error.message)?.message
+				const message = getErrorMessage(error)
 
 				if (message) {
 					dispatch(uiActions.setError({ errors: { register: message } }))
@@ -84,8 +85,8 @@ export const whoami =
 							user: {
 								id: userDetails.ID,
 								name: userDetails.Username,
+								token: userDetails.Token,
 							} as UserType,
-							token: userDetails.Token,
 						})
 					)
 				}

@@ -2,10 +2,12 @@ import { uiActions } from "./../slices/ui/ui"
 import {
 	GetTournamentPayloadType,
 	CreateTournamentPayloadType,
+	DeleteTournamentsPayload,
 } from "./../../api/tournament"
 import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
 import { AppThunkType } from "../store"
+import { getErrorMessage, getToken } from "../../api/jsonFetch"
 
 export const getAllTournaments = (): AppThunkType => async (dispatch) => {
 	return tournamentApi
@@ -50,14 +52,25 @@ export const getTournament =
 export const createTournament =
 	(data: CreateTournamentPayloadType): AppThunkType =>
 	async (dispatch, getState) => {
+		const token = getToken(getState, () => {
+			dispatch(
+				uiActions.setError({
+					errors: { createTournament: "Auth error" },
+				})
+			)
+		})
+		if (!token) {
+			return
+		}
+
 		return tournamentApi
-			.createTournament(data, getState().auth.token)
+			.createTournament(data, token)
 			.then(() => {
 				dispatch(getAllTournaments())
 				dispatch(uiActions.setSuccess({ success: { createTournament: true } }))
 			})
-			.catch((error) => {
-				const message: string | undefined = JSON.parse(error.message)?.message
+			.catch((error: Error) => {
+				const message = getErrorMessage(error)
 
 				if (message) {
 					dispatch(
@@ -70,5 +83,35 @@ export const createTournament =
 						})
 					)
 				}
+			})
+	}
+
+export const getUserTournaments =
+	(token: string): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.getUserTournaments(token)
+			.then((tournaments) => {
+				if (tournaments) {
+					dispatch(tournamentActions.setUserTournaments({ tournaments }))
+				}
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
+
+export const deleteTournaments =
+	(data: DeleteTournamentsPayload, token: string): AppThunkType =>
+	async (dispatch) => {
+		console.log(data)
+
+		return tournamentApi
+			.deleteTournaments(data, token)
+			.then(() => {
+				dispatch(getUserTournaments(token))
+			})
+			.catch((error) => {
+				console.log(error)
 			})
 	}

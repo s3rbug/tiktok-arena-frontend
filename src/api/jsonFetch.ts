@@ -1,3 +1,25 @@
+import { AppStateType } from "../redux/store"
+
+export function getErrorMessage(error: Error): string | undefined {
+	try {
+		return JSON.parse(error.message)?.message
+	} catch {
+		return undefined
+	}
+}
+
+export function getToken(
+	getState: () => AppStateType,
+	callbackFn?: () => void
+): string | undefined | null {
+	const token = getState().auth?.user?.token
+	if (!token && callbackFn) {
+		callbackFn()
+	}
+
+	return token
+}
+
 function urlWithPrefix(baseUrl: string, url: string) {
 	if (url.startsWith("/")) {
 		return baseUrl + url
