@@ -3,6 +3,7 @@ import {
 	ContestType,
 	TournamentType,
 	ContestProgressType,
+	TikTok,
 } from "./tournament.types"
 
 const initialContestProgress: ContestProgressType = {
@@ -13,6 +14,7 @@ const initialContestProgress: ContestProgressType = {
 
 const initialState = {
 	tournaments: [] as TournamentType[],
+	tiktoks: null as TikTok[] | null,
 	tournament: null as TournamentType | null,
 	userTournaments: null as TournamentType[] | null,
 	contest: {} as ContestType,
@@ -45,6 +47,11 @@ const tournamentSlice = createSlice({
 			state.contestProgress = { ...initialContestProgress }
 
 			state.contest = newContest
+		},
+		setTiktoks(state, action: PayloadAction<{ newTiktoks: TikTok[] | null }>) {
+			const { newTiktoks } = action.payload
+
+			state.tiktoks = newTiktoks
 		},
 		setChecked(
 			state,

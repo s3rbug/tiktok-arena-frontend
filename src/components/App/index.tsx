@@ -12,6 +12,7 @@ import {
 	RegisterPage,
 	CreateTournamentPage,
 } from "../../pages"
+import { EditPage } from "../../pages/EditPage"
 import { ProfilePage } from "../../pages/ProfilePage"
 import { whoami } from "../../redux/middleware/auth"
 import { useTypedDispatch } from "../../redux/store"
@@ -32,6 +33,10 @@ export function App() {
 			<Box>
 				<Routes>
 					<Route path="/tournaments" element={<TournamentsListPage />} />
+					<Route
+						path="/tournaments/:tournamentId/edit"
+						element={<EditPage />}
+					/>
 					<Route
 						path="/tournaments/:tournamentId"
 						element={<TournamentPage />}

@@ -1,3 +1,4 @@
+import { TikTok } from "./../redux/slices/tournament/tournament.types"
 import {
 	TournamentType,
 	ContestType,
@@ -7,7 +8,7 @@ import { jsonFetch } from "./jsonFetch"
 
 export type GetContestPayloadType = {
 	tournamentId: string
-	tounamentFormat: TournamentFormat
+	tournamentFormat: TournamentFormat
 }
 
 export type GetTournamentPayloadType = {
@@ -26,6 +27,10 @@ export type DeleteTournamentsPayload = {
 	TournamentIds: string[]
 }
 
+export type GetTikToksPayloadType = {
+	tournamentId: string
+}
+
 export const tournamentApi = {
 	getAllTournaments: async function () {
 		return jsonFetch.get<TournamentType[]>("/tournament")
@@ -33,10 +38,10 @@ export const tournamentApi = {
 
 	getContest: async function ({
 		tournamentId,
-		tounamentFormat,
+		tournamentFormat,
 	}: GetContestPayloadType) {
 		return jsonFetch.get<ContestType>(
-			`/tournament/contest/${tournamentId}?type=${tounamentFormat}`
+			`/tournament/contest/${tournamentId}?type=${tournamentFormat}`
 		)
 	},
 
@@ -69,6 +74,34 @@ export const tournamentApi = {
 		token: string
 	) {
 		return jsonFetch.delete("/tournament/delete", {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(data),
+		})
+	},
+
+	getTikToks: async function (
+		{ tournamentId }: GetTikToksPayloadType,
+		token: string
+	) {
+		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${tournamentId}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	},
+
+	editTournament: async function ({
+		data,
+		token,
+		tournamentId,
+	}: {
+		data: CreateTournamentPayloadType
+		token: string
+		tournamentId: string
+	}) {
+		return jsonFetch.post(`/tournament/edit/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

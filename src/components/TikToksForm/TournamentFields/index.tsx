@@ -15,22 +15,22 @@ import {
 	FieldArrayWithId,
 	FieldErrors,
 } from "react-hook-form"
-import { TikTokVideo } from "../../../components"
-import { TiktokUrl } from "../../../components/TikTokVideo/TikTokUrl"
-import { CreateTournamentType } from "../../../redux/slices/tournament/tournament.types"
+import { TikTokVideo } from "../.."
+import { TiktokUrl } from "../../TikTokVideo/TikTokUrl"
+import { TournamentFormType } from "../../../redux/slices/tournament/tournament.types"
 
 type PropsType = {
-	control: Control<CreateTournamentType, any>
-	fields: FieldArrayWithId<CreateTournamentType, "tiktoks", "id">[]
+	control: Control<TournamentFormType, any>
+	fields: FieldArrayWithId<TournamentFormType, "tiktoks", "id">[]
 	tiktoks: {
 		url: string
 	}[]
 	handleDeleteTiktok: (index: number) => void
 	customOnChange: (
 		event: React.FormEvent<HTMLInputElement>,
-		field: ControllerRenderProps<CreateTournamentType, `tiktoks.${number}.url`>
+		field: ControllerRenderProps<TournamentFormType, `tiktoks.${number}.url`>
 	) => any
-	errors: FieldErrors<CreateTournamentType>
+	errors: FieldErrors<TournamentFormType>
 }
 
 export const TournamentFields = ({

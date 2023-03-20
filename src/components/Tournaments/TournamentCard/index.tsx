@@ -75,7 +75,7 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 								</Text>
 							</Button>
 							{editable && (
-								<Link to={`/edit/${id}`}>
+								<Link to={`/tournaments/${id}/edit`}>
 									<EditIcon
 										color="blue.800"
 										mb={1}

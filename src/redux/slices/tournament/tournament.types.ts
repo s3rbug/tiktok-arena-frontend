@@ -40,9 +40,17 @@ export type ContestProgressType = {
 	isContestOver: boolean
 }
 
-export type CreateTournamentType = {
+export type TournamentFormType = {
 	name: string
 	tiktoks: {
 		url: string
 	}[]
+}
+
+export type TikTok = {
+	TournamentID: string
+	URL: string
+	wins: number
+	AvgPoints: number
+	TimesPlayed: number
 }

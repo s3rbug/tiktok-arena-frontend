@@ -16,7 +16,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 
 	useEffect(() => {
 		if (tournamentId) {
-			dispatch(getContest({ tournamentId, tounamentFormat: format }))
+			dispatch(getContest({ tournamentId, tournamentFormat: format }))
 		}
 	}, [dispatch, format, tournamentId])
 

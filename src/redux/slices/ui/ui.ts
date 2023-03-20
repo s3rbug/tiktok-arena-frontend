@@ -6,9 +6,11 @@ const initialState = {
 		login: null,
 		register: null,
 		createTournament: null,
+		editTournament: null,
 	} as ErrorType,
 	success: {
 		createTournament: null,
+		editTournament: null,
 	} as SuccessType,
 }
 

@@ -3,6 +3,7 @@ import {
 	GetTournamentPayloadType,
 	CreateTournamentPayloadType,
 	DeleteTournamentsPayload,
+	GetTikToksPayloadType,
 } from "./../../api/tournament"
 import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
@@ -23,10 +24,10 @@ export const getAllTournaments = (): AppThunkType => async (dispatch) => {
 }
 
 export const getContest =
-	({ tournamentId, tounamentFormat }: GetContestPayloadType): AppThunkType =>
+	({ tournamentId, tournamentFormat }: GetContestPayloadType): AppThunkType =>
 	async (dispatch) => {
 		return tournamentApi
-			.getContest({ tournamentId, tounamentFormat })
+			.getContest({ tournamentId, tournamentFormat })
 			.then((newContest) => {
 				if (newContest) {
 					dispatch(tournamentActions.setContest({ newContest }))
@@ -66,7 +67,6 @@ export const createTournament =
 		return tournamentApi
 			.createTournament(data, token)
 			.then(() => {
-				dispatch(getAllTournaments())
 				dispatch(uiActions.setSuccess({ success: { createTournament: true } }))
 			})
 			.catch((error: Error) => {
@@ -113,5 +113,51 @@ export const deleteTournaments =
 			})
 			.catch((error) => {
 				console.log(error)
+			})
+	}
+
+export const getTikToks =
+	(data: GetTikToksPayloadType, token: string): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.getTikToks(data, token)
+			.then((tiktoks) => {
+				if (tiktoks) {
+					dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))
+				}
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
+
+export const editTournament =
+	({
+		data,
+		token,
+		tournamentId,
+	}: {
+		data: CreateTournamentPayloadType
+		token: string
+		tournamentId: string
+	}): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.editTournament({ data, token, tournamentId })
+			.then(() => {
+				dispatch(uiActions.setSuccess({ success: { editTournament: true } }))
+			})
+			.catch((error: Error) => {
+				const message = getErrorMessage(error)
+
+				if (message) {
+					dispatch(uiActions.setError({ errors: { editTournament: message } }))
+				} else {
+					dispatch(
+						uiActions.setError({
+							errors: { editTournament: "Server connection error" },
+						})
+					)
+				}
 			})
 	}
