@@ -18,8 +18,7 @@ export function CreateTournamentPage() {
 	function onSubmit(data: TournamentFormType) {
 		dispatch(
 			createTournament({
-				...data,
-				size: data.tiktoks.length,
+				data: { ...data, size: data.tiktoks.length },
 			})
 		)
 	}

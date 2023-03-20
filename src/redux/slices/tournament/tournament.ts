@@ -27,9 +27,9 @@ const tournamentSlice = createSlice({
 	reducers: {
 		setTournaments(
 			state,
-			action: PayloadAction<{ newTounaments: TournamentType[] }>
+			action: PayloadAction<{ newTournaments: TournamentType[] }>
 		) {
-			const { newTounaments } = action.payload
+			const { newTournaments: newTounaments } = action.payload
 			state.tournaments = newTounaments
 		},
 		setUserTournaments(

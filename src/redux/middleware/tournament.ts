@@ -1,27 +1,40 @@
+import { paginationActions } from "./../slices/pagination/pagination"
 import { uiActions } from "./../slices/ui/ui"
 import {
 	GetTournamentPayloadType,
 	CreateTournamentPayloadType,
 	DeleteTournamentsPayload,
 	GetTikToksPayloadType,
+	GetTournamentsPayload,
 } from "./../../api/tournament"
 import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
 import { AppThunkType } from "../store"
 import { getErrorMessage, getToken } from "../../api/jsonFetch"
 
-export const getAllTournaments = (): AppThunkType => async (dispatch) => {
-	return tournamentApi
-		.getAllTournaments()
-		.then((newTounaments) => {
-			if (newTounaments) {
-				dispatch(tournamentActions.setTournaments({ newTounaments }))
-			}
-		})
-		.catch((error) => {
-			console.log(error)
-		})
-}
+export const getTournaments =
+	({ page, pageSize }: GetTournamentsPayload): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.getTournaments({ page, pageSize })
+			.then((response) => {
+				if (response) {
+					dispatch(
+						tournamentActions.setTournaments({
+							newTournaments: response.Tournaments,
+						})
+					)
+					dispatch(
+						paginationActions.setLastPage({
+							lastPage: Math.ceil(response.TournamentCount / pageSize),
+						})
+					)
+				}
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 export const getContest =
 	({ tournamentId, tournamentFormat }: GetContestPayloadType): AppThunkType =>
@@ -51,7 +64,7 @@ export const getTournament =
 	}
 
 export const createTournament =
-	(data: CreateTournamentPayloadType): AppThunkType =>
+	({ data }: { data: CreateTournamentPayloadType }): AppThunkType =>
 	async (dispatch, getState) => {
 		const token = getToken(getState, () => {
 			dispatch(
@@ -65,7 +78,7 @@ export const createTournament =
 		}
 
 		return tournamentApi
-			.createTournament(data, token)
+			.createTournament({ data, token })
 			.then(() => {
 				dispatch(uiActions.setSuccess({ success: { createTournament: true } }))
 			})
@@ -87,10 +100,10 @@ export const createTournament =
 	}
 
 export const getUserTournaments =
-	(token: string): AppThunkType =>
+	({ token }: { token: string }): AppThunkType =>
 	async (dispatch) => {
 		return tournamentApi
-			.getUserTournaments(token)
+			.getUserTournaments({ token })
 			.then((tournaments) => {
 				if (tournaments) {
 					dispatch(tournamentActions.setUserTournaments({ tournaments }))
@@ -102,14 +115,20 @@ export const getUserTournaments =
 	}
 
 export const deleteTournaments =
-	(data: DeleteTournamentsPayload, token: string): AppThunkType =>
+	({
+		data,
+		token,
+	}: {
+		data: DeleteTournamentsPayload
+		token: string
+	}): AppThunkType =>
 	async (dispatch) => {
 		console.log(data)
 
 		return tournamentApi
-			.deleteTournaments(data, token)
+			.deleteTournaments({ data, token })
 			.then(() => {
-				dispatch(getUserTournaments(token))
+				dispatch(getUserTournaments({ token }))
 			})
 			.catch((error) => {
 				console.log(error)
@@ -117,10 +136,16 @@ export const deleteTournaments =
 	}
 
 export const getTikToks =
-	(data: GetTikToksPayloadType, token: string): AppThunkType =>
+	({
+		data,
+		token,
+	}: {
+		data: GetTikToksPayloadType
+		token: string
+	}): AppThunkType =>
 	async (dispatch) => {
 		return tournamentApi
-			.getTikToks(data, token)
+			.getTikToks({ data, token })
 			.then((tiktoks) => {
 				if (tiktoks) {
 					dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))

@@ -31,9 +31,17 @@ export type GetTikToksPayloadType = {
 	tournamentId: string
 }
 
+export type GetTournamentsPayload = {
+	page: number
+	pageSize: number
+}
+
 export const tournamentApi = {
-	getAllTournaments: async function () {
-		return jsonFetch.get<TournamentType[]>("/tournament")
+	getTournaments: async function ({ page, pageSize }: GetTournamentsPayload) {
+		return jsonFetch.get<{
+			TournamentCount: number
+			Tournaments: TournamentType[]
+		}>(`/tournament?page=${page}&count=${pageSize}`)
 	},
 
 	getContest: async function ({
@@ -49,10 +57,13 @@ export const tournamentApi = {
 		return jsonFetch.get<TournamentType>(`/tournament/${tournamentId}`)
 	},
 
-	createTournament: async function (
-		data: CreateTournamentPayloadType,
+	createTournament: async function ({
+		data,
+		token,
+	}: {
+		data: CreateTournamentPayloadType
 		token: string
-	) {
+	}) {
 		return jsonFetch.post("/tournament/create", {
 			body: JSON.stringify(data),
 			headers: {
@@ -61,7 +72,7 @@ export const tournamentApi = {
 		})
 	},
 
-	getUserTournaments: async function (token: string) {
+	getUserTournaments: async function ({ token }: { token: string }) {
 		return jsonFetch.get<TournamentType[]>("/user/tournaments", {
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -69,10 +80,13 @@ export const tournamentApi = {
 		})
 	},
 
-	deleteTournaments: async function (
-		data: DeleteTournamentsPayload,
+	deleteTournaments: async function ({
+		data,
+		token,
+	}: {
+		data: DeleteTournamentsPayload
 		token: string
-	) {
+	}) {
 		return jsonFetch.delete("/tournament/delete", {
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -81,11 +95,14 @@ export const tournamentApi = {
 		})
 	},
 
-	getTikToks: async function (
-		{ tournamentId }: GetTikToksPayloadType,
+	getTikToks: async function ({
+		data,
+		token,
+	}: {
+		data: GetTikToksPayloadType
 		token: string
-	) {
-		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${tournamentId}`, {
+	}) {
+		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${data.tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

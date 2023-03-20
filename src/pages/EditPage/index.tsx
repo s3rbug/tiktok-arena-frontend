@@ -20,7 +20,7 @@ export function EditPage() {
 
 	useEffect(() => {
 		if (tournamentId && user?.token) {
-			dispatch(getTikToks({ tournamentId }, user.token))
+			dispatch(getTikToks({ data: { tournamentId }, token: user.token }))
 			dispatch(getTournament({ tournamentId }))
 		}
 

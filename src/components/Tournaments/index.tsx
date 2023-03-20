@@ -9,7 +9,11 @@ type PropsType = {
 
 export function Tournaments({ tournaments, editable }: PropsType) {
 	return (
-		<Grid templateColumns="repeat(4, 1fr)" gap={6}>
+		<Grid
+			gridTemplateColumns={"repeat(auto-fit, minmax(350px, 1fr))"}
+			justifyItems="center"
+			gap={6}
+		>
 			{tournaments &&
 				tournaments.map((tournament) => {
 					return (

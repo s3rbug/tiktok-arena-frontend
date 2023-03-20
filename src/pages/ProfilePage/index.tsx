@@ -30,7 +30,7 @@ export function ProfilePage() {
 
 	useEffect(() => {
 		if (user?.token) {
-			dispatch(getUserTournaments(user.token))
+			dispatch(getUserTournaments({ token: user.token }))
 		}
 	}, [dispatch, user?.token])
 
@@ -57,7 +57,9 @@ export function ProfilePage() {
 			return
 		}
 
-		dispatch(deleteTournaments(tournamentsToDelete, user.token))
+		dispatch(
+			deleteTournaments({ data: tournamentsToDelete, token: user.token })
+		)
 	}
 
 	if (!user || !tournaments) {

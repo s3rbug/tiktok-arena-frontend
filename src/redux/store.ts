@@ -1,3 +1,4 @@
+import { paginationReducer } from "./slices/pagination/pagination"
 import { uiReducer } from "./slices/ui/ui"
 import { AnyAction } from "redux"
 import { ThunkAction } from "redux-thunk"
@@ -7,7 +8,12 @@ import { tournamentReducer } from "./slices/tournament/tournament"
 import { authReducer } from "./slices/auth/auth"
 
 export const store = configureStore({
-	reducer: { arena: tournamentReducer, auth: authReducer, ui: uiReducer },
+	reducer: {
+		arena: tournamentReducer,
+		auth: authReducer,
+		ui: uiReducer,
+		pagination: paginationReducer,
+	},
 })
 
 export type AppDispatchType = typeof store.dispatch
