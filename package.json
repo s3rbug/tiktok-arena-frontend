@@ -1,9 +1,12 @@
 {
 	"name": "tiktok-arena",
+	"homepage": "https://s3rbug.github.io/tiktok-arena-frontend",
 	"private": true,
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
+		"predeploy": "yarn build",
+		"deploy": "gh-pages -d dist",
 		"start": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview"
