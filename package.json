@@ -1,6 +1,5 @@
 {
 	"name": "tiktok-arena",
-	"homepage": "https://s3rbug.github.io/tiktok-arena-frontend",
 	"private": true,
 	"version": "1.0.0",
 	"type": "module",
