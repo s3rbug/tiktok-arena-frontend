@@ -6,13 +6,13 @@ import {
 	FormErrorMessage,
 	Heading,
 } from "@chakra-ui/react"
-import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { uiActions } from "../../redux/slices/ui/ui"
 import { AuthInput } from "./AuthInput"
 import { AuthRedirectButton } from "./AuthRedirectButton"
+import { useCardShadow } from "../../hooks/useCardShadow"
 
 export type FormInputType = {
 	name: string
@@ -30,7 +30,12 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 	const [usernameMinLength, usernameMaxLength] = [4, 16]
 	const [passwordMinLength, passwordMaxLength] = [5, 16]
 
-	const [focus, setFocus] = useState(false)
+	const { setFocus, shadowStyleProps } = useCardShadow({
+		shadow: {
+			default: "lg",
+			focused: "2xl",
+		},
+	})
 
 	const {
 		control,
@@ -80,12 +85,13 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 			<Box
 				borderWidth={2}
 				borderRadius={8}
-				boxShadow={focus ? "2xl" : "lg"}
-				transition={"ease-in-out"}
-				transitionDuration=".4s"
-				_hover={{
-					boxShadow: "2xl",
-				}}
+				{...shadowStyleProps}
+				// boxShadow={focus ? "2xl" : "lg"}
+				// transition={"ease-in-out"}
+				// transitionDuration=".4s"
+				// _hover={{
+				// 	boxShadow: "2xl",
+				// }}
 			>
 				<Box textAlign="center" py={6}>
 					<Heading size={"xl"}>{title}</Heading>

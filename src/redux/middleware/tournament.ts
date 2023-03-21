@@ -123,8 +123,6 @@ export const deleteTournaments =
 		token: string
 	}): AppThunkType =>
 	async (dispatch) => {
-		console.log(data)
-
 		return tournamentApi
 			.deleteTournaments({ data, token })
 			.then(() => {

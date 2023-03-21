@@ -1,10 +1,12 @@
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { TikTokVideo } from "../"
-import { Button, CircularProgress, HStack, VStack } from "@chakra-ui/react"
+import { Button, HStack, VStack } from "@chakra-ui/react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useEffect } from "react"
 import { getContest } from "../../redux/middleware/tournament"
+import { LeaderboardPage } from "../../pages"
+import { Loading } from "../"
 
 type PropsType = {
 	tournamentId: string | undefined
@@ -33,11 +35,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 	})
 
 	if (!currentMatch) {
-		return (
-			<HStack justifyContent="center">
-				<CircularProgress isIndeterminate color="blue.300" />
-			</HStack>
-		)
+		return <Loading />
 	}
 
 	const [firstTikTokURL, secondTikTokURL] = [
@@ -57,7 +55,12 @@ export function Arena({ tournamentId, format }: PropsType) {
 		const winnerURL = currentMatch.firstOptionChosen
 			? currentMatch.FirstOption.TiktokURL
 			: currentMatch.SecondOption.TiktokURL
-		return <TikTokVideo url={winnerURL} />
+
+		if (!winnerURL || !tournamentId) {
+			return null
+		}
+
+		return <LeaderboardPage winnerURL={winnerURL} tournamentId={tournamentId} />
 	}
 
 	return (

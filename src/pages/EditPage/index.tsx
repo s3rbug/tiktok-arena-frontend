@@ -8,8 +8,8 @@ import { NotFoundPage } from "../NotFoundPage"
 import { useEffect } from "react"
 import { getTikToks, getTournament } from "../../redux/middleware/tournament"
 import { useAuth } from "../../hooks/useAuth"
-import { CircularProgress } from "@chakra-ui/react"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
+import { Loading } from "../../components"
 
 export function EditPage() {
 	const { tournamentId } = useParams()
@@ -45,7 +45,7 @@ export function EditPage() {
 	}
 
 	if (!user || !tournament || !tiktoks) {
-		return <CircularProgress isIndeterminate />
+		return <Loading />
 	}
 
 	const defaultValue = {

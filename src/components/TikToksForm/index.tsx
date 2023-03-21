@@ -3,7 +3,6 @@ import {
 	AlertIcon,
 	Box,
 	Button,
-	CircularProgress,
 	Flex,
 	FormControl,
 	FormErrorMessage,
@@ -24,6 +23,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
 import { useTypedDispatch } from "../../redux/store"
 import { TournamentFields } from "./TournamentFields"
+import { Loading } from "../Loading"
 
 type PropsType = {
 	defaultValues: TournamentFormType
@@ -93,7 +93,7 @@ export function TikToksForm({
 	}, [success, dispatch, navigate, clearErrors])
 
 	if (!user) {
-		return <CircularProgress isIndeterminate />
+		return <Loading />
 	}
 
 	function showToast(title: string, description: string) {

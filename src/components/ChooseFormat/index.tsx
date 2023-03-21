@@ -5,13 +5,13 @@ import {
 	Heading,
 	Image,
 	Stack,
-	CircularProgress,
 	Flex,
 } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import { Loading } from "../Loading"
 import { FormatButton } from "./FormatButton"
 
 type PropsType = {
@@ -30,11 +30,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	}, [dispatch, tournament?.ID, tournamentId])
 
 	if (!tournament) {
-		return (
-			<Flex justifyContent={"center"} mt={8}>
-				<CircularProgress isIndeterminate color="blue.300" />
-			</Flex>
-		)
+		return <Loading />
 	}
 
 	return (
@@ -42,12 +38,12 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 			<Card p={8}>
 				<CardBody>
 					<Image
-						src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+						src="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"
 						alt="Tournament"
 						borderRadius="lg"
 						maxH="md"
 					/>
-					<Stack mt={3}>
+					<Stack mt={6} mb={3}>
 						<Heading textAlign={"center"} size="md">
 							{tournament ? tournament.Name : ""}
 						</Heading>

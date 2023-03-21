@@ -2,16 +2,17 @@ import {
 	Avatar,
 	Box,
 	Button,
-	CircularProgress,
 	Flex,
 	Heading,
 	Text,
+	useDisclosure,
 	useToast,
 } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { DeleteTournamentsPayload } from "../../api/tournament"
-import { Tournaments } from "../../components"
+import { Loading, Tournaments } from "../../components"
+import { ConfirmDialog } from "../../components/ConfirmDialog"
 import { useAuth } from "../../hooks/useAuth"
 import {
 	deleteTournaments,
@@ -22,9 +23,13 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 export function ProfilePage() {
 	const dispatch = useTypedDispatch()
 
+	const { isOpen, onOpen, onClose } = useDisclosure()
+
 	const user = useAuth()
 
 	const toast = useToast()
+
+	const dialogRef = useRef(null)
 
 	const tournaments = useTypedSelector((state) => state.arena.userTournaments)
 
@@ -33,6 +38,10 @@ export function ProfilePage() {
 			dispatch(getUserTournaments({ token: user.token }))
 		}
 	}, [dispatch, user?.token])
+
+	function showDeleteDialog() {
+		onOpen()
+	}
 
 	function handleDelete() {
 		if (!tournaments || !user?.token) {
@@ -63,40 +72,52 @@ export function ProfilePage() {
 	}
 
 	if (!user || !tournaments) {
-		return <CircularProgress isIndeterminate />
+		return <Loading />
 	}
 
 	return (
-		<Box p={8} pt={16}>
-			<Flex gap={16}>
-				<Avatar
-					h={"100%"}
-					w={"250px"}
-					src="https://bit.ly/kent-c-dodds"
-				></Avatar>
-				<Flex flexDirection={"column"} gap={2}>
-					<Text fontSize={"lg"}>
-						Name: <b>{user?.name}</b>
-					</Text>
-					<Text fontSize={"lg"}>
-						Tournament count: <b>{tournaments?.length}</b>
-					</Text>
+		<>
+			<Box p={8} pt={16}>
+				<Flex gap={16}>
+					<Avatar h={"100%"} w={"250px"} src="https://bit.ly/kent-c-dodds" />
+					<Flex flexDirection={"column"} gap={2}>
+						<Text fontSize={"lg"}>
+							Name: <b>{user?.name}</b>
+						</Text>
+						<Text fontSize={"lg"}>
+							Tournament count: <b>{tournaments?.length}</b>
+						</Text>
+					</Flex>
 				</Flex>
-			</Flex>
-			<Flex mt={16} align="center" justifyContent={"space-between"}>
-				<Heading size="md">My tournaments</Heading>
-				<Flex gap={4}>
-					<Button colorScheme={"red"} onClick={handleDelete}>
-						Delete chosen
-					</Button>
-					<Button colorScheme={"blue"}>
-						<Link to="/user/create">Create new</Link>
-					</Button>
+				<Flex mt={16} align="center" justifyContent={"space-between"}>
+					<Heading size="md">My tournaments</Heading>
+					<Flex gap={4}>
+						<Button
+							ref={dialogRef}
+							colorScheme={"red"}
+							onClick={showDeleteDialog}
+						>
+							Delete chosen
+						</Button>
+						<Button colorScheme={"blue"}>
+							<Link to="/user/create">Create new</Link>
+						</Button>
+					</Flex>
 				</Flex>
-			</Flex>
-			<Box pt={6}>
-				<Tournaments editable tournaments={tournaments} />
+				<Box pt={6}>
+					<Tournaments editable tournaments={tournaments} />
+				</Box>
 			</Box>
-		</Box>
+			<ConfirmDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				title="Are you sure?"
+				description="Do you really want to delete checked tournaments?"
+				submitButtonText="Delete"
+				submitButtonColorScheme="red"
+				destructiveRef={dialogRef}
+				onSubmit={handleDelete}
+			/>
+		</>
 	)
 }

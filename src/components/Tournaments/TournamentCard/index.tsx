@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react"
 import { ChangeEvent } from "react"
 import { Link } from "react-router-dom"
+import { useCardShadow } from "../../../hooks/useCardShadow"
 import { tournamentActions } from "../../../redux/slices/tournament/tournament"
 import { useTypedDispatch } from "../../../redux/store"
 
@@ -24,6 +25,14 @@ type PropsType = {
 export function TournamentCard({ id, title, editable, checked }: PropsType) {
 	const dispatch = useTypedDispatch()
 
+	const { shadowStyleProps } = useCardShadow({
+		shadow: {
+			default: "md",
+			focused: "2xl",
+		},
+		transitionDuration: ".7s",
+	})
+
 	function handleCheckboxChange(event: ChangeEvent<HTMLInputElement>) {
 		console.log(event.target.checked)
 		dispatch(
@@ -35,7 +44,12 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 	}
 
 	return (
-		<Card maxW="sm" outline={"2px solid grey"}>
+		<Card
+			maxW="sm"
+			borderWidth={2}
+			borderColor="gray.300"
+			{...shadowStyleProps}
+		>
 			<CardBody>
 				{editable && (
 					<Flex justifyContent={"flex-start"} mb={8}>
@@ -44,7 +58,7 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 							borderColor={"blue.700"}
 							size="lg"
 							onChange={handleCheckboxChange}
-						></Checkbox>
+						/>
 					</Flex>
 				)}
 				<Link to={`/tournaments/${id}`}>
@@ -54,7 +68,9 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 						_hover={{
 							transform: "scale(1.05)",
 						}}
-						src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+						src="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"
+						maxWidth={"300px"}
+						maxHeight={"300px"}
 						alt="Tournament card"
 						borderRadius="lg"
 					/>
