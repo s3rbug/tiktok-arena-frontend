@@ -20,7 +20,7 @@ export function EditPage() {
 
 	useEffect(() => {
 		if (tournamentId && user?.token) {
-			dispatch(getTikToks({ data: { tournamentId }, token: user.token }))
+			dispatch(getTikToks({ data: { tournamentId } }))
 			dispatch(getTournament({ tournamentId }))
 		}
 
@@ -50,7 +50,9 @@ export function EditPage() {
 
 	const defaultValue = {
 		name: tournament.Name,
-		tiktoks: [...tiktoks.map((tiktok) => ({ url: tiktok.URL }))],
+		tiktoks: [
+			...tiktoks.map((tiktok) => ({ url: tiktok.URL, name: tiktok.Name })),
+		],
 	}
 
 	function onSubmit(data: TournamentFormType) {
@@ -78,6 +80,7 @@ export function EditPage() {
 			submitText="Edit tournament"
 			warning="Be carefull! Changing TikTok URL resets its tournament's statistics."
 			success={success}
+			successRedirect={"/user"}
 			serverError={serverError}
 			changeStoreOnSubmit={onSubmit}
 			clearStoreErrors={clearStoreErrors}

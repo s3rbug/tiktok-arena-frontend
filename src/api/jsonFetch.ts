@@ -27,7 +27,7 @@ function urlWithPrefix(baseUrl: string, url: string) {
 	return url
 }
 
-const fetchConfig = {
+const defaultConfig = {
 	baseUrl: "http://127.0.0.1:8000/api",
 	headers: {
 		Accept: "application/json",
@@ -38,16 +38,22 @@ const fetchConfig = {
 const requestTemplate = (method: "GET" | "POST" | "PUT" | "DELETE") =>
 	async function <T>(
 		url: string,
-		config?: RequestInit
+		config?: RequestInit,
+		overrideConfig?: boolean
 	): Promise<T | undefined> {
-		const response = await fetch(urlWithPrefix(fetchConfig.baseUrl, url), {
+		const response = await fetch(urlWithPrefix(defaultConfig.baseUrl, url), {
 			...config,
-			headers: {
-				...config?.headers,
-				...fetchConfig.headers,
-			},
+			headers: overrideConfig
+				? {
+						...config?.headers,
+				  }
+				: {
+						...config?.headers,
+						...defaultConfig.headers,
+				  },
 			method,
 		})
+
 		if (!response.ok) {
 			return response.text().then((text) => {
 				throw new Error(text)

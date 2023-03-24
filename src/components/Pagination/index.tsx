@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import { paginationActions } from "../../redux/slices/pagination/pagination"
 import { useTypedDispatch } from "../../redux/store"
-import { getPaginationItems } from "../../utils/pagination"
+import { getPaginationItems } from "../../utils/pagination/pagination"
 import PaginationLink from "./PaginationLink"
 
 type PropsType = {

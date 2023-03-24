@@ -1,7 +1,9 @@
 import { Flex, Text, VStack } from "@chakra-ui/react"
+import { useEffect } from "react"
 import { TikTokVideo } from "../../components"
 import { LeaderboardItem } from "../../components/LeaderboardItem"
-import { TikTok } from "../../redux/slices/tournament/tournament.types"
+import { getTikToks, getTournament } from "../../redux/middleware/tournament"
+import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 type PropsType = {
 	tournamentId: string
@@ -9,56 +11,39 @@ type PropsType = {
 }
 
 export const LeaderboardPage = ({ tournamentId, winnerURL }: PropsType) => {
-	const tiktoks: TikTok[] = [
-		{
-			TournamentID: "id1",
-			URL: "url1",
-			wins: 25,
-			AvgPoints: 10,
-			TimesPlayed: 100,
-		},
-		{
-			TournamentID: "id2",
-			URL: "url2",
-			wins: 40,
-			AvgPoints: 10,
-			TimesPlayed: 100,
-		},
-		{
-			TournamentID: "id3",
-			URL: "url3",
-			wins: 10,
-			AvgPoints: 10,
-			TimesPlayed: 100,
-		},
-		{
-			TournamentID: "id4",
-			URL: "url4",
-			wins: 20,
-			AvgPoints: 10,
-			TimesPlayed: 100,
-		},
-		{
-			TournamentID: "id5",
-			URL: "https://www.tiktok.com/@sr_fiot/video/7210021412008971525",
-			wins: 5,
-			AvgPoints: 10,
-			TimesPlayed: 100,
-		},
-	]
+	const dispatch = useTypedDispatch()
+
+	const tournament = useTypedSelector((state) => state.arena.tournament)
+
+	const tiktoks = useTypedSelector((state) => state.arena.tiktoks)
+
+	useEffect(() => {
+		if (!tiktoks) {
+			dispatch(getTikToks({ data: { tournamentId } }))
+		}
+		if (!tournament) {
+			dispatch(getTournament({ tournamentId }))
+		}
+	}, [dispatch, tournamentId, tiktoks, tournament])
+
+	if (!tiktoks || !tournament) {
+		return null
+	}
+
 	return (
 		<Flex px={8} pt={8} gap={8} justifyContent="space-evenly">
 			<VStack justifyContent={"center"}>
-				<Text>Your winner</Text>
+				<Text fontSize={"2xl"}>Your winner</Text>
 				<TikTokVideo url={winnerURL} />
 			</VStack>
 			<VStack gap={2}>
-				<Text>Other people choice:</Text>
-				{tiktoks
-					.sort((tiktok1, tiktok2) => tiktok2.wins - tiktok1.wins)
+				<Text fontSize={"2xl"}>Other people choice</Text>
+				{[...tiktoks]
+					.sort((tiktok1, tiktok2) => tiktok2.Wins - tiktok1.Wins)
 					.map((tiktok) => {
 						return (
 							<LeaderboardItem
+								timesPlayed={tournament.TimesPlayed}
 								key={tiktok.URL}
 								winnerURL={winnerURL}
 								tiktok={tiktok}

@@ -11,6 +11,7 @@ const initialState = {
 	success: {
 		createTournament: null,
 		editTournament: null,
+		endTournament: null,
 	} as SuccessType,
 }
 

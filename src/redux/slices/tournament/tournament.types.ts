@@ -3,6 +3,7 @@ export type TournamentType = {
 	Name: string
 	Size: number
 	UserId: string
+	TimesPlayed: number
 	checked?: boolean
 }
 
@@ -44,13 +45,13 @@ export type TournamentFormType = {
 	name: string
 	tiktoks: {
 		url: string
+		name: string
 	}[]
 }
 
 export type TikTok = {
 	TournamentID: string
 	URL: string
-	wins: number
-	AvgPoints: number
-	TimesPlayed: number
+	Wins: number
+	Name: string
 }

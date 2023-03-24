@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react"
-import { TiktokUrl } from "./TikTokUrl"
+import { TiktokUrl } from "../../utils/tiktokUrl/tiktokUrl"
 
 type PropsType = {
 	url?: string

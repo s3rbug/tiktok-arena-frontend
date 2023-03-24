@@ -1,7 +1,7 @@
 import { CircularProgress, Text, VStack } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { loadingMessages } from "../../utils/loadingMessages"
-import { randomArrayItem } from "../../utils/randomArrayItem"
+import { loadingMessages } from "../../utils/loadingMessages/loadingMessages"
+import { randomArrayItem } from "../../utils/randomArrayItem/randomArrayItem"
 
 export const Loading = () => {
 	const [text, setText] = useState(randomArrayItem(loadingMessages))

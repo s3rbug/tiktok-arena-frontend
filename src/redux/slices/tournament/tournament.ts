@@ -13,7 +13,7 @@ const initialContestProgress: ContestProgressType = {
 }
 
 const initialState = {
-	tournaments: [] as TournamentType[],
+	tournaments: [] as TournamentType[] | null,
 	tiktoks: null as TikTok[] | null,
 	tournament: null as TournamentType | null,
 	userTournaments: null as TournamentType[] | null,
@@ -27,7 +27,7 @@ const tournamentSlice = createSlice({
 	reducers: {
 		setTournaments(
 			state,
-			action: PayloadAction<{ newTournaments: TournamentType[] }>
+			action: PayloadAction<{ newTournaments: TournamentType[] | null }>
 		) {
 			const { newTournaments: newTounaments } = action.payload
 			state.tournaments = newTounaments
@@ -41,6 +41,9 @@ const tournamentSlice = createSlice({
 				...tournament,
 				checked: false,
 			}))
+		},
+		resetContestProgress(state) {
+			state.contestProgress = { ...initialContestProgress }
 		},
 		setContest(state, action: PayloadAction<{ newContest: ContestType }>) {
 			const { newContest } = action.payload

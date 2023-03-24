@@ -80,6 +80,7 @@ export const createTournament =
 		return tournamentApi
 			.createTournament({ data, token })
 			.then(() => {
+				dispatch(tournamentActions.setTournaments({ newTournaments: null }))
 				dispatch(uiActions.setSuccess({ success: { createTournament: true } }))
 			})
 			.catch((error: Error) => {
@@ -134,16 +135,10 @@ export const deleteTournaments =
 	}
 
 export const getTikToks =
-	({
-		data,
-		token,
-	}: {
-		data: GetTikToksPayloadType
-		token: string
-	}): AppThunkType =>
+	({ data }: { data: GetTikToksPayloadType }): AppThunkType =>
 	async (dispatch) => {
 		return tournamentApi
-			.getTikToks({ data, token })
+			.getTikToks({ data })
 			.then((tiktoks) => {
 				if (tiktoks) {
 					dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))
@@ -182,5 +177,26 @@ export const editTournament =
 						})
 					)
 				}
+			})
+	}
+
+export const endTournament =
+	({
+		token,
+		tournamentId,
+		winnerURL,
+	}: {
+		token: string
+		tournamentId: string
+		winnerURL: string
+	}): AppThunkType =>
+	async (dispatch) => {
+		return tournamentApi
+			.endTournament({ token, tournamentId, winnerURL })
+			.then(() => {
+				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
+			})
+			.catch((error) => {
+				console.log(error)
 			})
 	}

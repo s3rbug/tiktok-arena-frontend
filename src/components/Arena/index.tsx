@@ -3,10 +3,11 @@ import { TikTokVideo } from "../"
 import { Button, HStack, VStack } from "@chakra-ui/react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
-import { useEffect } from "react"
-import { getContest } from "../../redux/middleware/tournament"
+import { useEffect, useState } from "react"
+import { endTournament, getContest } from "../../redux/middleware/tournament"
 import { LeaderboardPage } from "../../pages"
 import { Loading } from "../"
+import { useAuth } from "../../hooks/useAuth"
 
 type PropsType = {
 	tournamentId: string | undefined
@@ -16,11 +17,9 @@ type PropsType = {
 export function Arena({ tournamentId, format }: PropsType) {
 	const dispatch = useTypedDispatch()
 
-	useEffect(() => {
-		if (tournamentId) {
-			dispatch(getContest({ tournamentId, tournamentFormat: format }))
-		}
-	}, [dispatch, format, tournamentId])
+	const [winnerURL, setWinnerURL] = useState<string | null>(null)
+
+	const user = useAuth()
 
 	const contestProgress = useTypedSelector(
 		(state) => state.arena.contestProgress
@@ -33,6 +32,36 @@ export function Arena({ tournamentId, format }: PropsType) {
 		}
 		return undefined
 	})
+
+	useEffect(() => {
+		if (tournamentId) {
+			dispatch(getContest({ tournamentId, tournamentFormat: format }))
+		}
+	}, [dispatch, format, tournamentId])
+
+	useEffect(() => {
+		if (isContestOver && tournamentId && currentMatch) {
+			const newWinnerURL = currentMatch.firstOptionChosen
+				? currentMatch.FirstOption.TiktokURL
+				: currentMatch.SecondOption.TiktokURL
+
+			if (!newWinnerURL) {
+				return
+			}
+
+			setWinnerURL(newWinnerURL)
+
+			if (user?.token) {
+				dispatch(
+					endTournament({
+						token: user.token,
+						tournamentId,
+						winnerURL: newWinnerURL,
+					})
+				)
+			}
+		}
+	}, [isContestOver, dispatch, tournamentId, user?.token, currentMatch])
 
 	if (!currentMatch) {
 		return <Loading />
@@ -52,11 +81,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 	}
 
 	if (isContestOver) {
-		const winnerURL = currentMatch.firstOptionChosen
-			? currentMatch.FirstOption.TiktokURL
-			: currentMatch.SecondOption.TiktokURL
-
-		if (!winnerURL || !tournamentId) {
+		if (!tournamentId || !winnerURL) {
 			return null
 		}
 

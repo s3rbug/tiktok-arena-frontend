@@ -8,6 +8,7 @@ export type ErrorType = {
 export type SuccessType = {
 	createTournament?: null | boolean
 	editTournament?: null | boolean
+	endTournament?: null | boolean
 }
 
 export type ValueOf<T> = T[keyof T]

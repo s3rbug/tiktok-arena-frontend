@@ -5,9 +5,8 @@ import {
 	Button,
 	Flex,
 	FormControl,
-	FormErrorMessage,
 	Input,
-	useToast,
+	VStack,
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import {
@@ -18,12 +17,14 @@ import {
 	ControllerRenderProps,
 } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { TiktokUrl } from "../TikTokVideo/TikTokUrl"
+import { TiktokUrl } from "../../utils/tiktokUrl/tiktokUrl"
 import { useAuth } from "../../hooks/useAuth"
 import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
 import { useTypedDispatch } from "../../redux/store"
 import { TournamentFields } from "./TournamentFields"
 import { Loading } from "../Loading"
+import { useCustomToast } from "../../hooks/useCustomToast"
+import { FormError } from "./FormError"
 
 type PropsType = {
 	defaultValues: TournamentFormType
@@ -32,6 +33,7 @@ type PropsType = {
 	clearStoreErrors: () => void
 	changeStoreOnSubmit: (data: TournamentFormType) => void
 	submitText: string
+	successRedirect: string
 	warning?: string
 }
 
@@ -42,14 +44,25 @@ export function TikToksForm({
 	clearStoreErrors,
 	changeStoreOnSubmit,
 	submitText,
+	successRedirect,
 	warning,
 }: PropsType) {
-	const [minTiktoksCount, maxTiktoksCount] = [4, 64]
-	const [minTournamentNameLength, maxTournamentNameLength] = [4, 30]
+	const tiktoksCount = {
+		min: 4,
+		max: 64,
+	}
+
+	const tournamentNameLength = {
+		min: 4,
+		max: 30,
+	}
 
 	const {
 		control,
 		handleSubmit,
+		setValue,
+		setError,
+		clearErrors,
 		formState: { errors },
 	} = useForm<TournamentFormType>({
 		defaultValues,
@@ -69,157 +82,157 @@ export function TikToksForm({
 
 	const dispatch = useTypedDispatch()
 
-	const toast = useToast()
+	const { showToast } = useCustomToast()
 
 	const navigate = useNavigate()
 
 	const user = useAuth()
 
-	const clearErrors = useCallback(() => {
+	const clearAllErrors = useCallback(() => {
 		if (success || serverError) {
 			clearStoreErrors()
 		}
 		setErrorUnique(null)
-	}, [clearStoreErrors, success, serverError])
+		clearErrors()
+	}, [clearStoreErrors, success, serverError, clearErrors])
 
 	useEffect(() => {
 		if (success) {
-			clearErrors()
-			navigate("/tournaments")
+			clearAllErrors()
+			navigate(successRedirect)
 		}
 		return () => {
-			clearErrors()
+			clearAllErrors()
 		}
-	}, [success, dispatch, navigate, clearErrors])
+	}, [success, dispatch, navigate, clearAllErrors, successRedirect])
 
 	if (!user) {
 		return <Loading />
-	}
-
-	function showToast(title: string, description: string) {
-		toast({
-			title,
-			description,
-			status: "warning",
-			duration: 2500,
-			isClosable: true,
-			position: "bottom-right",
-		})
 	}
 
 	function customOnChange(
 		event: React.FormEvent<HTMLInputElement>,
 		field: ControllerRenderProps<TournamentFormType, `tiktoks.${number}.url`>
 	) {
-		clearErrors()
+		clearAllErrors()
 
 		return field.onChange(event)
 	}
 
 	const onSubmit = (data: TournamentFormType) => {
-		const uniqueValues = new Set(
+		const uniqueURLs = new Set(
 			tiktoks.map((field) => TiktokUrl.toEmbeded(field.url))
 		)
 
-		if (uniqueValues.size !== fields.length) {
-			setErrorUnique("Duplicate tiktoks")
-		} else {
-			clearErrors()
+		const uniqueNames = new Set(tiktoks.map((field) => field.name))
 
-			changeStoreOnSubmit(data)
+		if (uniqueURLs.size !== fields.length) {
+			setErrorUnique("Duplicate tiktok URL")
+			return
 		}
+		if (uniqueNames.size !== fields.length) {
+			setErrorUnique("Duplicate tiktok name")
+			return
+		}
+
+		clearAllErrors()
+
+		changeStoreOnSubmit(data)
 	}
 
 	function handleCreateTiktok() {
-		if (fields.length !== maxTiktoksCount) {
-			append({ url: "" })
+		if (fields.length !== tiktoksCount.max) {
+			append({ url: "", name: "" })
 		} else {
 			showToast(
 				"Can not add tiktok",
-				`Maximum tiktok count is ${maxTiktoksCount}`
+				`Maximum tiktok count is ${tiktoksCount.max}`
 			)
 		}
 	}
 
 	function handleDeleteTiktok(index: number) {
-		if (fields.length !== minTiktoksCount) {
+		if (fields.length !== tiktoksCount.min) {
 			remove(index)
 		} else {
 			showToast(
 				"Can not delete tiktok",
-				`Minimum tiktok count is ${minTiktoksCount}`
+				`Minimum tiktok count is ${tiktoksCount.min}`
 			)
 		}
 	}
 
 	return (
-		<Box p={8}>
-			<form onSubmit={handleSubmit(onSubmit)}>
+		<Box p={8} as="form" onSubmit={handleSubmit(onSubmit)}>
+			<VStack gap={4} alignItems="stretch">
 				<FormControl
-					isInvalid={!!serverError || !!errorUnique}
 					display={"flex"}
-					flexDirection={"column"}
-					gap={4}
+					flexDirection="column"
+					alignItems={"center"}
+					isInvalid={!!errors?.name?.message}
+					mb={4}
 				>
-					<Flex flexDirection="column">
-						<Controller
-							name={"name"}
-							control={control}
-							rules={{
-								required: "Tournament name is required",
-								minLength: {
-									value: minTournamentNameLength,
-									message: `Min tournament name length is ${minTournamentNameLength}`,
-								},
-								maxLength: {
-									value: maxTournamentNameLength,
-									message: `Max tournament name length is ${maxTournamentNameLength}`,
-								},
-							}}
-							render={({ field }) => (
-								<Input
-									tabIndex={1}
-									isInvalid={!!errors?.name?.message}
-									errorBorderColor="crimson"
-									placeholder="Tournament name"
-									{...field}
-								/>
-							)}
-						/>
-						{!!errors?.name && (
-							<FormErrorMessage>{errors?.name?.message}</FormErrorMessage>
-						)}
-					</Flex>
-					<TournamentFields
+					<Controller
+						name={"name"}
 						control={control}
-						customOnChange={customOnChange}
-						errors={errors}
-						fields={fields}
-						handleDeleteTiktok={handleDeleteTiktok}
-						tiktoks={tiktoks}
+						rules={{
+							required: "Tournament name is required",
+							minLength: {
+								value: tournamentNameLength.min,
+								message: `Min tournament name length is ${tournamentNameLength.min}`,
+							},
+							maxLength: {
+								value: tournamentNameLength.max,
+								message: `Max tournament name length is ${tournamentNameLength.max}`,
+							},
+						}}
+						render={({ field }) => (
+							<Input
+								tabIndex={1}
+								isInvalid={!!errors?.name}
+								errorBorderColor="crimson"
+								placeholder="Tournament name"
+								{...field}
+								w="fit-content"
+								fontSize="xl"
+							/>
+						)}
 					/>
-					{!!errorUnique && <FormErrorMessage>{errorUnique}</FormErrorMessage>}
-					{!!serverError && <FormErrorMessage>{serverError}</FormErrorMessage>}
+					<FormError error={errors?.name?.message} />
 				</FormControl>
-				{warning && (
-					<Alert status="warning" mt={6}>
-						<AlertIcon />
-						{warning}
-					</Alert>
-				)}
-				<Flex justifyContent={"space-between"} align="flex-start" mt={6}>
-					<Button type="submit" colorScheme={"blue"}>
-						{submitText}
-					</Button>
-					<Button
-						onClick={handleCreateTiktok}
-						variant={"link"}
-						colorScheme={"blue"}
-					>
-						Add tiktok
-					</Button>
-				</Flex>
-			</form>
+				<TournamentFields
+					setValue={setValue}
+					control={control}
+					customOnChange={customOnChange}
+					errors={errors}
+					setError={setError}
+					fields={fields}
+					handleDeleteTiktok={handleDeleteTiktok}
+					tiktoks={tiktoks}
+				/>
+				<FormControl isInvalid={!!serverError || !!errorUnique}>
+					<FormError error={errorUnique} />
+					<FormError error={serverError} />
+				</FormControl>
+			</VStack>
+			{warning && (
+				<Alert status="warning" mt={6}>
+					<AlertIcon />
+					{warning}
+				</Alert>
+			)}
+			<Flex justifyContent={"space-between"} align="flex-start" mt={6}>
+				<Button type="submit" colorScheme={"blue"}>
+					{submitText}
+				</Button>
+				<Button
+					onClick={handleCreateTiktok}
+					variant={"link"}
+					colorScheme={"blue"}
+				>
+					Add tiktok
+				</Button>
+			</Flex>
 		</Box>
 	)
 }

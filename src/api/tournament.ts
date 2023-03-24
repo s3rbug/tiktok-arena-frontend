@@ -20,6 +20,7 @@ export type CreateTournamentPayloadType = {
 	size: number
 	tiktoks: {
 		url: string
+		name: string
 	}[]
 }
 
@@ -95,18 +96,8 @@ export const tournamentApi = {
 		})
 	},
 
-	getTikToks: async function ({
-		data,
-		token,
-	}: {
-		data: GetTikToksPayloadType
-		token: string
-	}) {
-		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${data.tournamentId}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		})
+	getTikToks: async function ({ data }: { data: GetTikToksPayloadType }) {
+		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${data.tournamentId}`)
 	},
 
 	editTournament: async function ({
@@ -123,6 +114,23 @@ export const tournamentApi = {
 				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(data),
+		})
+	},
+
+	endTournament: async function ({
+		tournamentId,
+		token,
+		winnerURL,
+	}: {
+		tournamentId: string
+		token: string
+		winnerURL: string
+	}) {
+		return jsonFetch.post(`/tournament/${tournamentId}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ TiktokURL: winnerURL }),
 		})
 	},
 }
