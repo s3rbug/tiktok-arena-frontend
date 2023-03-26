@@ -1,8 +1,5 @@
 import { Flex } from "@chakra-ui/react"
-import { useCallback, useEffect } from "react"
-import { useSearchParams } from "react-router-dom"
-import { paginationActions } from "../../redux/slices/pagination/pagination"
-import { useTypedDispatch } from "../../redux/store"
+import { useRoutePagination } from "../../hooks/useRoutePagination"
 import { getPaginationItems } from "../../utils/pagination/pagination"
 import PaginationLink from "./PaginationLink"
 
@@ -19,44 +16,11 @@ export const Pagination = ({
 	maxLength,
 	setCurrentPage,
 }: PropsType) => {
-	const dispatch = useTypedDispatch()
-
-	const [searchParams, setSearchParams] = useSearchParams()
-
-	const urlCurrentPage = Number(searchParams.get("page"))
-
-	const changeCurrentPage = useCallback(
-		(page: number) => {
-			setSearchParams({ page: String(page) })
-			setCurrentPage(page)
-		},
-		[setCurrentPage, setSearchParams]
-	)
-
-	useEffect(() => {
-		if (currentPage === null) {
-			dispatch(paginationActions.setCurrentPage({ page: 1 }))
-		}
-
-		if (
-			currentPage === null ||
-			lastPage == null ||
-			currentPage === urlCurrentPage
-		) {
-			return
-		}
-
-		if (
-			!isNaN(urlCurrentPage) &&
-			urlCurrentPage >= 1 &&
-			urlCurrentPage <= lastPage
-		) {
-			dispatch(paginationActions.setCurrentPage({ page: urlCurrentPage }))
-		} else {
-			//  should notify
-			changeCurrentPage(1)
-		}
-	}, [dispatch, urlCurrentPage, currentPage, changeCurrentPage, lastPage])
+	const { changeCurrentPage } = useRoutePagination({
+		currentPage,
+		lastPage,
+		setCurrentPage,
+	})
 
 	if (!currentPage || !lastPage) {
 		return null

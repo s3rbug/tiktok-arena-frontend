@@ -14,7 +14,7 @@ import {
 export const AppRoutes = () => {
 	return (
 		<Routes>
-			<Route path="/" element={<Navigate to="/tournaments" />} />
+			<Route path="/" element={<Navigate to="/tournaments?page=1" />} />
 			<Route path="/tournaments" element={<TournamentsListPage />} />
 			<Route path="/tournaments/:tournamentId/edit" element={<EditPage />} />
 			<Route path="/tournaments/:tournamentId" element={<TournamentPage />} />

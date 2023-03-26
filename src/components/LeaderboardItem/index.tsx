@@ -27,7 +27,7 @@ export const LeaderboardItem = ({
 				fontSize={"xl"}
 				fontWeight={isWinner ? "bold" : "normal"}
 			>{`${Math.round(getProgressValue())}%`}</Text>
-			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.URL}</Text>
+			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.Name}</Text>
 			<Box w={"100%"}>
 				<Progress
 					size="lg"

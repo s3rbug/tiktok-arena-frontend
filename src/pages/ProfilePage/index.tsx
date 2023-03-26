@@ -13,11 +13,13 @@ import { Link } from "react-router-dom"
 import { DeleteTournamentsPayload } from "../../api/tournament"
 import { Loading, Tournaments } from "../../components"
 import { ConfirmDialog } from "../../components/ConfirmDialog"
+import { Pagination } from "../../components/Pagination"
 import { useAuth } from "../../hooks/useAuth"
 import {
 	deleteTournaments,
 	getUserTournaments,
 } from "../../redux/middleware/tournament"
+import { paginationActions } from "../../redux/slices/pagination/pagination"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 export function ProfilePage() {
@@ -33,11 +35,18 @@ export function ProfilePage() {
 
 	const tournaments = useTypedSelector((state) => state.arena.userTournaments)
 
+	const { currentPage, lastPage, maxLength, pageSize, total } =
+		useTypedSelector((state) => state.pagination.userTournaments)
+
 	useEffect(() => {
-		if (user?.token) {
-			dispatch(getUserTournaments({ token: user.token }))
+		if (user?.token && currentPage && pageSize) {
+			dispatch(getUserTournaments({ page: currentPage, pageSize }))
 		}
-	}, [dispatch, user?.token])
+	}, [dispatch, user?.token, currentPage, pageSize])
+
+	function setCurrentPage(page: number) {
+		dispatch(paginationActions.setCurrentPage({ page, key: "userTournaments" }))
+	}
 
 	function showDeleteDialog() {
 		onOpen()
@@ -66,9 +75,7 @@ export function ProfilePage() {
 			return
 		}
 
-		dispatch(
-			deleteTournaments({ data: tournamentsToDelete, token: user.token })
-		)
+		dispatch(deleteTournaments({ data: tournamentsToDelete }))
 	}
 
 	if (!user || !tournaments) {
@@ -85,7 +92,7 @@ export function ProfilePage() {
 							Name: <b>{user?.name}</b>
 						</Text>
 						<Text fontSize={"lg"}>
-							Tournament count: <b>{tournaments?.length}</b>
+							Tournament count: <b>{total}</b>
 						</Text>
 					</Flex>
 				</Flex>
@@ -106,6 +113,12 @@ export function ProfilePage() {
 				</Flex>
 				<Box pt={6}>
 					<Tournaments editable tournaments={tournaments} />
+					<Pagination
+						currentPage={currentPage}
+						lastPage={lastPage}
+						maxLength={maxLength}
+						setCurrentPage={setCurrentPage}
+					/>
 				</Box>
 			</Box>
 			<ConfirmDialog

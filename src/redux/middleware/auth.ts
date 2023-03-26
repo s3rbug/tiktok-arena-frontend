@@ -1,11 +1,11 @@
 import { uiActions } from "./../slices/ui/ui"
 import { AppThunkType } from "./../store"
-import { AuthTokenType } from "./../../api/auth"
 import { UserType } from "../slices/auth/auth.types"
-import { authApi, AuthPayloadType } from "../../api/auth"
+import { authApi, AuthPayloadType, AuthTokenType } from "../../api/auth"
 import { authActions } from "../slices/auth/auth"
 import { localToken } from "../../localStorage/token"
-import { getErrorMessage } from "../../api/jsonFetch"
+import { getErrorMessage, RequestError } from "../../api/jsonFetch"
+import { StatusCodes } from "http-status-codes"
 
 export const login =
 	({ name, password }: AuthPayloadType): AppThunkType =>
@@ -26,7 +26,7 @@ export const login =
 					localToken.setToken(userDetails.Token)
 				}
 			})
-			.catch((error: Error) => {
+			.catch((error: RequestError) => {
 				const message = getErrorMessage(error)
 
 				if (message) {
@@ -58,7 +58,7 @@ export const register =
 					localToken.setToken(userDetails.Token)
 				}
 			})
-			.catch((error: Error) => {
+			.catch((error: RequestError) => {
 				const message = getErrorMessage(error)
 
 				if (message) {
@@ -91,7 +91,9 @@ export const whoami =
 					)
 				}
 			})
-			.catch(() => {
-				localToken.clearToken()
+			.catch((error: RequestError) => {
+				if (error.status === StatusCodes.UNAUTHORIZED) {
+					localToken.clearToken()
+				}
 			})
 	}

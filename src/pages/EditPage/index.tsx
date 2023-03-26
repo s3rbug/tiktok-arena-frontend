@@ -63,7 +63,6 @@ export function EditPage() {
 						...data,
 						size: data.tiktoks.length,
 					},
-					token: user.token,
 					tournamentId,
 				})
 			)

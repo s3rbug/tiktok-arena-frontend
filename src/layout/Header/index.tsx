@@ -50,7 +50,7 @@ export function Header() {
 				<Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
 					<HStack spacing={8} alignItems={"center"}>
 						<Box cursor={"pointer"}>
-							<Link replace to="/tournaments">
+							<Link replace to="/tournaments?page=1">
 								<img src={LogoSvg} alt="logo" onClick={handleLogoClick} />
 							</Link>
 						</Box>

@@ -6,11 +6,12 @@ import {
 	DeleteTournamentsPayload,
 	GetTikToksPayloadType,
 	GetTournamentsPayload,
+	EndTournamentPayloadType,
 } from "./../../api/tournament"
 import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
 import { AppThunkType } from "../store"
-import { getErrorMessage, getToken } from "../../api/jsonFetch"
+import { getErrorMessage, getToken, RequestError } from "../../api/jsonFetch"
 
 export const getTournaments =
 	({ page, pageSize }: GetTournamentsPayload): AppThunkType =>
@@ -27,11 +28,12 @@ export const getTournaments =
 					dispatch(
 						paginationActions.setLastPage({
 							lastPage: Math.ceil(response.TournamentCount / pageSize),
+							key: "globalTournaments",
 						})
 					)
 				}
 			})
-			.catch((error) => {
+			.catch((error: RequestError) => {
 				console.log(error)
 			})
 	}
@@ -101,35 +103,56 @@ export const createTournament =
 	}
 
 export const getUserTournaments =
-	({ token }: { token: string }): AppThunkType =>
-	async (dispatch) => {
+	({ page, pageSize }: GetTournamentsPayload): AppThunkType =>
+	async (dispatch, getState) => {
+		const token = getToken(getState)
+		if (!token) {
+			return
+		}
 		return tournamentApi
-			.getUserTournaments({ token })
-			.then((tournaments) => {
-				if (tournaments) {
-					dispatch(tournamentActions.setUserTournaments({ tournaments }))
+			.getUserTournaments({ token, page, pageSize })
+			.then((response) => {
+				if (response?.Tournaments) {
+					dispatch(
+						tournamentActions.setUserTournaments({
+							tournaments: response.Tournaments,
+						})
+					)
+
+					dispatch(
+						paginationActions.setLastPage({
+							lastPage: Math.ceil(response.TournamentCount / pageSize),
+							key: "userTournaments",
+						})
+					)
+
+					dispatch(
+						paginationActions.setTotal({
+							total: response.TournamentCount,
+							key: "userTournaments",
+						})
+					)
 				}
 			})
-			.catch((error) => {
+			.catch((error: RequestError) => {
 				console.log(error)
 			})
 	}
 
 export const deleteTournaments =
-	({
-		data,
-		token,
-	}: {
-		data: DeleteTournamentsPayload
-		token: string
-	}): AppThunkType =>
-	async (dispatch) => {
+	({ data }: { data: DeleteTournamentsPayload }): AppThunkType =>
+	async (dispatch, getState) => {
+		const token = getToken(getState)
+		const { currentPage, pageSize } = getState().pagination.userTournaments
+		if (!token || !currentPage) {
+			return
+		}
 		return tournamentApi
 			.deleteTournaments({ data, token })
 			.then(() => {
-				dispatch(getUserTournaments({ token }))
+				dispatch(getUserTournaments({ page: currentPage, pageSize }))
 			})
-			.catch((error) => {
+			.catch((error: RequestError) => {
 				console.log(error)
 			})
 	}
@@ -151,21 +174,23 @@ export const getTikToks =
 
 export const editTournament =
 	({
-		data,
-		token,
 		tournamentId,
+		data,
 	}: {
-		data: CreateTournamentPayloadType
-		token: string
 		tournamentId: string
+		data: CreateTournamentPayloadType
 	}): AppThunkType =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
+		const token = getToken(getState)
+		if (!token) {
+			return
+		}
 		return tournamentApi
 			.editTournament({ data, token, tournamentId })
 			.then(() => {
 				dispatch(uiActions.setSuccess({ success: { editTournament: true } }))
 			})
-			.catch((error: Error) => {
+			.catch((error: RequestError) => {
 				const message = getErrorMessage(error)
 
 				if (message) {
@@ -181,22 +206,18 @@ export const editTournament =
 	}
 
 export const endTournament =
-	({
-		token,
-		tournamentId,
-		winnerURL,
-	}: {
-		token: string
-		tournamentId: string
-		winnerURL: string
-	}): AppThunkType =>
-	async (dispatch) => {
+	({ tournamentId, winnerURL }: EndTournamentPayloadType): AppThunkType =>
+	async (dispatch, getState) => {
+		const token = getToken(getState)
+		if (!token) {
+			return
+		}
 		return tournamentApi
 			.endTournament({ token, tournamentId, winnerURL })
 			.then(() => {
 				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
 			})
-			.catch((error) => {
+			.catch((error: RequestError) => {
 				console.log(error)
 			})
 	}

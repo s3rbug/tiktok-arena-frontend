@@ -34,7 +34,6 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 	})
 
 	function handleCheckboxChange(event: ChangeEvent<HTMLInputElement>) {
-		console.log(event.target.checked)
 		dispatch(
 			tournamentActions.setChecked({
 				tournamentId: id,

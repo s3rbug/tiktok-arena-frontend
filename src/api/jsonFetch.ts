@@ -35,6 +35,15 @@ const defaultConfig = {
 	},
 }
 
+export class RequestError extends Error {
+	status: number
+	constructor(message: string, status: number) {
+		super(message)
+		this.name = "RequestError"
+		this.status = status
+	}
+}
+
 const requestTemplate = (method: "GET" | "POST" | "PUT" | "DELETE") =>
 	async function <T>(
 		url: string,
@@ -56,7 +65,7 @@ const requestTemplate = (method: "GET" | "POST" | "PUT" | "DELETE") =>
 
 		if (!response.ok) {
 			return response.text().then((text) => {
-				throw new Error(text)
+				throw new RequestError(text, response.status)
 			})
 		}
 		return await response.json()

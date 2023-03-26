@@ -54,7 +54,6 @@ export function Arena({ tournamentId, format }: PropsType) {
 			if (user?.token) {
 				dispatch(
 					endTournament({
-						token: user.token,
 						tournamentId,
 						winnerURL: newWinnerURL,
 					})

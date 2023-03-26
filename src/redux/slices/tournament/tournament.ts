@@ -34,9 +34,15 @@ const tournamentSlice = createSlice({
 		},
 		setUserTournaments(
 			state,
-			action: PayloadAction<{ tournaments: TournamentType[] }>
+			action: PayloadAction<{ tournaments: TournamentType[] | null }>
 		) {
 			const { tournaments } = action.payload
+
+			if (!tournaments) {
+				state.userTournaments = null
+				return
+			}
+
 			state.userTournaments = tournaments.map((tournament) => ({
 				...tournament,
 				checked: false,

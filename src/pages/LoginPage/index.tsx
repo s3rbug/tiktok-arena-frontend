@@ -15,7 +15,7 @@ export function LoginPage() {
 	}
 
 	if (user) {
-		return <Navigate replace to="/tournaments" />
+		return <Navigate replace to="/tournaments?page=1" />
 	}
 
 	return <Auth onSubmit={onSubmit} title={"Login"}></Auth>

@@ -1,10 +1,14 @@
-import { TikTok } from "./../redux/slices/tournament/tournament.types"
+import {
+	TikTok,
+	TournamentFormType,
+} from "./../redux/slices/tournament/tournament.types"
 import {
 	TournamentType,
 	ContestType,
 	TournamentFormat,
 } from "../redux/slices/tournament/tournament.types"
 import { jsonFetch } from "./jsonFetch"
+import { AuthTokenType } from "./auth"
 
 export type GetContestPayloadType = {
 	tournamentId: string
@@ -16,13 +20,8 @@ export type GetTournamentPayloadType = {
 }
 
 export type CreateTournamentPayloadType = {
-	name: string
 	size: number
-	tiktoks: {
-		url: string
-		name: string
-	}[]
-}
+} & TournamentFormType
 
 export type DeleteTournamentsPayload = {
 	TournamentIds: string[]
@@ -35,6 +34,11 @@ export type GetTikToksPayloadType = {
 export type GetTournamentsPayload = {
 	page: number
 	pageSize: number
+}
+
+export type EndTournamentPayloadType = {
+	tournamentId: string
+	winnerURL: string
 }
 
 export const tournamentApi = {
@@ -61,10 +65,7 @@ export const tournamentApi = {
 	createTournament: async function ({
 		data,
 		token,
-	}: {
-		data: CreateTournamentPayloadType
-		token: string
-	}) {
+	}: { data: CreateTournamentPayloadType } & AuthTokenType) {
 		return jsonFetch.post("/tournament/create", {
 			body: JSON.stringify(data),
 			headers: {
@@ -73,8 +74,15 @@ export const tournamentApi = {
 		})
 	},
 
-	getUserTournaments: async function ({ token }: { token: string }) {
-		return jsonFetch.get<TournamentType[]>("/user/tournaments", {
+	getUserTournaments: async function ({
+		page,
+		pageSize,
+		token,
+	}: GetTournamentsPayload & AuthTokenType) {
+		return jsonFetch.get<{
+			TournamentCount: number
+			Tournaments: TournamentType[]
+		}>(`/user/tournaments?page=${page}&count=${pageSize}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -84,10 +92,7 @@ export const tournamentApi = {
 	deleteTournaments: async function ({
 		data,
 		token,
-	}: {
-		data: DeleteTournamentsPayload
-		token: string
-	}) {
+	}: { data: DeleteTournamentsPayload } & AuthTokenType) {
 		return jsonFetch.delete("/tournament/delete", {
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -105,10 +110,9 @@ export const tournamentApi = {
 		token,
 		tournamentId,
 	}: {
-		data: CreateTournamentPayloadType
-		token: string
 		tournamentId: string
-	}) {
+		data: CreateTournamentPayloadType
+	} & AuthTokenType) {
 		return jsonFetch.post(`/tournament/edit/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -119,13 +123,9 @@ export const tournamentApi = {
 
 	endTournament: async function ({
 		tournamentId,
-		token,
 		winnerURL,
-	}: {
-		tournamentId: string
-		token: string
-		winnerURL: string
-	}) {
+		token,
+	}: EndTournamentPayloadType & AuthTokenType) {
 		return jsonFetch.post(`/tournament/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,

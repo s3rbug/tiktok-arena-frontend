@@ -11,10 +11,9 @@ export function TournamentsListPage() {
 
 	const tournaments = useTypedSelector((state) => state.arena.tournaments)
 
-	const currentPage = useTypedSelector((state) => state.pagination.currentPage)
-	const lastPage = useTypedSelector((state) => state.pagination.lastPage)
-	const maxLength = useTypedSelector((state) => state.pagination.maxLength)
-	const pageSize = useTypedSelector((state) => state.pagination.pageSize)
+	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
+		(state) => state.pagination.globalTournaments
+	)
 
 	useEffect(() => {
 		if (currentPage) {
@@ -23,21 +22,20 @@ export function TournamentsListPage() {
 	}, [dispatch, currentPage, pageSize])
 
 	function setCurrentPage(page: number) {
-		dispatch(paginationActions.setCurrentPage({ page }))
+		dispatch(
+			paginationActions.setCurrentPage({ page, key: "globalTournaments" })
+		)
 	}
 
 	return (
-		<>
-			{/* <Filters /> */}
-			<Box p={8}>
-				<Tournaments tournaments={tournaments} />
-				<Pagination
-					currentPage={currentPage}
-					lastPage={lastPage}
-					maxLength={maxLength}
-					setCurrentPage={setCurrentPage}
-				/>
-			</Box>
-		</>
+		<Box p={8}>
+			<Tournaments tournaments={tournaments} />
+			<Pagination
+				currentPage={currentPage}
+				lastPage={lastPage}
+				maxLength={maxLength}
+				setCurrentPage={setCurrentPage}
+			/>
+		</Box>
 	)
 }
