@@ -4,6 +4,7 @@ import { Tournaments } from "../../components"
 import { Pagination } from "../../components/Pagination"
 import { getTournaments } from "../../redux/middleware/tournament"
 import { paginationActions } from "../../redux/slices/pagination/pagination"
+import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 export function TournamentsListPage() {
@@ -14,17 +15,28 @@ export function TournamentsListPage() {
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
 		(state) => state.pagination.globalTournaments
 	)
+	const searchField = useTypedSelector((state) => state.arena.search.global)
 
 	useEffect(() => {
 		if (currentPage) {
-			dispatch(getTournaments({ page: currentPage, pageSize: pageSize }))
+			dispatch(
+				getTournaments({
+					page: currentPage,
+					pageSize: pageSize,
+					search: searchField,
+				})
+			)
 		}
-	}, [dispatch, currentPage, pageSize])
+	}, [dispatch, currentPage, pageSize, searchField])
 
 	function setCurrentPage(page: number) {
 		dispatch(
 			paginationActions.setCurrentPage({ page, key: "globalTournaments" })
 		)
+	}
+
+	function setSearchField(searchField: string | null) {
+		dispatch(tournamentActions.setSearchField({ searchField, key: "global" }))
 	}
 
 	return (
@@ -35,6 +47,8 @@ export function TournamentsListPage() {
 				lastPage={lastPage}
 				maxLength={maxLength}
 				setCurrentPage={setCurrentPage}
+				searchField={searchField}
+				setSearchField={setSearchField}
 			/>
 		</Box>
 	)

@@ -8,18 +8,24 @@ type PropsType = {
 	lastPage: number | null
 	maxLength: number
 	setCurrentPage: (newCurrentPage: number) => void
+	searchField: string | null
+	setSearchField: (newSearchField: string | null) => void
 }
 
 export const Pagination = ({
-	currentPage,
 	lastPage,
 	maxLength,
+	searchField,
+	setSearchField,
+	currentPage,
 	setCurrentPage,
 }: PropsType) => {
 	const { changeCurrentPage } = useRoutePagination({
 		currentPage,
 		lastPage,
 		setCurrentPage,
+		searchField,
+		setSearchField,
 	})
 
 	if (!currentPage || !lastPage) {

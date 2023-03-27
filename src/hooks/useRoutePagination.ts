@@ -5,24 +5,30 @@ import { useCustomToast } from "./useCustomToast"
 type PropsType = {
 	currentPage: number | null
 	lastPage: number | null
+	searchField: string | null
 	setCurrentPage: (currentPage: number) => void
+	setSearchField: (search: string | null) => void
 }
 
 export const useRoutePagination = ({
 	currentPage,
 	lastPage,
+	searchField,
 	setCurrentPage,
+	setSearchField,
 }: PropsType) => {
 	const { showToast } = useCustomToast()
 
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	const changeCurrentPage = useCallback(
-		(page: number) => {
-			setSearchParams({ page: String(page) }, { replace: true })
+		(page: number, replace: boolean = false) => {
+			// setSearchParams({ page: String(page) }, { replace })
+			searchParams.set("page", String(page))
 			setCurrentPage(page)
+			setSearchParams(searchParams)
 		},
-		[setCurrentPage, setSearchParams]
+		[setCurrentPage, searchParams, setSearchParams]
 	)
 
 	useEffect(() => {
@@ -47,10 +53,12 @@ export const useRoutePagination = ({
 		) {
 			setCurrentPage(urlCurrentPage)
 		} else {
-			showToast(
-				"Wrong page",
-				`${urlCurrentPageString} is wrong page value! Redirected to first page`
-			)
+			if (urlCurrentPageString) {
+				showToast(
+					"Wrong page",
+					`${urlCurrentPageString} is wrong page value! Redirected to first page`
+				)
+			}
 			changeCurrentPage(1)
 		}
 	}, [
@@ -61,6 +69,27 @@ export const useRoutePagination = ({
 		lastPage,
 		searchParams,
 	])
+
+	useEffect(() => {
+		const urlSearchField = searchParams.get("search")
+		// console.log({ urlSearchField })
+
+		if (!urlSearchField && searchField) {
+			setSearchField(null)
+		}
+
+		if (urlSearchField && !searchField) {
+			setSearchField(urlSearchField)
+		}
+
+		// if (!searchField && urlSearchField) {
+		// 	setSearchField(urlSearchField)
+		// }
+
+		// if (searchField !== urlSearchField && searchField) {
+		// 	setSearchUrl(searchField)
+		// }
+	}, [searchParams, setSearchField, searchField])
 
 	return { changeCurrentPage }
 }

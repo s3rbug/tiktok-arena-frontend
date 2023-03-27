@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { PaginationKeys, PaginationStateType } from "./pagination.types"
 
 const MAX_LENGTH = 7
-const PAGE_SIZE = 4
+const PAGE_SIZE = 8
 
 const initialState = {
 	globalTournaments: {

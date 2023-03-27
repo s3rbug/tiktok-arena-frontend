@@ -14,10 +14,10 @@ import { AppThunkType } from "../store"
 import { getErrorMessage, getToken, RequestError } from "../../api/jsonFetch"
 
 export const getTournaments =
-	({ page, pageSize }: GetTournamentsPayload): AppThunkType =>
+	({ page, pageSize, search }: GetTournamentsPayload): AppThunkType =>
 	async (dispatch) => {
 		return tournamentApi
-			.getTournaments({ page, pageSize })
+			.getTournaments({ page, pageSize, search })
 			.then((response) => {
 				if (response) {
 					dispatch(
@@ -103,14 +103,14 @@ export const createTournament =
 	}
 
 export const getUserTournaments =
-	({ page, pageSize }: GetTournamentsPayload): AppThunkType =>
+	({ page, pageSize, search }: GetTournamentsPayload): AppThunkType =>
 	async (dispatch, getState) => {
 		const token = getToken(getState)
 		if (!token) {
 			return
 		}
 		return tournamentApi
-			.getUserTournaments({ token, page, pageSize })
+			.getUserTournaments({ token, page, pageSize, search })
 			.then((response) => {
 				if (response?.Tournaments) {
 					dispatch(

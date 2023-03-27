@@ -34,6 +34,7 @@ export type GetTikToksPayloadType = {
 export type GetTournamentsPayload = {
 	page: number
 	pageSize: number
+	search?: string | null
 }
 
 export type EndTournamentPayloadType = {
@@ -42,11 +43,15 @@ export type EndTournamentPayloadType = {
 }
 
 export const tournamentApi = {
-	getTournaments: async function ({ page, pageSize }: GetTournamentsPayload) {
+	getTournaments: async function ({
+		page,
+		pageSize,
+		search,
+	}: GetTournamentsPayload) {
 		return jsonFetch.get<{
 			TournamentCount: number
 			Tournaments: TournamentType[]
-		}>(`/tournament?page=${page}&count=${pageSize}`)
+		}>(`/tournament?page=${page}&count=${pageSize}&search=${search || ""}`)
 	},
 
 	getContest: async function ({
@@ -78,15 +83,19 @@ export const tournamentApi = {
 		page,
 		pageSize,
 		token,
+		search,
 	}: GetTournamentsPayload & AuthTokenType) {
 		return jsonFetch.get<{
 			TournamentCount: number
 			Tournaments: TournamentType[]
-		}>(`/user/tournaments?page=${page}&count=${pageSize}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		})
+		}>(
+			`/user/tournaments?page=${page}&count=${pageSize}&search=${search || ""}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
 	},
 
 	deleteTournaments: async function ({

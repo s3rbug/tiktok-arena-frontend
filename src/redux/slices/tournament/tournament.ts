@@ -19,6 +19,10 @@ const initialState = {
 	userTournaments: null as TournamentType[] | null,
 	contest: {} as ContestType,
 	contestProgress: { ...initialContestProgress } as ContestProgressType,
+	search: {
+		global: null as string | null,
+		user: null as string | null,
+	},
 }
 
 const tournamentSlice = createSlice({
@@ -140,6 +144,16 @@ const tournamentSlice = createSlice({
 		) => {
 			const { tournament } = action.payload
 			state.tournament = tournament
+		},
+		setSearchField: (
+			state,
+			action: PayloadAction<{
+				searchField: string | null
+				key: keyof typeof state.search
+			}>
+		) => {
+			const { searchField, key } = action.payload
+			state.search[key] = searchField
 		},
 	},
 })

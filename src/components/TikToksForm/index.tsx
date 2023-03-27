@@ -168,9 +168,8 @@ export function TikToksForm({
 				<FormControl
 					display={"flex"}
 					flexDirection="column"
-					alignItems={"center"}
 					isInvalid={!!errors?.name?.message}
-					mb={4}
+					mb={2}
 				>
 					<Controller
 						name={"name"}
@@ -194,7 +193,6 @@ export function TikToksForm({
 								placeholder="Tournament name"
 								{...field}
 								w="fit-content"
-								fontSize="xl"
 							/>
 						)}
 					/>

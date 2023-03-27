@@ -20,6 +20,7 @@ import {
 	getUserTournaments,
 } from "../../redux/middleware/tournament"
 import { paginationActions } from "../../redux/slices/pagination/pagination"
+import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 export function ProfilePage() {
@@ -34,18 +35,30 @@ export function ProfilePage() {
 	const dialogRef = useRef(null)
 
 	const tournaments = useTypedSelector((state) => state.arena.userTournaments)
+	const searchField = useTypedSelector((state) => state.arena.search.user)
 
 	const { currentPage, lastPage, maxLength, pageSize, total } =
 		useTypedSelector((state) => state.pagination.userTournaments)
 
 	useEffect(() => {
 		if (user?.token && currentPage && pageSize) {
-			dispatch(getUserTournaments({ page: currentPage, pageSize }))
+			dispatch(
+				getUserTournaments({ page: currentPage, pageSize, search: searchField })
+			)
 		}
-	}, [dispatch, user?.token, currentPage, pageSize])
+	}, [dispatch, user?.token, currentPage, pageSize, searchField])
 
 	function setCurrentPage(page: number) {
 		dispatch(paginationActions.setCurrentPage({ page, key: "userTournaments" }))
+	}
+
+	function setSearchField(searchField: string | null) {
+		dispatch(
+			tournamentActions.setSearchField({
+				searchField,
+				key: "user",
+			})
+		)
 	}
 
 	function showDeleteDialog() {
@@ -118,6 +131,8 @@ export function ProfilePage() {
 						lastPage={lastPage}
 						maxLength={maxLength}
 						setCurrentPage={setCurrentPage}
+						searchField={searchField}
+						setSearchField={setSearchField}
 					/>
 				</Box>
 			</Box>

@@ -4,6 +4,7 @@ import { localToken } from "../../localStorage/token"
 import { whoami } from "../../redux/middleware/auth"
 import { useTypedDispatch } from "../../redux/store"
 import { AppRoutes } from "../"
+import { Box } from "@chakra-ui/react"
 
 export function App() {
 	const dispatch = useTypedDispatch()
@@ -18,7 +19,9 @@ export function App() {
 	return (
 		<>
 			<Header />
-			<AppRoutes />
+			<Box>
+				<AppRoutes />
+			</Box>
 		</>
 	)
 }

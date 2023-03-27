@@ -1,18 +1,11 @@
-import {
-	Box,
-	Card,
-	CardBody,
-	Heading,
-	Image,
-	Stack,
-	Flex,
-} from "@chakra-ui/react"
+import { Box, Card, CardBody, Heading, Image, Flex } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { Loading } from "../Loading"
 import { FormatButton } from "./FormatButton"
+import LogoSvg from "../../assets/logo.svg"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat) => void
@@ -34,20 +27,20 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	}
 
 	return (
-		<Box display={"flex"} justifyContent={"center"}>
-			<Card p={8}>
+		<Box display={"flex"} justifyContent={"center"} w={"100%"} mt={16}>
+			<Card w={"50%"} variant="unstyled">
 				<CardBody>
 					<Image
-						src="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"
+						src={LogoSvg}
 						alt="Tournament"
 						borderRadius="lg"
-						maxH="md"
+						width={"100%"}
+						maxH={"300px"}
 					/>
-					<Stack mt={6} mb={3}>
-						<Heading textAlign={"center"} size="md">
-							{tournament ? tournament.Name : ""}
-						</Heading>
-					</Stack>
+
+					<Heading mt={4} mb={6} textAlign={"center"} size="md">
+						{tournament ? tournament.Name : ""}
+					</Heading>
 				</CardBody>
 				<Flex justifyContent={"space-around"}>
 					<FormatButton

@@ -14,6 +14,7 @@ import { Link } from "react-router-dom"
 import { useCardShadow } from "../../../hooks/useCardShadow"
 import { tournamentActions } from "../../../redux/slices/tournament/tournament"
 import { useTypedDispatch } from "../../../redux/store"
+import LogoSvg from "../../../assets/logo.svg"
 
 type PropsType = {
 	id: string
@@ -67,9 +68,9 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 						_hover={{
 							transform: "scale(1.05)",
 						}}
-						src="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"
-						maxWidth={"300px"}
-						maxHeight={"300px"}
+						src={LogoSvg}
+						w={"250px"}
+						h="250px"
 						alt="Tournament card"
 						borderRadius="lg"
 					/>

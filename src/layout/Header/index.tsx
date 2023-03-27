@@ -1,13 +1,13 @@
 import {
 	Box,
 	Flex,
-	HStack,
 	Button,
 	Menu,
 	MenuButton,
 	MenuList,
 	MenuItem,
 	Avatar,
+	Image,
 } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
@@ -45,49 +45,58 @@ export function Header() {
 	}
 
 	return (
-		<>
-			<Box px={4}>
-				<Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-					<HStack spacing={8} alignItems={"center"}>
-						<Box cursor={"pointer"}>
-							<Link replace to="/tournaments?page=1">
-								<img src={LogoSvg} alt="logo" onClick={handleLogoClick} />
-							</Link>
-						</Box>
-					</HStack>
-					<HStack spacing={12} alignItems={"center"}>
-						<Search />
-						{user ? (
-							<Box>
-								<Menu>
-									{() => (
-										<>
-											<MenuButton>
-												<Avatar src="https://bit.ly/kent-c-dodds" />
-											</MenuButton>
-											<MenuList>
-												<MenuItem onClick={handleProfile}>My profile</MenuItem>
-												<MenuItem onClick={handleCreateTournament}>
-													Create tournament
-												</MenuItem>
-												<MenuItem onClick={handleLogout}>Logout</MenuItem>
-											</MenuList>
-										</>
-									)}
-								</Menu>
-							</Box>
-						) : (
-							<Button
-								onClick={handleLoginButton}
-								variant={"solid"}
-								colorScheme="blue"
-							>
-								Login
-							</Button>
-						)}
-					</HStack>
-				</Flex>
-			</Box>
-		</>
+		<Box
+			px={4}
+			py={2}
+			position="sticky"
+			zIndex={"sticky"}
+			top={0}
+			bg="white"
+			borderBottomColor={"blackAlpha.300"}
+			boxShadow="md"
+			borderBottomWidth={2}
+		>
+			<Flex
+				h={"100%"}
+				alignItems={"center"}
+				justifyContent={"space-between"}
+				gap={4}
+			>
+				<Link replace to="/tournaments?page=1">
+					<Image src={LogoSvg} alt="logo" onClick={handleLogoClick} />
+				</Link>
+
+				<Search />
+
+				{user ? (
+					<Box>
+						<Menu>
+							{() => (
+								<>
+									<MenuButton>
+										<Avatar src="https://bit.ly/kent-c-dodds" />
+									</MenuButton>
+									<MenuList>
+										<MenuItem onClick={handleProfile}>My profile</MenuItem>
+										<MenuItem onClick={handleCreateTournament}>
+											Create tournament
+										</MenuItem>
+										<MenuItem onClick={handleLogout}>Logout</MenuItem>
+									</MenuList>
+								</>
+							)}
+						</Menu>
+					</Box>
+				) : (
+					<Button
+						onClick={handleLoginButton}
+						variant={"solid"}
+						colorScheme="blue"
+					>
+						Login
+					</Button>
+				)}
+			</Flex>
+		</Box>
 	)
 }
