@@ -94,6 +94,8 @@ export function Arena({ tournamentId, format }: PropsType) {
 				<Button
 					onClick={handleChooseButton(firstTikTokURL)}
 					colorScheme={"blue"}
+					position={"sticky"}
+					bottom={0}
 				>
 					Обрати
 				</Button>
@@ -103,6 +105,8 @@ export function Arena({ tournamentId, format }: PropsType) {
 				<Button
 					onClick={handleChooseButton(secondTikTokURL)}
 					colorScheme={"blue"}
+					position={"sticky"}
+					bottom={0}
 				>
 					Обрати
 				</Button>

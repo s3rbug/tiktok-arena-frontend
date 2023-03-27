@@ -2,6 +2,8 @@ import { TiktokUrl } from "./tiktokUrl"
 
 describe("utilities for using tiktok URL", () => {
 	const { casual, embeded, id } = TiktokUrl.regex
+	const { toEmbeded } = TiktokUrl
+
 	it("casual tiktok URL regex", () => {
 		expect(
 			casual.test("https://www.tiktok.com/@user/video/7204073653393100037")
@@ -23,6 +25,11 @@ describe("utilities for using tiktok URL", () => {
 		expect(
 			casual.test("https://www.tiktok.com/embed/v2/7201108451286633722")
 		).toBe(false)
+		expect(
+			casual.test(
+				"https://www.tiktok.com/@username/video/3131231?is_from_webapp=1&sender_device=pc"
+			)
+		).toBe(true)
 	})
 	it("embeded tiktok URL regex", () => {
 		expect(
@@ -43,5 +50,15 @@ describe("utilities for using tiktok URL", () => {
 			id.test("https://www.tiktok.com/@user/video/7204073653393100037")
 		).toBe(false)
 		expect(id.test("https://www.tiktok.com/embed/v2/123333")).toBe(false)
+	})
+	it("to embeded function", () => {
+		expect(
+			toEmbeded(
+				"https://www.tiktok.com/@username/video/7201108451286633722?is_from_webapp=1&sender_device=pc"
+			)
+		).toBe("https://www.tiktok.com/embed/v2/7201108451286633722")
+		expect(
+			toEmbeded("https://www.tiktok.com/@username/video/7201108451286633722")
+		).toBe("https://www.tiktok.com/embed/v2/7201108451286633722")
 	})
 })
