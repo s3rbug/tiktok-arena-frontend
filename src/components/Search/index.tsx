@@ -39,8 +39,14 @@ export function Search() {
 			})
 		)
 
-		if (!isUserRoute) {
+		if (isUserRoute) {
+			return
+		}
+
+		if (data.searchField !== "") {
 			navigate(`/tournaments?search=${data.searchField}`, { replace: true })
+		} else {
+			navigate("/tournaments", { replace: true })
 		}
 	}
 

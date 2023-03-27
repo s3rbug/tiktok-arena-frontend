@@ -8,7 +8,7 @@ import { FormatButton } from "./FormatButton"
 import LogoSvg from "../../assets/logo.svg"
 
 type PropsType = {
-	setFormat: (format: TournamentFormat) => void
+	setFormat: (format: TournamentFormat | null) => void
 	tournamentId: string | undefined
 }
 
@@ -42,7 +42,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						{tournament ? tournament.Name : ""}
 					</Heading>
 				</CardBody>
-				<Flex justifyContent={"space-around"}>
+				<Flex justifyContent={"space-evenly"}>
 					<FormatButton
 						format={TournamentFormat.SINGLE_ELIMINATION}
 						setFormat={setFormat}

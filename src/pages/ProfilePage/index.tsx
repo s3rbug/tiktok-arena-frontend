@@ -22,6 +22,7 @@ import {
 import { paginationActions } from "../../redux/slices/pagination/pagination"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import AvatarJpg from "../../assets/avatar.jpg"
 
 export function ProfilePage() {
 	const dispatch = useTypedDispatch()
@@ -99,7 +100,7 @@ export function ProfilePage() {
 		<>
 			<Box p={8} pt={16}>
 				<Flex gap={16}>
-					<Avatar h={"100%"} w={"250px"} src="https://bit.ly/kent-c-dodds" />
+					<Avatar h={"100%"} w={"250px"} src={AvatarJpg} />
 					<Flex flexDirection={"column"} gap={2}>
 						<Text fontSize={"lg"}>
 							Name: <b>{user?.name}</b>

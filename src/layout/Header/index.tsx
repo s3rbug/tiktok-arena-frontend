@@ -11,39 +11,22 @@ import {
 } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useTypedDispatch } from "../../redux/store"
 import { authActions } from "../../redux/slices/auth/auth"
 import { localToken } from "../../localStorage/token"
 import { useAuth } from "../../hooks/useAuth"
+import AvatarJpg from "../../assets/avatar.jpg"
 
 export function Header() {
 	const dispatch = useTypedDispatch()
-	const navigate = useNavigate()
 
 	const user = useAuth()
-
-	function handleLogoClick() {
-		navigate("/tournaments")
-	}
-
-	function handleLoginButton() {
-		navigate("/login")
-	}
 
 	function handleLogout() {
 		localToken.clearToken()
 		dispatch(authActions.logout())
 	}
-
-	function handleCreateTournament() {
-		navigate("/user/create")
-	}
-
-	function handleProfile() {
-		navigate("/user")
-	}
-
 	return (
 		<Box
 			px={4}
@@ -63,7 +46,16 @@ export function Header() {
 				gap={4}
 			>
 				<Link replace to="/tournaments?page=1">
-					<Image src={LogoSvg} alt="logo" onClick={handleLogoClick} />
+					<Image
+						src={LogoSvg}
+						alt="logo"
+						h={"50px"}
+						w={"50px"}
+						_hover={{ filter: "invert(100%)" }}
+						transitionDuration=".3s"
+						transitionTimingFunction={"ease-in"}
+						transitionProperty="filter"
+					/>
 				</Link>
 
 				<Search />
@@ -74,13 +66,24 @@ export function Header() {
 							{() => (
 								<>
 									<MenuButton>
-										<Avatar src="https://bit.ly/kent-c-dodds" />
+										<Avatar src={AvatarJpg} />
 									</MenuButton>
 									<MenuList>
-										<MenuItem onClick={handleProfile}>My profile</MenuItem>
-										<MenuItem onClick={handleCreateTournament}>
-											Create tournament
-										</MenuItem>
+										<Link
+											to="/user"
+											replace
+											style={{ display: "inline-block", width: "100%" }}
+										>
+											<MenuItem>My profile</MenuItem>
+										</Link>
+
+										<Link
+											to="/user/create"
+											replace
+											style={{ display: "inline-block", width: "100%" }}
+										>
+											<MenuItem>Create tournament</MenuItem>
+										</Link>
 										<MenuItem onClick={handleLogout}>Logout</MenuItem>
 									</MenuList>
 								</>
@@ -88,13 +91,11 @@ export function Header() {
 						</Menu>
 					</Box>
 				) : (
-					<Button
-						onClick={handleLoginButton}
-						variant={"solid"}
-						colorScheme="blue"
-					>
-						Login
-					</Button>
+					<Link to="/login" replace>
+						<Button variant={"solid"} colorScheme="blue">
+							Login
+						</Button>
+					</Link>
 				)}
 			</Flex>
 		</Box>

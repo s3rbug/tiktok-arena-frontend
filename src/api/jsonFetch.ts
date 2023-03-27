@@ -27,8 +27,14 @@ function urlWithPrefix(baseUrl: string, url: string) {
 	return url
 }
 
+function isProduction() {
+	return import.meta.env.MODE === "production"
+}
+
 const defaultConfig = {
-	baseUrl: "http://127.0.0.1:8000/api",
+	baseUrl: isProduction()
+		? "https://tiktok-arena.onrender.com/api"
+		: "http://127.0.0.1:8000/api",
 	headers: {
 		Accept: "application/json",
 		"Content-Type": "application/json",

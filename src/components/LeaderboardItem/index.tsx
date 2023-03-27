@@ -1,4 +1,4 @@
-import { Box, Progress, Text, VStack } from "@chakra-ui/react"
+import { Badge, Box, Progress, Text, VStack } from "@chakra-ui/react"
 import { TikTok } from "../../redux/slices/tournament/tournament.types"
 
 type PropsType = {
@@ -13,20 +13,24 @@ export const LeaderboardItem = ({
 	timesPlayed,
 }: PropsType) => {
 	function getProgressValue() {
-		if (timesPlayed === 0) {
+		if (timesPlayed <= 1) {
 			return 0
 		}
-		return (100 * tiktok.Wins) / timesPlayed
+		return (100 * tiktok.Wins) / (timesPlayed - 1)
 	}
 
 	const isWinner = tiktok.URL === winnerURL
 
 	return (
-		<VStack align={"flex-start"} w={"100%"} maxWidth="600px">
-			<Text
+		<VStack align={"flex-start"} w={"100%"}>
+			<Badge
 				fontSize={"xl"}
+				colorScheme={"green"}
 				fontWeight={isWinner ? "bold" : "normal"}
-			>{`${Math.round(getProgressValue())}%`}</Text>
+			>
+				{`${Math.round(getProgressValue())}%`}
+			</Badge>
+
 			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.Name}</Text>
 			<Box w={"100%"}>
 				<Progress
