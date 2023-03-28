@@ -95,9 +95,9 @@ export function Arena({ tournamentId, format }: PropsType) {
 					onClick={handleChooseButton(firstTikTokURL)}
 					colorScheme={"blue"}
 					position={"sticky"}
-					bottom={0}
+					bottom={4}
 				>
-					Обрати
+					Choose
 				</Button>
 			</VStack>
 			<VStack alignItems="stretch">
@@ -106,9 +106,9 @@ export function Arena({ tournamentId, format }: PropsType) {
 					onClick={handleChooseButton(secondTikTokURL)}
 					colorScheme={"blue"}
 					position={"sticky"}
-					bottom={0}
+					bottom={4}
 				>
-					Обрати
+					Choose
 				</Button>
 			</VStack>
 		</HStack>

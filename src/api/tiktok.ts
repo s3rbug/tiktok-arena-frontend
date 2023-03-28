@@ -1,8 +1,8 @@
 import { jsonFetch } from "./jsonFetch"
 
 export const tiktokApi = {
-	getName: ({ url }: { url: string }) => {
-		return jsonFetch.get<{ title: string }>(
+	getDetails: ({ url }: { url: string }) => {
+		return jsonFetch.get<{ title: string; thumbnail_url: string }>(
 			`https://www.tiktok.com/oembed?url=${url}`,
 			{},
 			true

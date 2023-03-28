@@ -56,7 +56,7 @@ export const TournamentFields = ({
 		}
 
 		tiktokApi
-			.getName({ url })
+			.getDetails({ url })
 			.then((data) => {
 				const name = data?.title
 				if (name) {

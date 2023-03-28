@@ -163,9 +163,11 @@ export const getTikToks =
 		return tournamentApi
 			.getTikToks({ data })
 			.then((tiktoks) => {
-				if (tiktoks) {
-					dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))
+				if (!tiktoks) {
+					return
 				}
+
+				dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))
 			})
 			.catch((error) => {
 				console.log(error)

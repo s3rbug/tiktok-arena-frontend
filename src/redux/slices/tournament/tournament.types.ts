@@ -54,4 +54,5 @@ export type TikTok = {
 	URL: string
 	Wins: number
 	Name: string
+	thumbnailUrl: string | null
 }
