@@ -16,7 +16,7 @@ import { useTypedDispatch } from "../../redux/store"
 import { authActions } from "../../redux/slices/auth/auth"
 import { localToken } from "../../localStorage/token"
 import { useAuth } from "../../hooks/useAuth"
-import AvatarJpg from "../../assets/avatar.jpg"
+import UserSvg from "../../assets/userIcon.svg"
 
 export function Header() {
 	const dispatch = useTypedDispatch()
@@ -66,7 +66,7 @@ export function Header() {
 							{() => (
 								<>
 									<MenuButton>
-										<Avatar src={AvatarJpg} />
+										<Avatar src={UserSvg} />
 									</MenuButton>
 									<MenuList>
 										<Link

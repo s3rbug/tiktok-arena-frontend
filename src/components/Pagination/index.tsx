@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/react"
 import { useRoutePagination } from "../../hooks/useRoutePagination"
 import { getPaginationItems } from "../../utils/pagination/pagination"
+import { Loading } from "../Loading"
 import PaginationLink from "./PaginationLink"
 
 type PropsType = {
@@ -29,7 +30,7 @@ export const Pagination = ({
 	})
 
 	if (!currentPage || !lastPage) {
-		return null
+		return <Loading />
 	}
 
 	const pageNumbers = getPaginationItems(currentPage, lastPage, maxLength)

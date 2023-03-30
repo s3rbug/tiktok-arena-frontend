@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import { useEffect } from "react"
-import { Tournaments } from "../../components"
+import { Loading, Tournaments } from "../../components"
 import { Pagination } from "../../components/Pagination"
 import { getTournaments } from "../../redux/middleware/tournament"
 import { paginationActions } from "../../redux/slices/pagination/pagination"
@@ -37,6 +37,10 @@ export function TournamentsListPage() {
 
 	function setSearchField(searchField: string | null) {
 		dispatch(tournamentActions.setSearchField({ searchField, key: "global" }))
+	}
+
+	if (!tournaments) {
+		return <Loading />
 	}
 
 	return (

@@ -1,5 +1,4 @@
 import { editTournament } from "../../redux/middleware/tournament"
-import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
 import { uiActions } from "../../redux/slices/ui/ui"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { TikToksForm } from "../../components/TikToksForm"
@@ -10,6 +9,7 @@ import { getTikToks, getTournament } from "../../redux/middleware/tournament"
 import { useAuth } from "../../hooks/useAuth"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { Loading } from "../../components"
+import { CreateTournamentPayloadType } from "../../api/tournament"
 
 export function EditPage() {
 	const { tournamentId } = useParams()
@@ -50,18 +50,20 @@ export function EditPage() {
 
 	const defaultValue = {
 		name: tournament.Name,
+		photoURL: tournament.PhotoURL || null,
 		tiktoks: [
 			...tiktoks.map((tiktok) => ({ url: tiktok.URL, name: tiktok.Name })),
 		],
 	}
 
-	function onSubmit(data: TournamentFormType) {
+	function onSubmit(data: CreateTournamentPayloadType) {
 		if (user?.token && tournamentId) {
 			dispatch(
 				editTournament({
 					data: {
 						...data,
 						size: data.tiktoks.length,
+						photoURL: data.photoURL,
 					},
 					tournamentId,
 				})

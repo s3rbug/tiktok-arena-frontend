@@ -29,16 +29,16 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	return (
 		<Box display={"flex"} justifyContent={"center"} w={"100%"} mt={16}>
 			<Card w={"50%"} variant="unstyled">
-				<CardBody>
+				<CardBody display={"flex"} flexDirection="column" alignItems={"center"}>
 					<Image
-						src={LogoSvg}
+						src={tournament?.PhotoURL || LogoSvg}
 						alt="Tournament"
 						borderRadius="lg"
-						width={"100%"}
-						maxH={"300px"}
+						width={"fit-content"}
+						h={"400px"}
 					/>
 
-					<Heading mt={4} mb={6} textAlign={"center"} size="md">
+					<Heading mt={4} mb={6} size="md">
 						{tournament ? tournament.Name : ""}
 					</Heading>
 				</CardBody>

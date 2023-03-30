@@ -6,9 +6,8 @@ import {
 	Heading,
 	Text,
 	useDisclosure,
-	useToast,
 } from "@chakra-ui/react"
-import { useEffect, useRef } from "react"
+import { ChangeEvent, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { DeleteTournamentsPayload } from "../../api/tournament"
 import { Loading, Tournaments } from "../../components"
@@ -22,7 +21,11 @@ import {
 import { paginationActions } from "../../redux/slices/pagination/pagination"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import AvatarJpg from "../../assets/avatar.jpg"
+import UserSvg from "../../assets/userIcon.svg"
+import { PhotoIcon } from "../../assets/chakraIcons"
+import { useCustomToast } from "../../hooks/useCustomToast"
+import { imageApi } from "../../api/image"
+import { changeUserPicture } from "../../redux/middleware/user"
 
 export function ProfilePage() {
 	const dispatch = useTypedDispatch()
@@ -31,7 +34,7 @@ export function ProfilePage() {
 
 	const user = useAuth()
 
-	const toast = useToast()
+	const { showToast } = useCustomToast()
 
 	const dialogRef = useRef(null)
 
@@ -78,18 +81,23 @@ export function ProfilePage() {
 		}
 
 		if (tournamentsToDelete.TournamentIds.length === 0) {
-			toast({
-				title: "Delete error",
-				description: "No tournaments chosen!",
-				status: "error",
-				position: "bottom-right",
-				duration: 2500,
-				isClosable: true,
-			})
+			showToast("Delete error", "No tournaments chosen!")
 			return
 		}
 
 		dispatch(deleteTournaments({ data: tournamentsToDelete }))
+	}
+
+	async function changePicture(event: ChangeEvent<HTMLInputElement>) {
+		const fileImage = event.target?.files?.[0]
+		if (!fileImage) {
+			return
+		}
+		imageApi.saveImageToCloud(fileImage).then((url) => {
+			if (url) {
+				dispatch(changeUserPicture({ photoURL: url }))
+			}
+		})
 	}
 
 	if (!user || !tournaments) {
@@ -100,7 +108,36 @@ export function ProfilePage() {
 		<>
 			<Box p={8} pt={16}>
 				<Flex gap={16}>
-					<Avatar h={"100%"} w={"250px"} src={AvatarJpg} />
+					<Avatar
+						as="label"
+						role="group"
+						position={"relative"}
+						h={"250px"}
+						w={"fit-content"}
+						src={UserSvg}
+					>
+						<input
+							style={{ display: "none" }}
+							onChange={changePicture}
+							type="file"
+							name="image"
+							accept="image/png, image/jpeg"
+						/>
+						<Box
+							position={"absolute"}
+							borderRadius={"full"}
+							backgroundColor="white"
+							p={2}
+							bottom={0}
+							right={3}
+							_groupHover={{ opacity: 1, bottom: 3 }}
+							opacity={0}
+							transition="opacity .25s ease-in, bottom .4s ease-in-out"
+							border="2px solid black"
+						>
+							<PhotoIcon boxSize={8} color="black" />
+						</Box>
+					</Avatar>
 					<Flex flexDirection={"column"} gap={2}>
 						<Text fontSize={"lg"}>
 							Name: <b>{user?.name}</b>

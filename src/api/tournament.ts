@@ -21,6 +21,7 @@ export type GetTournamentPayloadType = {
 
 export type CreateTournamentPayloadType = {
 	size: number
+	PhotoURL?: string | null
 } & TournamentFormType
 
 export type DeleteTournamentsPayload = {

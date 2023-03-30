@@ -1,7 +1,8 @@
 export type UserType = {
 	id: string
 	name: string
-	token: null | string
+	token: string | null
+	photoURL: string | null
 } | null
 
 export type UserAuthDetailsType = {

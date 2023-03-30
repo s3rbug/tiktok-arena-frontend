@@ -1,14 +1,17 @@
 import {
 	Alert,
 	AlertIcon,
+	Badge,
 	Box,
 	Button,
 	Flex,
 	FormControl,
+	HStack,
+	Image,
 	Input,
 	VStack,
 } from "@chakra-ui/react"
-import { useCallback, useEffect, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import {
 	useFieldArray,
 	useForm,
@@ -25,13 +28,15 @@ import { TournamentFields } from "./TournamentFields"
 import { Loading } from "../Loading"
 import { useCustomToast } from "../../hooks/useCustomToast"
 import { FormError } from "./FormError"
+import { imageApi } from "../../api/image"
+import { CreateTournamentPayloadType } from "../../api/tournament"
 
 type PropsType = {
 	defaultValues: TournamentFormType
 	serverError: string | null | undefined
 	success: boolean | null | undefined
 	clearStoreErrors: () => void
-	changeStoreOnSubmit: (data: TournamentFormType) => void
+	changeStoreOnSubmit: (data: CreateTournamentPayloadType) => void
 	submitText: string
 	successRedirect: string
 	warning?: string
@@ -56,6 +61,22 @@ export function TikToksForm({
 		min: 4,
 		max: 30,
 	}
+
+	const [image, setImage] = useState<null | File>(null)
+
+	useEffect(() => {
+		if (defaultValues.photoURL) {
+			fetch(defaultValues.photoURL)
+				.then((res) => res.blob())
+				.then((blob) => {
+					let imageName = defaultValues.photoURL || "photo url"
+					if (imageName.includes("/")) {
+						imageName = imageName.substring(imageName.lastIndexOf("/") + 1)
+					}
+					setImage(new File([blob], imageName))
+				})
+		}
+	}, [defaultValues.photoURL])
 
 	const {
 		control,
@@ -119,7 +140,7 @@ export function TikToksForm({
 		return field.onChange(event)
 	}
 
-	const onSubmit = (data: TournamentFormType) => {
+	const onSubmit = async (data: TournamentFormType) => {
 		const uniqueURLs = new Set(
 			tiktoks.map((field) => TiktokUrl.toEmbeded(field.url))
 		)
@@ -137,7 +158,26 @@ export function TikToksForm({
 
 		clearAllErrors()
 
-		changeStoreOnSubmit(data)
+		if (image) {
+			await imageApi
+				.saveImageToCloud(image)
+				.then((url) => {
+					changeStoreOnSubmit({
+						...data,
+						photoURL: url || null,
+						size: data.tiktoks.length,
+					})
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		} else {
+			changeStoreOnSubmit({
+				...data,
+				photoURL: null,
+				size: data.tiktoks.length,
+			})
+		}
 	}
 
 	function handleCreateTiktok() {
@@ -160,6 +200,14 @@ export function TikToksForm({
 				`Minimum tiktok count is ${tiktoksCount.min}`
 			)
 		}
+	}
+
+	async function uploadImage(event: ChangeEvent<HTMLInputElement>) {
+		const fileImage = event.target?.files?.[0]
+		if (!fileImage) {
+			return
+		}
+		setImage(fileImage)
 	}
 
 	return (
@@ -198,6 +246,7 @@ export function TikToksForm({
 					/>
 					<FormError error={errors?.name?.message} />
 				</FormControl>
+
 				<TournamentFields
 					setValue={setValue}
 					control={control}
@@ -213,6 +262,44 @@ export function TikToksForm({
 					<FormError error={serverError} />
 				</FormControl>
 			</VStack>
+			<HStack>
+				<HStack as="label">
+					<VStack>
+						<Button as="div" colorScheme={"blue"} variant="outline">
+							Change tournament picture
+						</Button>
+
+						{image && (
+							<Badge
+								maxW="200px"
+								overflow={"hidden"}
+								textOverflow="ellipsis"
+								fontSize={"sm"}
+								colorScheme="cyan"
+							>
+								{image.name}
+							</Badge>
+						)}
+					</VStack>
+					<input
+						style={{ display: "none" }}
+						onChange={uploadImage}
+						type="file"
+						name="image"
+						accept="image/png, image/jpeg"
+					/>
+				</HStack>
+				<Flex w="100%" justifyContent={"flex-start"}>
+					{image && (
+						<Image
+							src={URL.createObjectURL(image)}
+							ml={16}
+							h="350px"
+							w="fit-content"
+						/>
+					)}
+				</Flex>
+			</HStack>
 			{warning && (
 				<Alert status="warning" mt={6}>
 					<AlertIcon />

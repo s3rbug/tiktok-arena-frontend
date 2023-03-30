@@ -23,6 +23,7 @@ export function Tournaments({ tournaments, editable }: PropsType) {
 								title={tournament.Name}
 								editable={editable}
 								checked={tournament?.checked}
+								photoURL={tournament.PhotoURL}
 							/>
 						</GridItem>
 					)

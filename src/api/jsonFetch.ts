@@ -20,6 +20,12 @@ export function getToken(
 	return token
 }
 
+export function authHeader(token: string): { Authorization: string } {
+	return {
+		Authorization: `Bearer ${token}`,
+	}
+}
+
 function urlWithPrefix(baseUrl: string, url: string) {
 	if (url.startsWith("/")) {
 		return baseUrl + url

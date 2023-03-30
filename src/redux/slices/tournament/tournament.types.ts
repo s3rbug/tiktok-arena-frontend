@@ -5,6 +5,7 @@ export type TournamentType = {
 	UserId: string
 	TimesPlayed: number
 	checked?: boolean
+	PhotoURL?: string | null
 }
 
 export enum TournamentFormat {
@@ -43,6 +44,7 @@ export type ContestProgressType = {
 
 export type TournamentFormType = {
 	name: string
+	photoURL: string | null
 	tiktoks: {
 		url: string
 		name: string

@@ -13,6 +13,15 @@ const authSlice = createSlice({
 			const { user } = action.payload
 			state.user = user
 		},
+		changeUserPicture: (
+			state,
+			action: PayloadAction<{ photoURL: string | null }>
+		) => {
+			const { photoURL } = action.payload
+			if (state.user) {
+				state.user.photoURL = photoURL
+			}
+		},
 		logout: (state) => {
 			state.user = null
 		},

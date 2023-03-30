@@ -1,8 +1,8 @@
 import { createTournament } from "../../redux/middleware/tournament"
-import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
 import { uiActions } from "../../redux/slices/ui/ui"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { TikToksForm } from "../../components/TikToksForm"
+import { CreateTournamentPayloadType } from "../../api/tournament"
 
 export function CreateTournamentPage() {
 	const dispatch = useTypedDispatch()
@@ -15,7 +15,7 @@ export function CreateTournamentPage() {
 		(state) => state.ui.success?.createTournament
 	)
 
-	function onSubmit(data: TournamentFormType) {
+	function onSubmit(data: CreateTournamentPayloadType) {
 		dispatch(
 			createTournament({
 				data: { ...data, size: data.tiktoks.length },
@@ -30,6 +30,7 @@ export function CreateTournamentPage() {
 
 	const defaultValue = {
 		name: "",
+		photoURL: "",
 		tiktoks: [
 			{ url: "", name: "" },
 			{ url: "", name: "" },

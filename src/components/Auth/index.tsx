@@ -82,17 +82,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 
 	return (
 		<Flex width="full" align={"center"} justifyContent="center" mt={8}>
-			<Box
-				borderWidth={2}
-				borderRadius={8}
-				{...shadowStyleProps}
-				// boxShadow={focus ? "2xl" : "lg"}
-				// transition={"ease-in-out"}
-				// transitionDuration=".4s"
-				// _hover={{
-				// 	boxShadow: "2xl",
-				// }}
-			>
+			<Box borderWidth={2} borderRadius={8} {...shadowStyleProps}>
 				<Box textAlign="center" py={6}>
 					<Heading size={"xl"}>{title}</Heading>
 				</Box>

@@ -13,7 +13,7 @@ const initialContestProgress: ContestProgressType = {
 }
 
 const initialState = {
-	tournaments: [] as TournamentType[] | null,
+	tournaments: null as TournamentType[] | null,
 	tiktoks: null as TikTok[] | null,
 	tournament: null as TournamentType | null,
 	userTournaments: null as TournamentType[] | null,

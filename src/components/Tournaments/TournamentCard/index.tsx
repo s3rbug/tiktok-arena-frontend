@@ -21,9 +21,16 @@ type PropsType = {
 	title: string
 	editable?: boolean
 	checked?: boolean
+	photoURL?: string | null
 }
 
-export function TournamentCard({ id, title, editable, checked }: PropsType) {
+export function TournamentCard({
+	id,
+	title,
+	editable,
+	checked,
+	photoURL,
+}: PropsType) {
 	const dispatch = useTypedDispatch()
 
 	const { shadowStyleProps } = useCardShadow({
@@ -68,8 +75,8 @@ export function TournamentCard({ id, title, editable, checked }: PropsType) {
 						_hover={{
 							transform: "scale(1.05)",
 						}}
-						src={LogoSvg}
-						w={"250px"}
+						src={photoURL || LogoSvg}
+						w={"fit-content"}
 						h="250px"
 						alt="Tournament card"
 						borderRadius="lg"

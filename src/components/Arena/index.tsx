@@ -81,7 +81,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 
 	if (isContestOver) {
 		if (!tournamentId || !winnerURL) {
-			return null
+			return <Loading />
 		}
 
 		return <LeaderboardPage winnerURL={winnerURL} tournamentId={tournamentId} />
