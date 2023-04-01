@@ -66,7 +66,7 @@ export function Header() {
 							{() => (
 								<>
 									<MenuButton>
-										<Avatar src={UserSvg} />
+										<Avatar src={user?.photoURL || UserSvg} />
 									</MenuButton>
 									<MenuList>
 										<Link

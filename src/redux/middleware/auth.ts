@@ -86,6 +86,7 @@ export const whoami =
 								id: userDetails.ID,
 								name: userDetails.Username,
 								token: userDetails.Token,
+								photoURL: userDetails?.PhotoURL || null,
 							} as UserType,
 						})
 					)

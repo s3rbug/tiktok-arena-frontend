@@ -8,7 +8,7 @@ export const userApi = {
 		photoURL: string
 		token: string
 	}) => {
-		return jsonFetch.post("/user/photo", {
+		return jsonFetch.put("/user/photo", {
 			body: JSON.stringify({ photoURL }),
 			headers: {
 				...authHeader(token),

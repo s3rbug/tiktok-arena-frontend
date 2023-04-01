@@ -9,4 +9,5 @@ export type UserAuthDetailsType = {
 	ID: string
 	Username: string
 	Token: string
+	PhotoURL?: string
 }

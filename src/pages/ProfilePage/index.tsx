@@ -114,7 +114,7 @@ export function ProfilePage() {
 						position={"relative"}
 						h={"250px"}
 						w={"fit-content"}
-						src={UserSvg}
+						src={user?.photoURL || UserSvg}
 					>
 						<input
 							style={{ display: "none" }}

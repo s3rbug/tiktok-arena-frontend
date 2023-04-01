@@ -123,7 +123,7 @@ export const tournamentApi = {
 		tournamentId: string
 		data: CreateTournamentPayloadType
 	} & AuthTokenType) {
-		return jsonFetch.post(`/tournament/edit/${tournamentId}`, {
+		return jsonFetch.put(`/tournament/edit/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -136,7 +136,7 @@ export const tournamentApi = {
 		winnerURL,
 		token,
 	}: EndTournamentPayloadType & AuthTokenType) {
-		return jsonFetch.post(`/tournament/${tournamentId}`, {
+		return jsonFetch.put(`/tournament/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
