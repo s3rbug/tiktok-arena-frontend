@@ -164,7 +164,7 @@ export function TikToksForm({
 				.then((url) => {
 					changeStoreOnSubmit({
 						...data,
-						photoURL: url || null,
+						PhotoURL: url || null,
 						size: data.tiktoks.length,
 					})
 				})
@@ -174,7 +174,7 @@ export function TikToksForm({
 		} else {
 			changeStoreOnSubmit({
 				...data,
-				photoURL: null,
+				PhotoURL: null,
 				size: data.tiktoks.length,
 			})
 		}

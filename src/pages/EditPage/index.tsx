@@ -63,7 +63,7 @@ export function EditPage() {
 					data: {
 						...data,
 						size: data.tiktoks.length,
-						photoURL: data.photoURL,
+						photoURL: data.PhotoURL || null,
 					},
 					tournamentId,
 				})
