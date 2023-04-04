@@ -13,10 +13,10 @@ export const LeaderboardItem = ({
 	timesPlayed,
 }: PropsType) => {
 	function getProgressValue() {
-		if (timesPlayed <= 1) {
+		if (timesPlayed <= 0) {
 			return 0
 		}
-		return (100 * tiktok.Wins) / (timesPlayed - 1)
+		return (100 * tiktok.Wins) / timesPlayed
 	}
 
 	const isWinner = tiktok.URL === winnerURL

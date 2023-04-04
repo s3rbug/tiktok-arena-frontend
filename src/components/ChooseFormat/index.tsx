@@ -6,6 +6,7 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { Loading } from "../Loading"
 import { FormatButton } from "./FormatButton"
 import LogoSvg from "../../assets/logo.svg"
+import { tournamentActions } from "../../redux/slices/tournament/tournament"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat | null) => void
@@ -15,6 +16,12 @@ type PropsType = {
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	const dispatch = useTypedDispatch()
 	const tournament = useTypedSelector((state) => state.arena.tournament)
+
+	useEffect(() => {
+		return () => {
+			dispatch(tournamentActions.setTournament({ tournament: null }))
+		}
+	}, [dispatch])
 
 	useEffect(() => {
 		if (tournamentId !== tournament?.ID && tournamentId) {

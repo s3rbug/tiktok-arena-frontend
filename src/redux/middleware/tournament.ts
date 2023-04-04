@@ -214,10 +214,14 @@ export const endTournament =
 		if (!token) {
 			return
 		}
+		console.log("tut")
+
 		return tournamentApi
 			.endTournament({ token, tournamentId, winnerURL })
 			.then(() => {
 				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
+				dispatch(getTikToks({ data: { tournamentId } }))
+				dispatch(getTournament({ tournamentId }))
 			})
 			.catch((error: RequestError) => {
 				console.log(error)

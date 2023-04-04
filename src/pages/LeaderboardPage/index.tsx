@@ -2,7 +2,7 @@ import { Flex, Text, VStack } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { Loading, TikTokVideo } from "../../components"
 import { LeaderboardItem } from "../../components/LeaderboardItem"
-import { getTikToks, getTournament } from "../../redux/middleware/tournament"
+import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 type PropsType = {
@@ -14,13 +14,13 @@ export const LeaderboardPage = ({ tournamentId, winnerURL }: PropsType) => {
 	const dispatch = useTypedDispatch()
 
 	const tournament = useTypedSelector((state) => state.arena.tournament)
-
 	const tiktoks = useTypedSelector((state) => state.arena.tiktoks)
 
 	useEffect(() => {
-		dispatch(getTikToks({ data: { tournamentId } }))
-		dispatch(getTournament({ tournamentId }))
-	}, [dispatch, tournamentId])
+		return () => {
+			dispatch(tournamentActions.resetContestProgress())
+		}
+	}, [dispatch])
 
 	if (!tiktoks || !tournament) {
 		return <Loading />
