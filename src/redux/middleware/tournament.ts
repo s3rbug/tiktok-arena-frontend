@@ -214,7 +214,6 @@ export const endTournament =
 		if (!token) {
 			return
 		}
-		console.log("tut")
 
 		return tournamentApi
 			.endTournament({ token, tournamentId, winnerURL })

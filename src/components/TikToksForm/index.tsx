@@ -63,6 +63,7 @@ export function TikToksForm({
 	}
 
 	const [image, setImage] = useState<null | File>(null)
+	const [imageURL, setImageURL] = useState<null | string>(null)
 
 	useEffect(() => {
 		if (defaultValues.photoURL) {
@@ -73,7 +74,9 @@ export function TikToksForm({
 					if (imageName.includes("/")) {
 						imageName = imageName.substring(imageName.lastIndexOf("/") + 1)
 					}
-					setImage(new File([blob], imageName))
+					const newImage = new File([blob], imageName)
+					setImage(newImage)
+					setImageURL(URL.createObjectURL(newImage))
 				})
 		}
 	}, [defaultValues.photoURL])
@@ -204,10 +207,12 @@ export function TikToksForm({
 
 	async function uploadImage(event: ChangeEvent<HTMLInputElement>) {
 		const fileImage = event.target?.files?.[0]
+
 		if (!fileImage) {
 			return
 		}
 		setImage(fileImage)
+		setImageURL(URL.createObjectURL(fileImage))
 	}
 
 	return (
@@ -290,13 +295,8 @@ export function TikToksForm({
 					/>
 				</HStack>
 				<Flex w="100%" justifyContent={"flex-start"}>
-					{image && (
-						<Image
-							src={URL.createObjectURL(image)}
-							ml={16}
-							h="350px"
-							w="fit-content"
-						/>
+					{imageURL && (
+						<Image src={imageURL} ml={16} h="350px" w="fit-content" />
 					)}
 				</Flex>
 			</HStack>

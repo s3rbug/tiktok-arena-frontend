@@ -72,7 +72,6 @@ export const useRoutePagination = ({
 
 	useEffect(() => {
 		const urlSearchField = searchParams.get("search")
-		// console.log({ urlSearchField })
 
 		if (!urlSearchField && searchField) {
 			setSearchField(null)
@@ -81,14 +80,6 @@ export const useRoutePagination = ({
 		if (urlSearchField && !searchField) {
 			setSearchField(urlSearchField)
 		}
-
-		// if (!searchField && urlSearchField) {
-		// 	setSearchField(urlSearchField)
-		// }
-
-		// if (searchField !== urlSearchField && searchField) {
-		// 	setSearchUrl(searchField)
-		// }
 	}, [searchParams, setSearchField, searchField])
 
 	return { changeCurrentPage }

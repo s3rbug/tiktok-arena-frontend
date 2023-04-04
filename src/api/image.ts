@@ -3,13 +3,14 @@ import { jsonFetch } from "./jsonFetch"
 
 export const imageApi = {
 	saveImageToCloud: async (image: File) => {
-		let imageBase64 = await toBase64(image)
-		if (imageBase64.includes(",")) {
-			imageBase64 = imageBase64.substring(imageBase64.lastIndexOf(",") + 1)
-		}
 		const apiKey = import.meta.env.ENV_IMAGE_CLOUD_API_KEY
 		if (!apiKey) {
 			return
+		}
+
+		let imageBase64 = await toBase64(image)
+		if (imageBase64.includes(",")) {
+			imageBase64 = imageBase64.substring(imageBase64.lastIndexOf(",") + 1)
 		}
 
 		return jsonFetch
