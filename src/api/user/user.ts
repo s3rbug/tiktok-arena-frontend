@@ -1,4 +1,4 @@
-import { authHeader, jsonFetch } from "./jsonFetch"
+import { authHeader, jsonFetch } from "../jsonFetch"
 
 export const userApi = {
 	changePicture: async ({

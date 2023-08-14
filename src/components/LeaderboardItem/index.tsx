@@ -16,7 +16,7 @@ export const LeaderboardItem = ({
 		if (timesPlayed <= 0) {
 			return 0
 		}
-		return (100 * tiktok.Wins) / timesPlayed
+		return (100.0 * tiktok.Wins) / timesPlayed
 	}
 
 	const isWinner = tiktok.URL === winnerURL
@@ -28,7 +28,7 @@ export const LeaderboardItem = ({
 				colorScheme={"green"}
 				fontWeight={isWinner ? "bold" : "normal"}
 			>
-				{`${Math.round(getProgressValue())}%`}
+				{`${getProgressValue().toFixed(2)}%`}
 			</Badge>
 
 			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.Name}</Text>

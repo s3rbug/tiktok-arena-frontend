@@ -1,6 +1,6 @@
 import { authActions } from "./../slices/auth/auth"
 import { getToken } from "../../api/jsonFetch"
-import { userApi } from "../../api/user"
+import { userApi } from "../../api/user/user"
 import { AppThunkType } from "../store"
 
 export const changeUserPicture =

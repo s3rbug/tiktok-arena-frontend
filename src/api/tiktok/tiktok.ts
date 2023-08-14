@@ -1,4 +1,4 @@
-import { jsonFetch } from "./jsonFetch"
+import { jsonFetch } from "../jsonFetch"
 
 export const tiktokApi = {
 	getDetails: ({ url }: { url: string }) => {

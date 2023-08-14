@@ -1,5 +1,5 @@
-import { toBase64 } from "../utils/toBase64/toBase64"
-import { jsonFetch } from "./jsonFetch"
+import { toBase64 } from "../../utils/toBase64/toBase64"
+import { jsonFetch } from "../jsonFetch"
 
 export const imageApi = {
 	saveImageToCloud: async (image: File) => {

@@ -10,7 +10,7 @@ import {
 } from "react-hook-form"
 import { TiktokUrl } from "../../../utils/tiktokUrl/tiktokUrl"
 import { TournamentFormType } from "../../../redux/slices/tournament/tournament.types"
-import { tiktokApi } from "../../../api/tiktok"
+import { tiktokApi } from "../../../api/tiktok/tiktok"
 import { FormError } from "../FormError"
 import { PreviewTiktok } from "../PreviewTiktok"
 

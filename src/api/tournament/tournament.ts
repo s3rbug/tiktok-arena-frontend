@@ -1,47 +1,19 @@
-import {
-	TikTok,
-	TournamentFormType,
-} from "./../redux/slices/tournament/tournament.types"
+import { TikTok } from "../../redux/slices/tournament/tournament.types"
 import {
 	TournamentType,
 	ContestType,
-	TournamentFormat,
-} from "../redux/slices/tournament/tournament.types"
-import { jsonFetch } from "./jsonFetch"
-import { AuthTokenType } from "./auth"
-
-export type GetContestPayloadType = {
-	tournamentId: string
-	tournamentFormat: TournamentFormat
-}
-
-export type GetTournamentPayloadType = {
-	tournamentId: string
-}
-
-export type CreateTournamentPayloadType = {
-	size: number
-	PhotoURL?: string | null
-} & TournamentFormType
-
-export type DeleteTournamentsPayload = {
-	TournamentIds: string[]
-}
-
-export type GetTikToksPayloadType = {
-	tournamentId: string
-}
-
-export type GetTournamentsPayload = {
-	page: number
-	pageSize: number
-	search?: string | null
-}
-
-export type EndTournamentPayloadType = {
-	tournamentId: string
-	winnerURL: string
-}
+} from "../../redux/slices/tournament/tournament.types"
+import { jsonFetch } from "../jsonFetch"
+import { AuthTokenType } from "../auth/auth.types"
+import {
+	CreateTournamentPayloadType,
+	DeleteTournamentsPayload,
+	EndTournamentPayloadType,
+	GetContestPayloadType,
+	GetTikToksPayloadType,
+	GetTournamentPayloadType,
+	GetTournamentsPayload,
+} from "./tournament.types"
 
 export const tournamentApi = {
 	getTournaments: async function ({
@@ -134,12 +106,8 @@ export const tournamentApi = {
 	endTournament: async function ({
 		tournamentId,
 		winnerURL,
-		token,
-	}: EndTournamentPayloadType & AuthTokenType) {
+	}: EndTournamentPayloadType) {
 		return jsonFetch.put(`/tournament/${tournamentId}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
 			body: JSON.stringify({ TiktokURL: winnerURL }),
 		})
 	},

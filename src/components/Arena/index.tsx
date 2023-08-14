@@ -1,30 +1,44 @@
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
-import { TikTokVideo } from "../"
-import { Button, HStack, VStack } from "@chakra-ui/react"
+import { HStack } from "@chakra-ui/react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useEffect, useState } from "react"
 import { endTournament, getContest } from "../../redux/middleware/tournament"
 import { LeaderboardPage } from "../../pages"
 import { Loading } from "../"
-import { useAuth } from "../../hooks/useAuth"
+import { AnimatePresence } from "framer-motion"
+import { ArenaItem } from "./ArenaItem"
 
 type PropsType = {
 	tournamentId: string | undefined
 	format: TournamentFormat
 }
 
+export enum Choice {
+	FIRST = 1,
+	SECOND = 2,
+}
+
 export function Arena({ tournamentId, format }: PropsType) {
 	const dispatch = useTypedDispatch()
+	const [hidden, setHidden] = useState<null | Choice>(null)
 
-	const [winnerURL, setWinnerURL] = useState<string | null>(null)
+	function handleChooseButton(choiceToHide: Choice, winnerURL?: string) {
+		return () => {
+			if (!winnerURL) {
+				return
+			}
+			setHidden(choiceToHide)
+			setTimeout(() => {
+				setHidden(null)
+				dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
+			}, 2000)
+		}
+	}
 
-	const user = useAuth()
-
-	const contestProgress = useTypedSelector(
+	const { isContestOver, matchIndex, roundIndex } = useTypedSelector(
 		(state) => state.arena.contestProgress
 	)
-	const { isContestOver, matchIndex, roundIndex } = contestProgress
 
 	const currentMatch = useTypedSelector((state) => {
 		if (state.arena.contest.Rounds) {
@@ -39,31 +53,27 @@ export function Arena({ tournamentId, format }: PropsType) {
 		}
 	}, [dispatch, format, tournamentId])
 
-	useEffect(() => {
-		if (isContestOver && tournamentId && currentMatch) {
-			const newWinnerURL = currentMatch.firstOptionChosen
-				? currentMatch.FirstOption.TiktokURL
-				: currentMatch.SecondOption.TiktokURL
-
-			if (!newWinnerURL) {
-				return
-			}
-
-			setWinnerURL(newWinnerURL)
-
-			if (user?.token) {
-				dispatch(
-					endTournament({
-						tournamentId,
-						winnerURL: newWinnerURL,
-					})
-				)
-			}
-		}
-	}, [isContestOver, dispatch, tournamentId, user?.token, currentMatch])
-
-	if (!currentMatch) {
+	if (!currentMatch || !tournamentId) {
 		return <Loading />
+	}
+
+	if (isContestOver) {
+		const winnerURL = currentMatch.firstOptionChosen
+			? currentMatch.FirstOption.TiktokURL
+			: currentMatch.SecondOption.TiktokURL
+
+		if (!winnerURL) {
+			return <Loading />
+		}
+
+		dispatch(
+			endTournament({
+				tournamentId,
+				winnerURL,
+			})
+		)
+
+		return <LeaderboardPage winnerURL={winnerURL} tournamentId={tournamentId} />
 	}
 
 	const [firstTikTokURL, secondTikTokURL] = [
@@ -71,46 +81,28 @@ export function Arena({ tournamentId, format }: PropsType) {
 		currentMatch.SecondOption.TiktokURL,
 	]
 
-	function handleChooseButton(winnerURL?: string) {
-		return () => {
-			if (winnerURL) {
-				dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
-			}
-		}
-	}
-
-	if (isContestOver) {
-		if (!tournamentId || !winnerURL) {
-			return <Loading />
-		}
-
-		return <LeaderboardPage winnerURL={winnerURL} tournamentId={tournamentId} />
-	}
-
 	return (
-		<HStack justifyContent={"space-evenly"} p={0}>
-			<VStack alignItems="stretch">
-				<TikTokVideo minWidth url={firstTikTokURL} />
-				<Button
-					onClick={handleChooseButton(firstTikTokURL)}
-					colorScheme={"blue"}
-					position={"sticky"}
-					bottom={4}
-				>
-					Choose
-				</Button>
-			</VStack>
-			<VStack alignItems="stretch">
-				<TikTokVideo minWidth url={secondTikTokURL} />
-				<Button
-					onClick={handleChooseButton(secondTikTokURL)}
-					colorScheme={"blue"}
-					position={"sticky"}
-					bottom={4}
-				>
-					Choose
-				</Button>
-			</VStack>
+		<HStack justifyContent={"space-evenly"} p={0} pt={2}>
+			<AnimatePresence>
+				{hidden !== Choice.FIRST && (
+					<ArenaItem
+						key="first-choice"
+						url={firstTikTokURL ?? ""}
+						hidden={hidden}
+						onClick={handleChooseButton(Choice.SECOND, firstTikTokURL)}
+						animateDirection="left"
+					/>
+				)}
+				{hidden !== Choice.SECOND && (
+					<ArenaItem
+						key="second-choice"
+						url={secondTikTokURL ?? ""}
+						hidden={hidden}
+						onClick={handleChooseButton(Choice.FIRST, secondTikTokURL)}
+						animateDirection="right"
+					/>
+				)}
+			</AnimatePresence>
 		</HStack>
 	)
 }

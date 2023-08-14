@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import { ChangeEvent, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
-import { DeleteTournamentsPayload } from "../../api/tournament"
+import { DeleteTournamentsPayload } from "../../api/tournament/tournament"
 import { Loading, Tournaments } from "../../components"
 import { ConfirmDialog } from "../../components/ConfirmDialog"
 import { Pagination } from "../../components/Pagination"
@@ -24,7 +24,7 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import UserSvg from "../../assets/userIcon.svg"
 import { PhotoIcon } from "../../assets/chakraIcons"
 import { useCustomToast } from "../../hooks/useCustomToast"
-import { imageApi } from "../../api/image"
+import { imageApi } from "../../api/image/image"
 import { changeUserPicture } from "../../redux/middleware/user"
 
 export function ProfilePage() {

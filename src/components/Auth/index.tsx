@@ -26,10 +26,20 @@ type PropsType = {
 	isRegister?: boolean
 }
 
-export function Auth({ onSubmit, title, isRegister }: PropsType) {
-	const [usernameMinLength, usernameMaxLength] = [4, 16]
-	const [passwordMinLength, passwordMaxLength] = [5, 16]
+const [usernameMinLength, usernameMaxLength] = [4, 16]
+const [passwordMinLength, passwordMaxLength] = [5, 16]
 
+const tabIndex = {
+	USER: 1,
+	PASSWORD: 2,
+	CONFIRM_PASSWORD: 3,
+	HIDE_PASSWORD_BTN: 4,
+	HIDE_CONFIRM_PASSWORD_BTN: 5,
+	SUBMIT: 6,
+	REDIRECT: 7,
+}
+
+export function Auth({ onSubmit, title, isRegister }: PropsType) {
 	const { setFocus, shadowStyleProps } = useCardShadow({
 		shadow: {
 			default: "lg",
@@ -96,6 +106,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 						maxLength={usernameMaxLength}
 						minLength={usernameMinLength}
 						error={errors?.name}
+						tabIndex={{ input: tabIndex.USER }}
 					/>
 					<AuthInput
 						title="Password"
@@ -106,6 +117,10 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 						maxLength={passwordMaxLength}
 						minLength={passwordMinLength}
 						error={errors?.password}
+						tabIndex={{
+							input: tabIndex.PASSWORD,
+							button: tabIndex.HIDE_PASSWORD_BTN,
+						}}
 						isPassword
 					/>
 					{isRegister && (
@@ -119,19 +134,34 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 							minLength={passwordMinLength}
 							error={errors?.confirmPassword}
 							watch={watch}
+							tabIndex={{
+								input: tabIndex.CONFIRM_PASSWORD,
+								button: tabIndex.HIDE_CONFIRM_PASSWORD_BTN,
+							}}
 							isPassword
 						/>
 					)}
 					<FormControl isInvalid={!!authErrorMessage}>
 						<FormErrorMessage>{authErrorMessage}</FormErrorMessage>
-						<Button width="full" mt={6} type="submit" colorScheme={"blue"}>
+						<Button
+							tabIndex={tabIndex.SUBMIT}
+							width="full"
+							mt={6}
+							type="submit"
+							colorScheme={"blue"}
+						>
 							{title}
 						</Button>
 					</FormControl>
 					{isRegister ? (
-						<AuthRedirectButton handleClick={handleLoginButton} title="Login" />
+						<AuthRedirectButton
+							tabIndex={tabIndex.REDIRECT}
+							handleClick={handleLoginButton}
+							title="Login"
+						/>
 					) : (
 						<AuthRedirectButton
+							tabIndex={tabIndex.REDIRECT}
 							handleClick={handleRegisterButton}
 							title="Register"
 						/>

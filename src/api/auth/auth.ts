@@ -1,14 +1,6 @@
-import { UserAuthDetailsType } from "../redux/slices/auth/auth.types"
-import { jsonFetch } from "./jsonFetch"
-
-export type AuthPayloadType = {
-	name: string
-	password: string
-}
-
-export type AuthTokenType = {
-	token: string
-}
+import { UserAuthDetailsType } from "../../redux/slices/auth/auth.types"
+import { jsonFetch } from "../jsonFetch"
+import { AuthPayloadType, AuthTokenType } from "./auth.types"
 
 export const authApi = {
 	login: async ({ name, password }: AuthPayloadType) => {

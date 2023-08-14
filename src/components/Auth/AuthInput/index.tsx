@@ -22,6 +22,10 @@ type PropsType = {
 	name: keyof FormInputType
 	isPassword?: boolean
 	watch?: any
+	tabIndex?: {
+		input: number
+		button?: number
+	}
 }
 
 export const AuthInput = ({
@@ -35,6 +39,7 @@ export const AuthInput = ({
 	name,
 	isPassword,
 	watch,
+	tabIndex,
 }: PropsType) => {
 	const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
@@ -81,6 +86,7 @@ export const AuthInput = ({
 					render={({ field }) => (
 						<Input
 							{...field}
+							tabIndex={tabIndex?.input}
 							type={getInputType()}
 							onBlur={changeFocus(false)}
 							onFocus={changeFocus(true)}
@@ -94,6 +100,7 @@ export const AuthInput = ({
 				/>
 				{isPassword && (
 					<IconButton
+						tabIndex={tabIndex?.button}
 						aria-label="view icon"
 						icon={isPasswordHidden ? <ViewOffIcon /> : <ViewIcon />}
 						onClick={togglePasswordHidden}

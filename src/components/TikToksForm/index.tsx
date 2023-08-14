@@ -28,8 +28,8 @@ import { TournamentFields } from "./TournamentFields"
 import { Loading } from "../Loading"
 import { useCustomToast } from "../../hooks/useCustomToast"
 import { FormError } from "./FormError"
-import { imageApi } from "../../api/image"
-import { CreateTournamentPayloadType } from "../../api/tournament"
+import { imageApi } from "../../api/image/image"
+import { CreateTournamentPayloadType } from "../../api/tournament/tournament"
 
 type PropsType = {
 	defaultValues: TournamentFormType

@@ -9,7 +9,7 @@ import { getTikToks, getTournament } from "../../redux/middleware/tournament"
 import { useAuth } from "../../hooks/useAuth"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { Loading } from "../../components"
-import { CreateTournamentPayloadType } from "../../api/tournament"
+import { CreateTournamentPayloadType } from "../../api/tournament/tournament"
 
 export function EditPage() {
 	const { tournamentId } = useParams()

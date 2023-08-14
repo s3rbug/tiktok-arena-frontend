@@ -7,8 +7,9 @@ import {
 	GetTikToksPayloadType,
 	GetTournamentsPayload,
 	EndTournamentPayloadType,
-} from "./../../api/tournament"
-import { GetContestPayloadType, tournamentApi } from "../../api/tournament"
+	GetContestPayloadType,
+} from "../../api/tournament/tournament.types"
+import { tournamentApi } from "../../api/tournament/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
 import { AppThunkType } from "../store"
 import { getErrorMessage, getToken, RequestError } from "../../api/jsonFetch"
@@ -209,14 +210,9 @@ export const editTournament =
 
 export const endTournament =
 	({ tournamentId, winnerURL }: EndTournamentPayloadType): AppThunkType =>
-	async (dispatch, getState) => {
-		const token = getToken(getState)
-		if (!token) {
-			return
-		}
-
+	async (dispatch) => {
 		return tournamentApi
-			.endTournament({ token, tournamentId, winnerURL })
+			.endTournament({ tournamentId, winnerURL })
 			.then(() => {
 				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
 				dispatch(getTikToks({ data: { tournamentId } }))
