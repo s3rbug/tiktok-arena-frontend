@@ -79,7 +79,7 @@ export function Search() {
 				role="group"
 				icon={
 					<Search2Icon
-						transitionDuration={".5s"}
+						transitionDuration=".5s"
 						transitionTimingFunction="ease-in-out"
 						_groupHover={{ transform: "scale(1.2)" }}
 					/>

@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 import { useRoutePagination } from "../../hooks/useRoutePagination"
 import { getPaginationItems } from "../../utils/pagination/pagination"
 import PaginationLink from "./PaginationLink"
@@ -35,7 +36,18 @@ export const Pagination = ({
 	const pageNumbers = getPaginationItems(currentPage, lastPage, maxLength)
 
 	return (
-		<Flex mt={8} gap={2} justifyContent="center">
+		<Flex
+			as={motion.div}
+			initial={{ transform: "translateY(100px)", opacity: 0 }}
+			animate={{
+				transform: "translateY(0)",
+				opacity: 1,
+				transition: { duration: 1 },
+			}}
+			mt={8}
+			gap={2}
+			justifyContent="center"
+		>
 			<PaginationLink
 				onClick={() => changeCurrentPage(currentPage - 1)}
 				isDisabled={currentPage === 1}

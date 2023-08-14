@@ -32,7 +32,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 			setTimeout(() => {
 				setHidden(null)
 				dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
-			}, 2000)
+			}, 1500)
 		}
 	}
 
@@ -66,6 +66,8 @@ export function Arena({ tournamentId, format }: PropsType) {
 			return <Loading />
 		}
 
+		console.log({ winnerURL })
+
 		dispatch(
 			endTournament({
 				tournamentId,
@@ -73,7 +75,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 			})
 		)
 
-		return <LeaderboardPage winnerURL={winnerURL} tournamentId={tournamentId} />
+		return <LeaderboardPage winnerURL={winnerURL} />
 	}
 
 	const [firstTikTokURL, secondTikTokURL] = [

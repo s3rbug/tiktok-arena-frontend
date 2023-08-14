@@ -36,6 +36,7 @@ export const getTournaments =
 			})
 			.catch((error: RequestError) => {
 				console.log(error)
+				return Promise.reject(error)
 			})
 	}
 
@@ -137,6 +138,7 @@ export const getUserTournaments =
 			})
 			.catch((error: RequestError) => {
 				console.log(error)
+				return Promise.reject(error)
 			})
 	}
 
@@ -155,6 +157,7 @@ export const deleteTournaments =
 			})
 			.catch((error: RequestError) => {
 				console.log(error)
+				return Promise.reject(error)
 			})
 	}
 
@@ -163,15 +166,18 @@ export const getTikToks =
 	async (dispatch) => {
 		return tournamentApi
 			.getTikToks({ data })
-			.then((tiktoks) => {
-				if (!tiktoks) {
+			.then((tiktokData) => {
+				if (!tiktokData) {
 					return
 				}
 
-				dispatch(tournamentActions.setTiktoks({ newTiktoks: tiktoks }))
+				dispatch(
+					tournamentActions.setTiktoks({ newTiktoks: tiktokData.TiktoksStats })
+				)
 			})
 			.catch((error) => {
 				console.log(error)
+				return Promise.reject(error)
 			})
 	}
 
@@ -220,5 +226,6 @@ export const endTournament =
 			})
 			.catch((error: RequestError) => {
 				console.log(error)
+				return Promise.reject(error)
 			})
 	}

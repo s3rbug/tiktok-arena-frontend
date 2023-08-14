@@ -8,12 +8,12 @@ import {
 	Input,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { Control, Controller, FieldError } from "react-hook-form"
+import { Control, Controller, FieldError, UseFormWatch } from "react-hook-form"
 import { FormInputType } from ".."
 
 type PropsType = {
 	error?: FieldError
-	control: Control<FormInputType, any>
+	control: Control<FormInputType>
 	minLength: number
 	maxLength: number
 	changeFocus: (newFocus: boolean) => () => void
@@ -21,7 +21,7 @@ type PropsType = {
 	title: string
 	name: keyof FormInputType
 	isPassword?: boolean
-	watch?: any
+	watch?: UseFormWatch<FormInputType>
 	tabIndex?: {
 		input: number
 		button?: number
@@ -76,7 +76,7 @@ export const AuthInput = ({
 							name === "confirmPassword"
 								? {
 										checkIfPasswordsMatch: (value) => {
-											if (value !== watch("password")) {
+											if (watch && value !== watch("password")) {
 												return "Passwords do not match!"
 											}
 										},

@@ -6,11 +6,10 @@ import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 type PropsType = {
-	tournamentId: string
 	winnerURL: string
 }
 
-export const LeaderboardPage = ({ tournamentId, winnerURL }: PropsType) => {
+export const LeaderboardPage = ({ winnerURL }: PropsType) => {
 	const dispatch = useTypedDispatch()
 
 	const tournament = useTypedSelector((state) => state.arena.tournament)

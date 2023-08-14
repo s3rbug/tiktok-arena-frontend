@@ -51,12 +51,7 @@ export function TournamentCard({
 	}
 
 	return (
-		<Card
-			maxW="sm"
-			borderWidth={2}
-			borderColor="gray.300"
-			{...shadowStyleProps}
-		>
+		<Card borderWidth={2} borderColor="gray.300" {...shadowStyleProps}>
 			<CardBody>
 				{editable && (
 					<Flex justifyContent={"flex-start"} mb={8}>
@@ -68,7 +63,7 @@ export function TournamentCard({
 						/>
 					</Flex>
 				)}
-				<Link to={`/tournaments/${id}`}>
+				<Flex as={Link} justifyContent="center" to={`/tournaments/${id}`}>
 					<Image
 						transition="ease-out"
 						transitionDuration=".5s"
@@ -76,12 +71,11 @@ export function TournamentCard({
 							transform: "scale(1.05)",
 						}}
 						src={photoURL || LogoSvg}
-						w={"fit-content"}
 						h="250px"
 						alt="Tournament card"
 						borderRadius="lg"
 					/>
-				</Link>
+				</Flex>
 
 				<Stack mt={3}>
 					<Heading size="md">

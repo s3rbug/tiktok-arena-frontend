@@ -23,12 +23,14 @@ type PropsType = {
 		name: string
 	}[]
 	handleDeleteTiktok: (index: number) => void
-	customOnChange: (
-		event: React.FormEvent<HTMLInputElement>,
-		field: ControllerRenderProps<TournamentFormType, any>
-	) => any
 	errors: FieldErrors<TournamentFormType>
 	setError: UseFormSetError<TournamentFormType>
+	clearAllErrors: () => void
+}
+
+const tiktokNameLength = {
+	min: 4,
+	max: 60,
 }
 
 export const TournamentFields = ({
@@ -36,15 +38,22 @@ export const TournamentFields = ({
 	fields,
 	tiktoks,
 	handleDeleteTiktok,
-	customOnChange,
 	setValue,
 	errors,
 	setError,
+	clearAllErrors,
 }: PropsType) => {
-	const tiktokNameLength = {
-		min: 4,
-		max: 60,
+	function customOnChange(
+		event: React.FormEvent<HTMLInputElement>,
+		field:
+			| ControllerRenderProps<TournamentFormType, `tiktoks.${number}.name`>
+			| ControllerRenderProps<TournamentFormType, `tiktoks.${number}.url`>
+	) {
+		clearAllErrors()
+
+		return field.onChange(event)
 	}
+
 	const handleLoadNameClick = (index: number) => () => {
 		const url = tiktoks[index].url
 		if (url === "") {

@@ -1,3 +1,3 @@
-export function randomArrayItem(items: any[]) {
+export function randomArrayItem(items: unknown[]) {
 	return items[Math.floor(Math.random() * items.length)]
 }

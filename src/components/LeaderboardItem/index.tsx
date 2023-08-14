@@ -1,4 +1,5 @@
 import { Badge, Box, Progress, Text, VStack } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 import { TikTok } from "../../redux/slices/tournament/tournament.types"
 
 type PropsType = {
@@ -24,6 +25,9 @@ export const LeaderboardItem = ({
 	return (
 		<VStack align={"flex-start"} w={"100%"}>
 			<Badge
+				as={motion.span}
+				initial={{ scale: 0 }}
+				animate={{ scale: 1, transition: { duration: 0.75 } }}
 				fontSize={"xl"}
 				colorScheme={"green"}
 				fontWeight={isWinner ? "bold" : "normal"}
@@ -34,6 +38,13 @@ export const LeaderboardItem = ({
 			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.Name}</Text>
 			<Box w={"100%"}>
 				<Progress
+					as={motion.div}
+					initial={{ width: 0 }}
+					animate={{
+						width: `auto`,
+						transition: { duration: 0.5 },
+					}}
+					style={{ overflow: "hidden" }}
 					size="lg"
 					colorScheme={isWinner ? "facebook" : "blue"}
 					value={getProgressValue()}

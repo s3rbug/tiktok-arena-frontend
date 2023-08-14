@@ -1,4 +1,3 @@
-import { TikTok } from "../../redux/slices/tournament/tournament.types"
 import {
 	TournamentType,
 	ContestType,
@@ -11,6 +10,7 @@ import {
 	EndTournamentPayloadType,
 	GetContestPayloadType,
 	GetTikToksPayloadType,
+	GetTiktoksType,
 	GetTournamentPayloadType,
 	GetTournamentsPayload,
 } from "./tournament.types"
@@ -84,7 +84,9 @@ export const tournamentApi = {
 	},
 
 	getTikToks: async function ({ data }: { data: GetTikToksPayloadType }) {
-		return jsonFetch.get<TikTok[]>(`/tournament/tiktoks/${data.tournamentId}`)
+		return jsonFetch.get<GetTiktoksType>(
+			`/tournament/tiktoks/${data.tournamentId}`
+		)
 	},
 
 	editTournament: async function ({

@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, Heading, Image, Flex } from "@chakra-ui/react"
+import { Card, CardBody, Heading, Image, Flex } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
@@ -7,6 +7,7 @@ import { Loading } from "../Loading"
 import { FormatButton } from "./FormatButton"
 import LogoSvg from "../../assets/logo.svg"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
+import { motion } from "framer-motion"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat | null) => void
@@ -34,12 +35,15 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	}
 
 	return (
-		<Box display={"flex"} justifyContent={"center"} w={"100%"} mt={16}>
+		<Flex justifyContent={"center"} w={"100%"} mt={16}>
 			<Card w={"50%"} variant="unstyled">
 				<CardBody display={"flex"} flexDirection="column" alignItems={"center"}>
 					<Image
 						src={tournament?.PhotoURL || LogoSvg}
 						alt="Tournament"
+						as={motion.img}
+						initial={{ scale: 0.5, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1, transition: { duration: 0.5 } }}
 						borderRadius="lg"
 						width={"fit-content"}
 						h={"400px"}
@@ -51,12 +55,14 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 				</CardBody>
 				<Flex justifyContent={"space-evenly"}>
 					<FormatButton
+						animationDirection="left"
 						format={TournamentFormat.SINGLE_ELIMINATION}
 						setFormat={setFormat}
 					>
 						Standart
 					</FormatButton>
 					<FormatButton
+						animationDirection="right"
 						format={TournamentFormat.KING_OF_THE_HILL}
 						setFormat={setFormat}
 					>
@@ -64,6 +70,6 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 					</FormatButton>
 				</Flex>
 			</Card>
-		</Box>
+		</Flex>
 	)
 }

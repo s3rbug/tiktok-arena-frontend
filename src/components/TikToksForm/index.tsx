@@ -12,13 +12,7 @@ import {
 	VStack,
 } from "@chakra-ui/react"
 import { ChangeEvent, useCallback, useEffect, useState } from "react"
-import {
-	useFieldArray,
-	useForm,
-	Controller,
-	useWatch,
-	ControllerRenderProps,
-} from "react-hook-form"
+import { useFieldArray, useForm, Controller, useWatch } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { TiktokUrl } from "../../utils/tiktokUrl/tiktokUrl"
 import { useAuth } from "../../hooks/useAuth"
@@ -29,7 +23,7 @@ import { Loading } from "../Loading"
 import { useCustomToast } from "../../hooks/useCustomToast"
 import { FormError } from "./FormError"
 import { imageApi } from "../../api/image/image"
-import { CreateTournamentPayloadType } from "../../api/tournament/tournament"
+import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
 
 type PropsType = {
 	defaultValues: TournamentFormType
@@ -42,6 +36,16 @@ type PropsType = {
 	warning?: string
 }
 
+const tiktoksCount = {
+	min: 4,
+	max: 64,
+}
+
+const tournamentNameLength = {
+	min: 4,
+	max: 30,
+}
+
 export function TikToksForm({
 	defaultValues,
 	serverError,
@@ -52,16 +56,6 @@ export function TikToksForm({
 	successRedirect,
 	warning,
 }: PropsType) {
-	const tiktoksCount = {
-		min: 4,
-		max: 64,
-	}
-
-	const tournamentNameLength = {
-		min: 4,
-		max: 30,
-	}
-
 	const [image, setImage] = useState<null | File>(null)
 	const [imageURL, setImageURL] = useState<null | string>(null)
 
@@ -132,15 +126,6 @@ export function TikToksForm({
 
 	if (!user) {
 		return <Loading />
-	}
-
-	function customOnChange(
-		event: React.FormEvent<HTMLInputElement>,
-		field: ControllerRenderProps<TournamentFormType, `tiktoks.${number}.url`>
-	) {
-		clearAllErrors()
-
-		return field.onChange(event)
 	}
 
 	const onSubmit = async (data: TournamentFormType) => {
@@ -255,12 +240,12 @@ export function TikToksForm({
 				<TournamentFields
 					setValue={setValue}
 					control={control}
-					customOnChange={customOnChange}
 					errors={errors}
 					setError={setError}
 					fields={fields}
 					handleDeleteTiktok={handleDeleteTiktok}
 					tiktoks={tiktoks}
+					clearAllErrors={clearAllErrors}
 				/>
 				<FormControl isInvalid={!!serverError || !!errorUnique}>
 					<FormError error={errorUnique} />

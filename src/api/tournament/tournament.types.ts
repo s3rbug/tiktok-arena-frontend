@@ -1,4 +1,5 @@
 import {
+	TikTok,
 	TournamentFormat,
 	TournamentFormType,
 } from "../../redux/slices/tournament/tournament.types"
@@ -34,4 +35,8 @@ export type GetTournamentsPayload = {
 export type EndTournamentPayloadType = {
 	tournamentId: string
 	winnerURL: string
+}
+
+export type GetTiktoksType = {
+	TiktoksStats: TikTok[]
 }
