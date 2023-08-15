@@ -40,6 +40,7 @@ export type ContestProgressType = {
 	roundIndex: number
 	matchIndex: number
 	isContestOver: boolean
+	isContestInProgress: boolean
 }
 
 export type TournamentFormType = {

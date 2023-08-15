@@ -12,14 +12,18 @@ import {
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
 import { Link } from "react-router-dom"
-import { useTypedDispatch } from "../../redux/store"
+import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { authActions } from "../../redux/slices/auth/auth"
 import { localToken } from "../../localStorage/token"
 import { useAuth } from "../../hooks/useAuth"
 import UserSvg from "../../assets/userIcon.svg"
+import { ContestDetails } from "./ContestDetails.tsx"
 
 export function Header() {
 	const dispatch = useTypedDispatch()
+	const { isContestInProgress } = useTypedSelector(
+		(state) => state.arena.contestProgress
+	)
 
 	const user = useAuth()
 
@@ -58,7 +62,7 @@ export function Header() {
 					/>
 				</Link>
 
-				<Search />
+				{isContestInProgress ? <ContestDetails /> : <Search />}
 
 				{user ? (
 					<Box>

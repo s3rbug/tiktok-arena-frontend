@@ -1,6 +1,6 @@
 export { App } from "./App"
 export { AppRoutes } from "./AppRoutes/"
-export { Search } from "./Search"
+export { Search } from "../layout/Header/Search"
 export { Filters } from "./Filters"
 export { Tournaments } from "./Tournaments"
 export { ChooseFormat } from "./ChooseFormat"

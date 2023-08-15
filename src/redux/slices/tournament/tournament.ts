@@ -10,6 +10,7 @@ const initialContestProgress: ContestProgressType = {
 	matchIndex: 0,
 	roundIndex: 0,
 	isContestOver: false,
+	isContestInProgress: false,
 }
 
 const initialState = {
@@ -57,7 +58,10 @@ const tournamentSlice = createSlice({
 		},
 		setContest(state, action: PayloadAction<{ newContest: ContestType }>) {
 			const { newContest } = action.payload
-			state.contestProgress = { ...initialContestProgress }
+			state.contestProgress = {
+				...initialContestProgress,
+				isContestInProgress: state.contestProgress.isContestInProgress,
+			}
 
 			state.contest = newContest
 		},
@@ -154,6 +158,13 @@ const tournamentSlice = createSlice({
 		) => {
 			const { searchField, key } = action.payload
 			state.search[key] = searchField
+		},
+		setIsContestInProgress: (
+			state,
+			action: PayloadAction<{ isContestInProgress: boolean }>
+		) => {
+			const { isContestInProgress } = action.payload
+			state.contestProgress.isContestInProgress = isContestInProgress
 		},
 	},
 })

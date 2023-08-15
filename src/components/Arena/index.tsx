@@ -24,16 +24,14 @@ export function Arena({ tournamentId, format }: PropsType) {
 	const [hidden, setHidden] = useState<null | Choice>(null)
 
 	function handleChooseButton(choiceToHide: Choice, winnerURL?: string) {
-		return () => {
-			if (!winnerURL) {
-				return
-			}
-			setHidden(choiceToHide)
-			setTimeout(() => {
-				setHidden(null)
-				dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
-			}, 1500)
+		if (!winnerURL) {
+			return
 		}
+		setHidden(choiceToHide)
+		setTimeout(() => {
+			setHidden(null)
+			dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
+		}, 1500)
 	}
 
 	const { isContestOver, matchIndex, roundIndex } = useTypedSelector(
@@ -53,6 +51,14 @@ export function Arena({ tournamentId, format }: PropsType) {
 		}
 	}, [dispatch, format, tournamentId])
 
+	useEffect(() => {
+		return () => {
+			dispatch(
+				tournamentActions.setIsContestInProgress({ isContestInProgress: false })
+			)
+		}
+	}, [dispatch])
+
 	if (!currentMatch || !tournamentId) {
 		return <Loading />
 	}
@@ -65,8 +71,6 @@ export function Arena({ tournamentId, format }: PropsType) {
 		if (!winnerURL) {
 			return <Loading />
 		}
-
-		console.log({ winnerURL })
 
 		dispatch(
 			endTournament({
@@ -91,7 +95,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 						key="first-choice"
 						url={firstTikTokURL ?? ""}
 						hidden={hidden}
-						onClick={handleChooseButton(Choice.SECOND, firstTikTokURL)}
+						onClick={() => handleChooseButton(Choice.SECOND, firstTikTokURL)}
 						animateDirection="left"
 					/>
 				)}
@@ -100,7 +104,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 						key="second-choice"
 						url={secondTikTokURL ?? ""}
 						hidden={hidden}
-						onClick={handleChooseButton(Choice.FIRST, secondTikTokURL)}
+						onClick={() => handleChooseButton(Choice.FIRST, secondTikTokURL)}
 						animateDirection="right"
 					/>
 				)}

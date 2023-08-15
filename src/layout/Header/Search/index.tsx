@@ -1,8 +1,8 @@
 import { HStack, Input, IconButton } from "@chakra-ui/react"
 import { Search2Icon } from "@chakra-ui/icons"
 import { Controller, useForm } from "react-hook-form"
-import { tournamentActions } from "../../redux/slices/tournament/tournament"
-import { useTypedDispatch, useTypedSelector } from "../../redux/store"
+import { tournamentActions } from "../../../redux/slices/tournament/tournament"
+import { useTypedDispatch, useTypedSelector } from "../../../redux/store"
 import { useEffect } from "react"
 import { useMatch, useNavigate } from "react-router-dom"
 

@@ -220,6 +220,11 @@ export const endTournament =
 		return tournamentApi
 			.endTournament({ tournamentId, winnerURL })
 			.then(() => {
+				dispatch(
+					tournamentActions.setIsContestInProgress({
+						isContestInProgress: false,
+					})
+				)
 				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
 				dispatch(getTikToks({ data: { tournamentId } }))
 				dispatch(getTournament({ tournamentId }))

@@ -13,6 +13,7 @@ import { uiActions } from "../../redux/slices/ui/ui"
 import { AuthInput } from "./AuthInput"
 import { AuthRedirectButton } from "./AuthRedirectButton"
 import { useCardShadow } from "../../hooks/useCardShadow"
+import { motion } from "framer-motion"
 
 export type FormInputType = {
 	name: string
@@ -91,7 +92,15 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 	}
 
 	return (
-		<Flex width="full" align={"center"} justifyContent="center" mt={8}>
+		<Flex
+			as={motion.div}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1, transition: { duration: 0.5 } }}
+			width="full"
+			align={"center"}
+			justifyContent="center"
+			mt={8}
+		>
 			<Box borderWidth={2} borderRadius={8} {...shadowStyleProps}>
 				<Box textAlign="center" py={6}>
 					<Heading size={"xl"}>{title}</Heading>
