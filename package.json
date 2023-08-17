@@ -11,10 +11,11 @@
 		"test:ui": "vitest --ui",
 		"test:run": "vitest run",
 		"format": "prettier ./src --write",
-		"lint": "eslint ./src --fix"
+		"lint": "eslint ./src --fix",
+		"prepare": "husky install"
 	},
 	"lint-staged": {
-		"**/*.{js,jsx,json,ts,tsx}": [
+		"**/*.{js,jsx,ts,tsx}": [
 			"yarn format",
 			"yarn lint"
 		]
