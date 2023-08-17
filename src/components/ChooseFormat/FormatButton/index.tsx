@@ -11,19 +11,19 @@ type PropsType = {
 	children: ReactNode
 }
 
+const FORMAT_EXPLANATION = {
+	[TournamentFormat.SINGLE_ELIMINATION]:
+		"Each match-up is immediately eliminated from the tournament. Each winner will play another in the next round, until the final match-up, whose winner becomes the tournament champion",
+	[TournamentFormat.KING_OF_THE_HILL]:
+		"Winner plays in the next match against a new opponent. The loser is out of the tournament.",
+}
+
 export function FormatButton({
 	setFormat,
 	format,
 	animationDirection,
 	children,
 }: PropsType) {
-	const typesExplanation = {
-		[TournamentFormat.SINGLE_ELIMINATION]:
-			"Each match-up is immediately eliminated from the tournament. Each winner will play another in the next round, until the final match-up, whose winner becomes the tournament champion",
-		[TournamentFormat.KING_OF_THE_HILL]:
-			"Winner plays in the next match against a new opponent. The loser is out of the tournament.",
-	}
-
 	return (
 		<Button
 			as={motion.button}
@@ -45,7 +45,7 @@ export function FormatButton({
 		>
 			<Box mr={2}>{children}</Box>
 			<Tooltip
-				label={typesExplanation[format]}
+				label={FORMAT_EXPLANATION[format]}
 				ml={2}
 				hasArrow
 				placement="right-end"

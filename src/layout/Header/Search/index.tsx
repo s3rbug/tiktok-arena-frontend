@@ -17,7 +17,7 @@ export function Search() {
 
 	const isUserRoute = useMatch("/user")
 
-	const search = useTypedSelector((state) => state.arena.search)
+	const search = useTypedSelector((state) => state.arena.tournamentSearch)
 
 	const searchField = isUserRoute ? search.user : search.global
 
@@ -45,9 +45,10 @@ export function Search() {
 
 		if (data.searchField !== "") {
 			navigate(`/tournaments?search=${data.searchField}`, { replace: true })
-		} else {
-			navigate("/tournaments", { replace: true })
+			return
 		}
+
+		navigate("/tournaments", { replace: true })
 	}
 
 	return (

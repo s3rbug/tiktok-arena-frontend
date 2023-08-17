@@ -6,8 +6,6 @@ import {
 	DeleteTournamentsPayload,
 	GetTikToksPayloadType,
 	GetTournamentsPayload,
-	EndTournamentPayloadType,
-	GetContestPayloadType,
 } from "../../api/tournament/tournament.types"
 import { tournamentApi } from "../../api/tournament/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
@@ -37,18 +35,6 @@ export const getTournaments =
 			.catch((error: RequestError) => {
 				console.log(error)
 				return Promise.reject(error)
-			})
-	}
-
-export const getContest =
-	({ tournamentId, tournamentFormat }: GetContestPayloadType): AppThunkType =>
-	async (dispatch) => {
-		return tournamentApi
-			.getContest({ tournamentId, tournamentFormat })
-			.then((newContest) => {
-				if (newContest) {
-					dispatch(tournamentActions.setContest({ newContest }))
-				}
 			})
 	}
 
@@ -211,26 +197,5 @@ export const editTournament =
 						})
 					)
 				}
-			})
-	}
-
-export const endTournament =
-	({ tournamentId, winnerURL }: EndTournamentPayloadType): AppThunkType =>
-	async (dispatch) => {
-		return tournamentApi
-			.endTournament({ tournamentId, winnerURL })
-			.then(() => {
-				dispatch(
-					tournamentActions.setIsContestInProgress({
-						isContestInProgress: false,
-					})
-				)
-				dispatch(uiActions.setSuccess({ success: { endTournament: true } }))
-				dispatch(getTikToks({ data: { tournamentId } }))
-				dispatch(getTournament({ tournamentId }))
-			})
-			.catch((error: RequestError) => {
-				console.log(error)
-				return Promise.reject(error)
 			})
 	}

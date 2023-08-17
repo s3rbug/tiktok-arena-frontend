@@ -5,17 +5,17 @@ import { TournamentCard } from "./TournamentCard"
 
 type PropsType = {
 	tournaments: TournamentType[] | null
-	editable?: boolean
+	isEditable?: boolean
 }
 
 const gridVariants = {
-	initial: (index: number) => ({
+	initial: {
 		opacity: 0,
-		transform: `translateY(${index % 2 === 0 ? "-" : ""}100px)`,
-	}),
+		transform: `translateY(-100px)`,
+	},
 	popup: (index: number) => ({
 		transition: {
-			delay: index * 0.25,
+			delay: index * 0.15,
 			duration: 0.6,
 		},
 		transform: "translateY(0)",
@@ -23,7 +23,7 @@ const gridVariants = {
 	}),
 }
 
-export function Tournaments({ tournaments, editable }: PropsType) {
+export function Tournaments({ tournaments, isEditable }: PropsType) {
 	return (
 		<Grid
 			gridTemplateColumns={"repeat(auto-fit, minmax(250px, 1fr))"}
@@ -46,9 +46,11 @@ export function Tournaments({ tournaments, editable }: PropsType) {
 							<TournamentCard
 								id={tournament.ID}
 								title={tournament.Name}
-								editable={editable}
+								isEditable={isEditable}
 								checked={tournament?.checked}
 								photoURL={tournament.PhotoURL}
+								borderWidth={2}
+								borderColor="gray.300"
 							/>
 						</GridItem>
 					)

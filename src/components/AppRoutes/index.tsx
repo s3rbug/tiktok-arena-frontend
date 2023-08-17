@@ -22,6 +22,7 @@ export const AppRoutes = () => {
 			<Route path="/login" element={<LoginPage />} />
 			<Route path="/register" element={<RegisterPage />} />
 			<Route path="/user" element={<ProfilePage />} />
+			<Route path="/user/:userId" element={<ProfilePage />} />
 			<Route path="/user/create" element={<CreateTournamentPage />} />
 			<Route path="/*" element={<NotFoundPage />} />
 		</Routes>

@@ -2,7 +2,7 @@ import { Flex, Text, VStack } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { Loading, TikTokVideo } from "../../components"
 import { LeaderboardItem } from "../../components/LeaderboardItem"
-import { tournamentActions } from "../../redux/slices/tournament/tournament"
+import { contestActions } from "../../redux/slices/contest/contest"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 
 type PropsType = {
@@ -17,7 +17,7 @@ export const LeaderboardPage = ({ winnerURL }: PropsType) => {
 
 	useEffect(() => {
 		return () => {
-			dispatch(tournamentActions.resetContestProgress())
+			dispatch(contestActions.resetContestProgress())
 		}
 	}, [dispatch])
 

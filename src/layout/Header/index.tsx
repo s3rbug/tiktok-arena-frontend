@@ -1,36 +1,20 @@
-import {
-	Box,
-	Flex,
-	Button,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
-	Avatar,
-	Image,
-} from "@chakra-ui/react"
+import { Box, Flex, Button, Image } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
 import { Link } from "react-router-dom"
-import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { authActions } from "../../redux/slices/auth/auth"
-import { localToken } from "../../localStorage/token"
+import { useTypedSelector } from "../../redux/store"
 import { useAuth } from "../../hooks/useAuth"
 import UserSvg from "../../assets/userIcon.svg"
 import { ContestDetails } from "./ContestDetails.tsx"
+import { ProfileMenu } from "./ProfileMenu"
 
 export function Header() {
-	const dispatch = useTypedDispatch()
 	const { isContestInProgress } = useTypedSelector(
-		(state) => state.arena.contestProgress
+		(state) => state.contest.contestProgress
 	)
 
 	const user = useAuth()
 
-	function handleLogout() {
-		localToken.clearToken()
-		dispatch(authActions.logout())
-	}
 	return (
 		<Box
 			px={4}
@@ -65,35 +49,7 @@ export function Header() {
 				{isContestInProgress ? <ContestDetails /> : <Search />}
 
 				{user ? (
-					<Box>
-						<Menu>
-							{() => (
-								<>
-									<MenuButton>
-										<Avatar src={user?.photoURL || UserSvg} />
-									</MenuButton>
-									<MenuList>
-										<Link
-											to="/user"
-											replace
-											style={{ display: "inline-block", width: "100%" }}
-										>
-											<MenuItem>My profile</MenuItem>
-										</Link>
-
-										<Link
-											to="/user/create"
-											replace
-											style={{ display: "inline-block", width: "100%" }}
-										>
-											<MenuItem>Create tournament</MenuItem>
-										</Link>
-										<MenuItem onClick={handleLogout}>Logout</MenuItem>
-									</MenuList>
-								</>
-							)}
-						</Menu>
-					</Box>
+					<ProfileMenu photoURL={user?.photoURL || UserSvg} />
 				) : (
 					<Link to="/login" replace>
 						<Button variant={"solid"} colorScheme="blue">

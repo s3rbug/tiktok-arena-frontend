@@ -2,6 +2,7 @@ import { EditIcon } from "@chakra-ui/icons"
 import {
 	Card,
 	CardBody,
+	CardProps,
 	Checkbox,
 	Flex,
 	Heading,
@@ -19,17 +20,18 @@ import LogoSvg from "../../../assets/logo.svg"
 type PropsType = {
 	id: string
 	title: string
-	editable?: boolean
+	isEditable?: boolean
 	checked?: boolean
 	photoURL?: string | null
-}
+} & CardProps
 
 export function TournamentCard({
 	id,
 	title,
-	editable,
+	isEditable,
 	checked,
 	photoURL,
+	...cardStyles
 }: PropsType) {
 	const dispatch = useTypedDispatch()
 
@@ -51,9 +53,9 @@ export function TournamentCard({
 	}
 
 	return (
-		<Card borderWidth={2} borderColor="gray.300" {...shadowStyleProps}>
+		<Card {...cardStyles} {...shadowStyleProps}>
 			<CardBody>
-				{editable && (
+				{isEditable && (
 					<Flex justifyContent={"flex-start"} mb={8}>
 						<Checkbox
 							checked={checked}
@@ -63,7 +65,13 @@ export function TournamentCard({
 						/>
 					</Flex>
 				)}
-				<Flex as={Link} justifyContent="center" to={`/tournaments/${id}`}>
+				<Flex
+					as={Link}
+					justifyContent="center"
+					alignItems="center"
+					to={`/tournaments/${id}`}
+					h="250px"
+				>
 					<Image
 						transition="ease-out"
 						transitionDuration=".5s"
@@ -71,7 +79,8 @@ export function TournamentCard({
 							transform: "scale(1.05)",
 						}}
 						src={photoURL || LogoSvg}
-						h="250px"
+						maxW="100%"
+						maxH="100%"
 						alt="Tournament card"
 						borderRadius="lg"
 					/>
@@ -83,7 +92,7 @@ export function TournamentCard({
 							<Link to={`/tournaments/${id}`}>
 								<Text fontSize="lg">{title}</Text>
 							</Link>
-							{editable && (
+							{isEditable && (
 								<Link to={`/tournaments/${id}/edit`}>
 									<EditIcon
 										color="blue.800"

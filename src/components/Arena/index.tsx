@@ -1,13 +1,13 @@
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
 import { HStack } from "@chakra-ui/react"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
-import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useEffect, useState } from "react"
-import { endTournament, getContest } from "../../redux/middleware/tournament"
+import { endContest, getContest } from "../../redux/middleware/contest"
 import { LeaderboardPage } from "../../pages"
 import { Loading } from "../"
 import { AnimatePresence } from "framer-motion"
 import { ArenaItem } from "./ArenaItem"
+import { contestActions } from "../../redux/slices/contest/contest"
 
 type PropsType = {
 	tournamentId: string | undefined
@@ -23,28 +23,6 @@ export function Arena({ tournamentId, format }: PropsType) {
 	const dispatch = useTypedDispatch()
 	const [hidden, setHidden] = useState<null | Choice>(null)
 
-	function handleChooseButton(choiceToHide: Choice, winnerURL?: string) {
-		if (!winnerURL) {
-			return
-		}
-		setHidden(choiceToHide)
-		setTimeout(() => {
-			setHidden(null)
-			dispatch(tournamentActions.contestChoiceMade({ winnerURL }))
-		}, 1500)
-	}
-
-	const { isContestOver, matchIndex, roundIndex } = useTypedSelector(
-		(state) => state.arena.contestProgress
-	)
-
-	const currentMatch = useTypedSelector((state) => {
-		if (state.arena.contest.Rounds) {
-			return state.arena.contest.Rounds[roundIndex].Matches[matchIndex]
-		}
-		return undefined
-	})
-
 	useEffect(() => {
 		if (tournamentId) {
 			dispatch(getContest({ tournamentId, tournamentFormat: format }))
@@ -54,14 +32,41 @@ export function Arena({ tournamentId, format }: PropsType) {
 	useEffect(() => {
 		return () => {
 			dispatch(
-				tournamentActions.setIsContestInProgress({ isContestInProgress: false })
+				contestActions.setIsContestInProgress({ isContestInProgress: false })
 			)
 		}
 	}, [dispatch])
 
+	function handleChooseButton(choiceToHide: Choice, winnerURL?: string) {
+		if (!winnerURL) {
+			return
+		}
+		setHidden(choiceToHide)
+		setTimeout(() => {
+			setHidden(null)
+			dispatch(contestActions.contestChoiceMade({ winnerURL }))
+		}, 1500)
+	}
+
+	const { isContestOver, matchIndex, roundIndex } = useTypedSelector(
+		(state) => state.contest.contestProgress
+	)
+
+	const currentMatch = useTypedSelector((state) => {
+		if (state.contest.currentContest.Rounds) {
+			return state.contest.currentContest.Rounds[roundIndex].Matches[matchIndex]
+		}
+		return undefined
+	})
+
 	if (!currentMatch || !tournamentId) {
 		return <Loading />
 	}
+
+	const [firstTikTokURL, secondTikTokURL] = [
+		currentMatch.FirstOption.TiktokURL,
+		currentMatch.SecondOption.TiktokURL,
+	]
 
 	if (isContestOver) {
 		const winnerURL = currentMatch.firstOptionChosen
@@ -73,7 +78,7 @@ export function Arena({ tournamentId, format }: PropsType) {
 		}
 
 		dispatch(
-			endTournament({
+			endContest({
 				tournamentId,
 				winnerURL,
 			})
@@ -82,13 +87,13 @@ export function Arena({ tournamentId, format }: PropsType) {
 		return <LeaderboardPage winnerURL={winnerURL} />
 	}
 
-	const [firstTikTokURL, secondTikTokURL] = [
-		currentMatch.FirstOption.TiktokURL,
-		currentMatch.SecondOption.TiktokURL,
-	]
-
 	return (
-		<HStack justifyContent={"space-evenly"} p={0} pt={2}>
+		<HStack
+			justifyContent={"space-evenly"}
+			p={0}
+			pt={2}
+			flexDirection={{ lg: "row", sm: "column" }}
+		>
 			<AnimatePresence>
 				{hidden !== Choice.FIRST && (
 					<ArenaItem

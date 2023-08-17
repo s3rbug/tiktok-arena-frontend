@@ -6,10 +6,12 @@ import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { tournamentReducer } from "./slices/tournament/tournament"
 import { authReducer } from "./slices/auth/auth"
+import { contestReducer } from "./slices/contest/contest"
 
 export const store = configureStore({
 	reducer: {
 		arena: tournamentReducer,
+		contest: contestReducer,
 		auth: authReducer,
 		ui: uiReducer,
 		pagination: paginationReducer,

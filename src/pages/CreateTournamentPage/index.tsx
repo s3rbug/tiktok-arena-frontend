@@ -2,7 +2,7 @@ import { createTournament } from "../../redux/middleware/tournament"
 import { uiActions } from "../../redux/slices/ui/ui"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { TikToksForm } from "../../components/TikToksForm"
-import { CreateTournamentPayloadType } from "../../api/tournament/tournament"
+import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
 
 export function CreateTournamentPage() {
 	const dispatch = useTypedDispatch()

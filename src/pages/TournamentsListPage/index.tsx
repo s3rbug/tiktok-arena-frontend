@@ -15,7 +15,9 @@ export function TournamentsListPage() {
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
 		(state) => state.pagination.globalTournaments
 	)
-	const searchField = useTypedSelector((state) => state.arena.search.global)
+	const searchField = useTypedSelector(
+		(state) => state.arena.tournamentSearch.global
+	)
 
 	useEffect(() => {
 		if (currentPage) {

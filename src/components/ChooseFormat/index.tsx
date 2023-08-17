@@ -25,18 +25,22 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	}, [dispatch])
 
 	useEffect(() => {
-		if (tournamentId !== tournament?.ID && tournamentId) {
+		if (tournamentId && tournamentId !== tournament?.ID) {
 			dispatch(getTournament({ tournamentId }))
 		}
-	}, [dispatch, tournament?.ID, tournamentId])
+	}, [dispatch, tournamentId, tournament?.ID])
 
 	if (!tournament) {
 		return <Loading />
 	}
 
 	return (
-		<Flex justifyContent={"center"} w={"100%"} mt={16}>
-			<Card w={"50%"} variant="unstyled">
+		<Flex justifyContent={"center"} w={"100%"} mt={{ lg: 16, sm: 4 }}>
+			<Card
+				w={{ lg: "50%", sm: "100%" }}
+				p={{ lg: 0, sm: 5 }}
+				variant="unstyled"
+			>
 				<CardBody display={"flex"} flexDirection="column" alignItems={"center"}>
 					<Image
 						src={tournament?.PhotoURL || LogoSvg}
@@ -46,14 +50,18 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						animate={{ scale: 1, opacity: 1, transition: { duration: 0.5 } }}
 						borderRadius="lg"
 						width={"fit-content"}
-						h={"400px"}
+						maxH={"400px"}
 					/>
 
 					<Heading mt={4} mb={6} size="md">
 						{tournament ? tournament.Name : ""}
 					</Heading>
 				</CardBody>
-				<Flex justifyContent={"space-evenly"}>
+				<Flex
+					justifyContent={"space-evenly"}
+					flexDirection={{ lg: "row", sm: "column" }}
+					gap={4}
+				>
 					<FormatButton
 						animationDirection="left"
 						format={TournamentFormat.SINGLE_ELIMINATION}

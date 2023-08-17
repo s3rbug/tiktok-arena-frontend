@@ -22,8 +22,7 @@ export const useRoutePagination = ({
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	const changeCurrentPage = useCallback(
-		(page: number, replace: boolean = false) => {
-			// setSearchParams({ page: String(page) }, { replace })
+		(page: number) => {
 			searchParams.set("page", String(page))
 			setCurrentPage(page)
 			setSearchParams(searchParams)

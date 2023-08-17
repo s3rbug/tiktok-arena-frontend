@@ -9,7 +9,20 @@
 		"preview": "vite preview",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
-		"test:run": "vitest run"
+		"test:run": "vitest run",
+		"format": "prettier ./src --write",
+		"lint": "eslint ./src --fix"
+	},
+	"lint-staged": {
+		"**/*.{js,jsx,json,ts,tsx}": [
+			"yarn format",
+			"yarn lint"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
 	},
 	"dependencies": {
 		"@chakra-ui/icons": "^2.0.17",
@@ -32,6 +45,8 @@
 		"@vitejs/plugin-react-swc": "^3.0.0",
 		"eslint": "^8.36.0",
 		"eslint-config-react-app": "^7.0.1",
+		"husky": "^8.0.3",
+		"lint-staged": "^14.0.0",
 		"typescript": "^4.9.3",
 		"vite": "^4.1.0",
 		"vite-plugin-eslint": "^1.8.1",

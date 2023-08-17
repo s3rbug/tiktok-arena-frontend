@@ -1,15 +1,7 @@
-import {
-	Avatar,
-	Box,
-	Button,
-	Flex,
-	Heading,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react"
-import { ChangeEvent, useEffect, useRef } from "react"
-import { Link } from "react-router-dom"
-import { DeleteTournamentsPayload } from "../../api/tournament/tournament"
+import { Box, Button, Flex, Heading, useDisclosure } from "@chakra-ui/react"
+import { useEffect, useRef } from "react"
+import { Link, useParams } from "react-router-dom"
+import { DeleteTournamentsPayload } from "../../api/tournament/tournament.types"
 import { Loading, Tournaments } from "../../components"
 import { ConfirmDialog } from "../../components/ConfirmDialog"
 import { Pagination } from "../../components/Pagination"
@@ -22,10 +14,8 @@ import { paginationActions } from "../../redux/slices/pagination/pagination"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import UserSvg from "../../assets/userIcon.svg"
-import { PhotoIcon } from "../../assets/chakraIcons"
 import { useCustomToast } from "../../hooks/useCustomToast"
-import { imageApi } from "../../api/image/image"
-import { changeUserPicture } from "../../redux/middleware/user"
+import { ProfileHeader } from "./ProfileHeader/ProfileHeader"
 
 export function ProfilePage() {
 	const dispatch = useTypedDispatch()
@@ -34,12 +24,18 @@ export function ProfilePage() {
 
 	const user = useAuth()
 
+	const { userId } = useParams()
+
+	const isProfileOwner = !userId || userId === user?.id
+
 	const { showToast } = useCustomToast()
 
 	const dialogRef = useRef(null)
 
 	const tournaments = useTypedSelector((state) => state.arena.userTournaments)
-	const searchField = useTypedSelector((state) => state.arena.search.user)
+	const searchField = useTypedSelector(
+		(state) => state.arena.tournamentSearch.user
+	)
 
 	const { currentPage, lastPage, maxLength, pageSize, total } =
 		useTypedSelector((state) => state.pagination.userTournaments)
@@ -65,10 +61,6 @@ export function ProfilePage() {
 		)
 	}
 
-	function showDeleteDialog() {
-		onOpen()
-	}
-
 	function handleDelete() {
 		if (!tournaments || !user?.token) {
 			return
@@ -88,18 +80,6 @@ export function ProfilePage() {
 		dispatch(deleteTournaments({ data: tournamentsToDelete }))
 	}
 
-	async function changePicture(event: ChangeEvent<HTMLInputElement>) {
-		const fileImage = event.target?.files?.[0]
-		if (!fileImage) {
-			return
-		}
-		imageApi.saveImageToCloud(fileImage).then((url) => {
-			if (url) {
-				dispatch(changeUserPicture({ photoURL: url }))
-			}
-		})
-	}
-
 	if (!user || !tournaments) {
 		return <Loading />
 	}
@@ -107,63 +87,32 @@ export function ProfilePage() {
 	return (
 		<>
 			<Box p={8} pt={16}>
-				<Flex gap={16}>
-					<Avatar
-						as="label"
-						role="group"
-						position={"relative"}
-						h={"250px"}
-						w={"fit-content"}
-						src={user?.photoURL || UserSvg}
-					>
-						<input
-							style={{ display: "none" }}
-							onChange={changePicture}
-							type="file"
-							name="image"
-							accept="image/png, image/jpeg"
-						/>
-						<Box
-							position={"absolute"}
-							borderRadius={"full"}
-							backgroundColor="white"
-							p={2}
-							bottom={0}
-							right={3}
-							_groupHover={{ opacity: 1, bottom: 3 }}
-							opacity={0}
-							transition="opacity .25s ease-in, bottom .4s ease-in-out"
-							border="2px solid black"
-						>
-							<PhotoIcon boxSize={8} color="black" />
-						</Box>
-					</Avatar>
-					<Flex flexDirection={"column"} gap={2}>
-						<Text fontSize={"lg"}>
-							Name: <b>{user?.name}</b>
-						</Text>
-						<Text fontSize={"lg"}>
-							Tournament count: <b>{total}</b>
-						</Text>
-					</Flex>
-				</Flex>
+				<ProfileHeader
+					gap={16}
+					isEditable={isProfileOwner}
+					avatarSrc={user?.photoURL || UserSvg}
+					totalTournaments={total ?? 0}
+					username={user.name}
+				/>
 				<Flex mt={16} align="center" justifyContent={"space-between"}>
 					<Heading size="md">My tournaments</Heading>
-					<Flex gap={4}>
-						<Button
-							ref={dialogRef}
-							colorScheme={"red"}
-							onClick={showDeleteDialog}
-						>
-							Delete chosen
-						</Button>
-						<Button colorScheme={"blue"}>
-							<Link to="/user/create">Create new</Link>
-						</Button>
-					</Flex>
+					{isProfileOwner && (
+						<Flex gap={4}>
+							<Button
+								ref={dialogRef}
+								colorScheme={"red"}
+								onClick={() => onOpen()}
+							>
+								Delete chosen
+							</Button>
+							<Button colorScheme={"blue"}>
+								<Link to="/user/create">Create new</Link>
+							</Button>
+						</Flex>
+					)}
 				</Flex>
 				<Box pt={6}>
-					<Tournaments editable tournaments={tournaments} />
+					<Tournaments isEditable={isProfileOwner} tournaments={tournaments} />
 					<Pagination
 						currentPage={currentPage}
 						lastPage={lastPage}
@@ -174,16 +123,18 @@ export function ProfilePage() {
 					/>
 				</Box>
 			</Box>
-			<ConfirmDialog
-				isOpen={isOpen}
-				onClose={onClose}
-				title="Are you sure?"
-				description="Do you really want to delete checked tournaments?"
-				submitButtonText="Delete"
-				submitButtonColorScheme="red"
-				destructiveRef={dialogRef}
-				onSubmit={handleDelete}
-			/>
+			{isProfileOwner && (
+				<ConfirmDialog
+					isOpen={isOpen}
+					onClose={onClose}
+					title="Are you sure?"
+					description="Do you really want to delete checked tournaments?"
+					submitButtonText="Delete"
+					submitButtonColorScheme="red"
+					destructiveRef={dialogRef}
+					onSubmit={handleDelete}
+				/>
+			)}
 		</>
 	)
 }
