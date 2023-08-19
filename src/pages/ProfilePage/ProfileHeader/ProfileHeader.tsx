@@ -3,23 +3,27 @@ import { ChangeEvent } from "react"
 import { imageApi } from "../../../api/image/image"
 import { PhotoIcon } from "../../../assets/chakraIcons"
 import { changeUserPicture } from "../../../redux/middleware/user"
-import { useTypedDispatch } from "../../../redux/store"
+import { useTypedDispatch, useTypedSelector } from "../../../redux/store"
 
 type PropsType = {
 	avatarSrc: string
-	username: string
-	totalTournaments: number
-	isEditable?: boolean
+	isProfileOwner?: boolean
 } & FlexProps
 
 export const ProfileHeader = ({
 	avatarSrc,
-	username,
-	totalTournaments,
-	isEditable,
+	isProfileOwner,
 	...flexProps
 }: PropsType) => {
 	const dispatch = useTypedDispatch()
+
+	const username = useTypedSelector(
+		(state) => state.arena.userTournaments?.User?.Name || ""
+	)
+
+	const totalTournaments = useTypedSelector(
+		(state) => state.arena.userTournaments?.TotalTournamentCount || 0
+	)
 
 	async function changePicture(event: ChangeEvent<HTMLInputElement>) {
 		const fileImage = event.target?.files?.[0]
@@ -42,7 +46,7 @@ export const ProfileHeader = ({
 				w={"fit-content"}
 				src={avatarSrc}
 			>
-				{isEditable && (
+				{isProfileOwner && (
 					<>
 						<input
 							style={{ display: "none" }}

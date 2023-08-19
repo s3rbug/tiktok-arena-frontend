@@ -19,7 +19,7 @@ export function EditPage() {
 	const dispatch = useTypedDispatch()
 
 	useEffect(() => {
-		if (tournamentId && user?.token) {
+		if (tournamentId && user?.Token) {
 			dispatch(getTikToks({ data: { tournamentId } }))
 			dispatch(getTournament({ tournamentId }))
 		}
@@ -28,9 +28,11 @@ export function EditPage() {
 			dispatch(tournamentActions.setTiktoks({ newTiktoks: null }))
 			dispatch(tournamentActions.setTournament({ tournament: null }))
 		}
-	}, [dispatch, tournamentId, user?.token])
+	}, [dispatch, tournamentId, user?.Token])
 
-	const tournament = useTypedSelector((state) => state.arena?.tournament)
+	const tournament = useTypedSelector(
+		(state) => state.arena?.tournamentData?.Tournament
+	)
 
 	const tiktoks = useTypedSelector((state) => state.arena?.tiktoks)
 
@@ -57,7 +59,7 @@ export function EditPage() {
 	}
 
 	function onSubmit(data: CreateTournamentPayloadType) {
-		if (user?.token && tournamentId) {
+		if (user?.Token && tournamentId) {
 			dispatch(
 				editTournament({
 					data: {

@@ -1,4 +1,7 @@
-import { TournamentType } from "../../redux/slices/tournament/tournament.types"
+import {
+	TournamentType,
+	TournamentWithUserType,
+} from "../../redux/slices/tournament/tournament.types"
 import { jsonFetch } from "../jsonFetch"
 import { AuthTokenType } from "../auth/auth.types"
 import {
@@ -8,7 +11,9 @@ import {
 	GetTiktoksType,
 	GetTournamentPayloadType,
 	GetTournamentsPayload,
+	GetUserTournamentsPayload,
 } from "./tournament.types"
+import { UserType } from "../../redux/slices/auth/auth.types"
 
 export const tournamentApi = {
 	getTournaments: async function ({
@@ -19,6 +24,7 @@ export const tournamentApi = {
 		return jsonFetch.get<{
 			TournamentCount: number
 			Tournaments: TournamentType[]
+			User: UserType
 		}>(
 			`/tournament/tournaments?page=${page}&count=${pageSize}&search=${
 				search || ""
@@ -27,7 +33,9 @@ export const tournamentApi = {
 	},
 
 	getTournament: async function ({ tournamentId }: GetTournamentPayloadType) {
-		return jsonFetch.get<TournamentType>(`/tournament/details/${tournamentId}`)
+		return jsonFetch.get<TournamentWithUserType>(
+			`/tournament/details/${tournamentId}`
+		)
 	},
 
 	createTournament: async function ({
@@ -47,12 +55,16 @@ export const tournamentApi = {
 		pageSize,
 		token,
 		search,
-	}: GetTournamentsPayload & AuthTokenType) {
+		userId,
+	}: GetUserTournamentsPayload & AuthTokenType) {
 		return jsonFetch.get<{
 			TournamentCount: number
 			Tournaments: TournamentType[]
+			User: UserType
 		}>(
-			`/user/tournaments?page=${page}&count=${pageSize}&search=${search || ""}`,
+			`/user/profile/${userId}?page=${page}&count=${pageSize}&search=${
+				search || ""
+			}`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

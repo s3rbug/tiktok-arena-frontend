@@ -22,31 +22,56 @@ export function ProfilePage() {
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
-	const user = useAuth()
+	const currentUser = useAuth()
+
+	const profileUser = useTypedSelector(
+		(state) => state.arena.userTournaments?.User
+	)
 
 	const { userId } = useParams()
 
-	const isProfileOwner = !userId || userId === user?.id
+	const isProfileOwner = !userId || userId === currentUser?.ID
+
+	const user = isProfileOwner ? currentUser : profileUser
 
 	const { showToast } = useCustomToast()
 
 	const dialogRef = useRef(null)
 
-	const tournaments = useTypedSelector((state) => state.arena.userTournaments)
+	const tournaments = useTypedSelector(
+		(state) => state.arena.userTournaments?.Tournaments
+	)
+
 	const searchField = useTypedSelector(
 		(state) => state.arena.tournamentSearch.user
 	)
 
-	const { currentPage, lastPage, maxLength, pageSize, total } =
-		useTypedSelector((state) => state.pagination.userTournaments)
+	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
+		(state) => state.pagination.userTournaments
+	)
 
 	useEffect(() => {
-		if (user?.token && currentPage && pageSize) {
-			dispatch(
-				getUserTournaments({ page: currentPage, pageSize, search: searchField })
-			)
+		const userIdToFetch = userId || user?.ID
+
+		if (!currentPage || !pageSize || !userIdToFetch) {
+			return
 		}
-	}, [dispatch, user?.token, currentPage, pageSize, searchField])
+
+		dispatch(
+			getUserTournaments({
+				page: currentPage,
+				pageSize,
+				search: searchField,
+				userId: userIdToFetch,
+			})
+		)
+	}, [dispatch, user?.ID, currentPage, pageSize, searchField, userId])
+
+	useEffect(() => {
+		return () => {
+			dispatch(tournamentActions.setUserTournaments({ tournamentsData: null }))
+		}
+	}, [dispatch])
 
 	function setCurrentPage(page: number) {
 		dispatch(paginationActions.setCurrentPage({ page, key: "userTournaments" }))
@@ -62,7 +87,7 @@ export function ProfilePage() {
 	}
 
 	function handleDelete() {
-		if (!tournaments || !user?.token) {
+		if (!tournaments || !currentUser?.Token) {
 			return
 		}
 
@@ -89,13 +114,13 @@ export function ProfilePage() {
 			<Box p={8} pt={16}>
 				<ProfileHeader
 					gap={16}
-					isEditable={isProfileOwner}
-					avatarSrc={user?.photoURL || UserSvg}
-					totalTournaments={total ?? 0}
-					username={user.name}
+					isProfileOwner={isProfileOwner}
+					avatarSrc={user?.PhotoURL || UserSvg}
 				/>
 				<Flex mt={16} align="center" justifyContent={"space-between"}>
-					<Heading size="md">My tournaments</Heading>
+					<Heading size="md">
+						{isProfileOwner ? "My tournaments" : `${user.Name}'s tournaments`}
+					</Heading>
 					{isProfileOwner && (
 						<Flex gap={4}>
 							<Button

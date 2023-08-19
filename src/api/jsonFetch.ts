@@ -12,7 +12,7 @@ export function getToken(
 	getState: () => AppStateType,
 	callbackFn?: () => void
 ): string | undefined | null {
-	const token = getState().auth?.user?.token
+	const token = getState().auth?.user?.Token
 	if (!token && callbackFn) {
 		callbackFn()
 	}

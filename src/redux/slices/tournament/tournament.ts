@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { TournamentType, TikTok } from "./tournament.types"
+import {
+	TikTok,
+	TournamentDataType,
+	TournamentsDataType,
+} from "./tournament.types"
 
 const initialState = {
-	tournaments: null as TournamentType[] | null,
+	tournamentsData: null as TournamentsDataType | null,
 	tiktoks: null as TikTok[] | null,
-	tournament: null as TournamentType | null,
-	userTournaments: null as TournamentType[] | null,
+	tournamentData: null as TournamentDataType | null,
+	userTournaments: null as TournamentsDataType | null,
 	tournamentSearch: {
 		global: null as string | null,
 		user: null as string | null,
@@ -18,26 +22,29 @@ const tournamentSlice = createSlice({
 	reducers: {
 		setTournaments(
 			state,
-			action: PayloadAction<{ newTournaments: TournamentType[] | null }>
+			action: PayloadAction<{ newTournaments: TournamentsDataType | null }>
 		) {
 			const { newTournaments: newTounaments } = action.payload
-			state.tournaments = newTounaments
+			state.tournamentsData = newTounaments
 		},
 		setUserTournaments(
 			state,
-			action: PayloadAction<{ tournaments: TournamentType[] | null }>
+			action: PayloadAction<{ tournamentsData: TournamentsDataType | null }>
 		) {
-			const { tournaments } = action.payload
+			const { tournamentsData } = action.payload
 
-			if (!tournaments) {
+			if (!tournamentsData) {
 				state.userTournaments = null
 				return
 			}
 
-			state.userTournaments = tournaments.map((tournament) => ({
-				...tournament,
-				checked: false,
-			}))
+			state.userTournaments = {
+				...tournamentsData,
+				Tournaments: tournamentsData.Tournaments.map((tournament) => ({
+					...tournament,
+					checked: false,
+				})),
+			}
 		},
 		setTiktoks(state, action: PayloadAction<{ newTiktoks: TikTok[] | null }>) {
 			const { newTiktoks } = action.payload
@@ -51,19 +58,19 @@ const tournamentSlice = createSlice({
 			const { tournamentId, checked } = action.payload
 
 			if (state.userTournaments) {
-				state.userTournaments = state.userTournaments.map((tournament) => ({
-					...tournament,
-					checked:
-						tournament.ID === tournamentId ? checked : tournament.checked,
-				}))
+				state.userTournaments.Tournaments.forEach((tournament) => {
+					if (tournament.ID === tournamentId) {
+						tournament.checked = checked
+					}
+				})
 			}
 		},
 		setTournament: (
 			state,
-			action: PayloadAction<{ tournament: TournamentType | null }>
+			action: PayloadAction<{ tournament: TournamentDataType | null }>
 		) => {
 			const { tournament } = action.payload
-			state.tournament = tournament
+			state.tournamentData = tournament
 		},
 		setSearchField: (
 			state,

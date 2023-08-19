@@ -1,4 +1,13 @@
-import { Card, CardBody, Heading, Image, Flex } from "@chakra-ui/react"
+import {
+	Card,
+	CardBody,
+	Heading,
+	Image,
+	Flex,
+	Text,
+	VStack,
+	Link as ChakraLink,
+} from "@chakra-ui/react"
 import { useEffect } from "react"
 import { getTournament } from "../../redux/middleware/tournament"
 import { TournamentFormat } from "../../redux/slices/tournament/tournament.types"
@@ -8,6 +17,7 @@ import { FormatButton } from "./FormatButton"
 import LogoSvg from "../../assets/logo.svg"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { motion } from "framer-motion"
+import { Link as ReactRouterLink } from "react-router-dom"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat | null) => void
@@ -16,7 +26,13 @@ type PropsType = {
 
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	const dispatch = useTypedDispatch()
-	const tournament = useTypedSelector((state) => state.arena.tournament)
+	const tournament = useTypedSelector(
+		(state) => state.arena.tournamentData?.Tournament
+	)
+
+	const ownerUser = useTypedSelector(
+		(state) => state.arena.tournamentData?.User
+	)
 
 	useEffect(() => {
 		return () => {
@@ -41,7 +57,12 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 				p={{ lg: 0, sm: 5 }}
 				variant="unstyled"
 			>
-				<CardBody display={"flex"} flexDirection="column" alignItems={"center"}>
+				<CardBody
+					display={"flex"}
+					flexDirection="column"
+					alignItems={"center"}
+					gap={5}
+				>
 					<Image
 						src={tournament?.PhotoURL || LogoSvg}
 						alt="Tournament"
@@ -52,15 +73,26 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						width={"fit-content"}
 						maxH={"400px"}
 					/>
-
-					<Heading mt={4} mb={6} size="md">
-						{tournament ? tournament.Name : ""}
-					</Heading>
+					<VStack>
+						<Heading size="lg">{tournament?.Name || ""}</Heading>
+						<Text fontSize="md">
+							{"Made by "}
+							<ChakraLink
+								as={ReactRouterLink}
+								fontWeight="bold"
+								color="teal.500"
+								to={`/user/${ownerUser?.ID}`}
+							>
+								{`${ownerUser?.Name || ""}`}
+							</ChakraLink>
+						</Text>
+					</VStack>
 				</CardBody>
 				<Flex
 					justifyContent={"space-evenly"}
 					flexDirection={{ lg: "row", sm: "column" }}
 					gap={4}
+					mt={8}
 				>
 					<FormatButton
 						animationDirection="left"

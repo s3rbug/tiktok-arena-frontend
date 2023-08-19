@@ -12,7 +12,9 @@ type PropsType = {
 export const LeaderboardPage = ({ winnerURL }: PropsType) => {
 	const dispatch = useTypedDispatch()
 
-	const tournament = useTypedSelector((state) => state.arena.tournament)
+	const tournament = useTypedSelector(
+		(state) => state.arena.tournamentData?.Tournament
+	)
 	const tiktoks = useTypedSelector((state) => state.arena.tiktoks)
 
 	useEffect(() => {

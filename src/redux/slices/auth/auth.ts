@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { UserType } from "./auth.types"
 
 const initialState = {
-	user: null as UserType,
+	user: null as UserType | null,
 }
 
 const authSlice = createSlice({
@@ -19,7 +19,7 @@ const authSlice = createSlice({
 		) => {
 			const { photoURL } = action.payload
 			if (state.user) {
-				state.user.photoURL = photoURL
+				state.user.PhotoURL = photoURL
 			}
 		},
 		logout: (state) => {

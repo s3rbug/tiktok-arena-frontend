@@ -10,7 +10,9 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 export function TournamentsListPage() {
 	const dispatch = useTypedDispatch()
 
-	const tournaments = useTypedSelector((state) => state.arena.tournaments)
+	const tournaments = useTypedSelector(
+		(state) => state.arena.tournamentsData?.Tournaments
+	)
 
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
 		(state) => state.pagination.globalTournaments

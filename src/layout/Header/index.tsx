@@ -49,7 +49,7 @@ export function Header() {
 				{isContestInProgress ? <ContestDetails /> : <Search />}
 
 				{user ? (
-					<ProfileMenu photoURL={user?.photoURL || UserSvg} />
+					<ProfileMenu photoURL={user?.PhotoURL || UserSvg} />
 				) : (
 					<Link to="/login" replace>
 						<Button variant={"solid"} colorScheme="blue">

@@ -1,6 +1,5 @@
 import { uiActions } from "./../slices/ui/ui"
 import { AppThunkType } from "./../store"
-import { UserType } from "../slices/auth/auth.types"
 import { authApi } from "../../api/auth/auth"
 import { AuthPayloadType, AuthTokenType } from "../../api/auth/auth.types"
 import { authActions } from "../slices/auth/auth"
@@ -13,18 +12,14 @@ export const login =
 	async (dispatch) => {
 		return authApi
 			.login({ name, password })
-			.then((userDetails) => {
-				if (userDetails) {
+			.then((user) => {
+				if (user && user.Token) {
 					dispatch(
 						authActions.setUser({
-							user: {
-								id: userDetails.ID,
-								name: userDetails.Username,
-								token: userDetails.Token,
-							} as UserType,
+							user,
 						})
 					)
-					localToken.setToken(userDetails.Token)
+					localToken.setToken(user.Token)
 				}
 			})
 			.catch((error: RequestError) => {
@@ -45,18 +40,14 @@ export const register =
 	async (dispatch) => {
 		return authApi
 			.register({ name, password })
-			.then((userDetails) => {
-				if (userDetails) {
+			.then((user) => {
+				if (user && user.Token) {
 					dispatch(
 						authActions.setUser({
-							user: {
-								id: userDetails.ID,
-								name: userDetails.Username,
-								token: userDetails.Token,
-							} as UserType,
+							user,
 						})
 					)
-					localToken.setToken(userDetails.Token)
+					localToken.setToken(user.Token)
 				}
 			})
 			.catch((error: RequestError) => {
@@ -79,18 +70,9 @@ export const whoami =
 	async (dispatch) => {
 		return authApi
 			.whoami({ token })
-			.then((userDetails) => {
-				if (userDetails) {
-					dispatch(
-						authActions.setUser({
-							user: {
-								id: userDetails.ID,
-								name: userDetails.Username,
-								token: userDetails.Token,
-								photoURL: userDetails?.PhotoURL || null,
-							} as UserType,
-						})
-					)
+			.then((user) => {
+				if (user) {
+					dispatch(authActions.setUser({ user }))
 				}
 			})
 			.catch((error: RequestError) => {

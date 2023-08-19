@@ -1,10 +1,10 @@
-import { UserAuthDetailsType } from "../../redux/slices/auth/auth.types"
+import { UserType } from "../../redux/slices/auth/auth.types"
 import { jsonFetch } from "../jsonFetch"
 import { AuthPayloadType, AuthTokenType } from "./auth.types"
 
 export const authApi = {
 	login: async ({ name, password }: AuthPayloadType) => {
-		return jsonFetch.post<UserAuthDetailsType>("/auth/login", {
+		return jsonFetch.post<UserType>("/auth/login", {
 			body: JSON.stringify({
 				name,
 				password,
@@ -12,7 +12,7 @@ export const authApi = {
 		})
 	},
 	register: async ({ name, password }: AuthPayloadType) => {
-		return jsonFetch.post<UserAuthDetailsType>("/auth/register", {
+		return jsonFetch.post<UserType>("/auth/register", {
 			body: JSON.stringify({
 				name,
 				password,
@@ -20,7 +20,7 @@ export const authApi = {
 		})
 	},
 	whoami: async ({ token }: AuthTokenType) => {
-		return jsonFetch.get<UserAuthDetailsType>("/auth/whoami", {
+		return jsonFetch.get<UserType>("/auth/whoami", {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

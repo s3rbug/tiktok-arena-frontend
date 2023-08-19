@@ -6,6 +6,7 @@ import {
 	DeleteTournamentsPayload,
 	GetTikToksPayloadType,
 	GetTournamentsPayload,
+	GetUserTournamentsPayload,
 } from "../../api/tournament/tournament.types"
 import { tournamentApi } from "../../api/tournament/tournament"
 import { tournamentActions } from "../slices/tournament/tournament"
@@ -21,7 +22,11 @@ export const getTournaments =
 				if (response) {
 					dispatch(
 						tournamentActions.setTournaments({
-							newTournaments: response.Tournaments,
+							newTournaments: {
+								Tournaments: response.Tournaments,
+								User: response.User,
+								TotalTournamentCount: response.TournamentCount,
+							},
 						})
 					)
 					dispatch(
@@ -45,7 +50,15 @@ export const getTournament =
 			.getTournament({ tournamentId })
 			.then((tournament) => {
 				if (tournament) {
-					dispatch(tournamentActions.setTournament({ tournament }))
+					const { User, ...Tournament } = tournament
+					dispatch(
+						tournamentActions.setTournament({
+							tournament: {
+								Tournament,
+								User,
+							},
+						})
+					)
 				}
 			})
 			.catch(() => {
@@ -91,19 +104,28 @@ export const createTournament =
 	}
 
 export const getUserTournaments =
-	({ page, pageSize, search }: GetTournamentsPayload): AppThunkType =>
+	({
+		page,
+		pageSize,
+		search,
+		userId,
+	}: GetUserTournamentsPayload): AppThunkType =>
 	async (dispatch, getState) => {
 		const token = getToken(getState)
 		if (!token) {
 			return
 		}
 		return tournamentApi
-			.getUserTournaments({ token, page, pageSize, search })
+			.getUserTournaments({ token, page, pageSize, search, userId })
 			.then((response) => {
 				if (response?.Tournaments) {
 					dispatch(
 						tournamentActions.setUserTournaments({
-							tournaments: response.Tournaments,
+							tournamentsData: {
+								Tournaments: response.Tournaments,
+								User: response.User,
+								TotalTournamentCount: response.TournamentCount,
+							},
 						})
 					)
 
@@ -133,13 +155,16 @@ export const deleteTournaments =
 	async (dispatch, getState) => {
 		const token = getToken(getState)
 		const { currentPage, pageSize } = getState().pagination.userTournaments
-		if (!token || !currentPage) {
+		const userId = getState().auth.user?.ID
+
+		if (!token || !currentPage || !userId) {
 			return
 		}
+
 		return tournamentApi
 			.deleteTournaments({ data, token })
 			.then(() => {
-				dispatch(getUserTournaments({ page: currentPage, pageSize }))
+				dispatch(getUserTournaments({ page: currentPage, pageSize, userId }))
 			})
 			.catch((error: RequestError) => {
 				console.log(error)

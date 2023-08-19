@@ -25,6 +25,11 @@ export type GetTournamentsPayload = {
 	pageSize: number
 	search?: string | null
 }
+
+export type GetUserTournamentsPayload = GetTournamentsPayload & {
+	userId: string
+}
+
 export type GetTiktoksType = {
 	TiktoksStats: TikTok[]
 }
