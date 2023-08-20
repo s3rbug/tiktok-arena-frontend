@@ -19,7 +19,7 @@ const authSlice = createSlice({
 		) => {
 			const { photoURL } = action.payload
 			if (state.user) {
-				state.user.PhotoURL = photoURL
+				state.user.photoURL = photoURL
 			}
 		},
 		logout: (state) => {

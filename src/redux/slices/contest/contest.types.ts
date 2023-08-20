@@ -11,24 +11,23 @@ export type ContestProgressType = {
 }
 
 export type ContestType = {
-	CountMatches: number
-	Rounds: ContestRound[]
+	countMatches: number
+	rounds: ContestRound[]
 }
 
 export type ContestRound = {
-	Round: number
-	Matches: ContestMatch[]
+	round: number
+	matches: ContestMatch[]
+}
+
+export type OptionType = {
+	tiktokURL?: string
+	matchID?: string
 }
 
 export type ContestMatch = {
-	MatchID: string
-	FirstOption: {
-		TiktokURL?: string
-		MatchID?: string
-	}
-	SecondOption: {
-		TiktokURL?: string
-		MatchID?: string
-	}
+	matchID: string
+	firstOption: OptionType
+	secondOption: OptionType
 	firstOptionChosen?: boolean
 }

@@ -13,13 +13,13 @@ export const login =
 		return authApi
 			.login({ name, password })
 			.then((user) => {
-				if (user && user.Token) {
+				if (user && user.token) {
 					dispatch(
 						authActions.setUser({
 							user,
 						})
 					)
-					localToken.setToken(user.Token)
+					localToken.setToken(user.token)
 				}
 			})
 			.catch((error: RequestError) => {
@@ -41,13 +41,13 @@ export const register =
 		return authApi
 			.register({ name, password })
 			.then((user) => {
-				if (user && user.Token) {
+				if (user && user.token) {
 					dispatch(
 						authActions.setUser({
 							user,
 						})
 					)
-					localToken.setToken(user.Token)
+					localToken.setToken(user.token)
 				}
 			})
 			.catch((error: RequestError) => {

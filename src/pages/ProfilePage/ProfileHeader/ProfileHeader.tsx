@@ -18,11 +18,11 @@ export const ProfileHeader = ({
 	const dispatch = useTypedDispatch()
 
 	const username = useTypedSelector(
-		(state) => state.arena.userTournaments?.User?.Name || ""
+		(state) => state.arena.userTournamentsData?.user?.name || ""
 	)
 
 	const totalTournaments = useTypedSelector(
-		(state) => state.arena.userTournaments?.TotalTournamentCount || 0
+		(state) => state.arena.userTournamentsData?.totalTournamentCount || 0
 	)
 
 	async function changePicture(event: ChangeEvent<HTMLInputElement>) {

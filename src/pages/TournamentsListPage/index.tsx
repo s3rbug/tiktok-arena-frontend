@@ -11,7 +11,7 @@ export function TournamentsListPage() {
 	const dispatch = useTypedDispatch()
 
 	const tournaments = useTypedSelector(
-		(state) => state.arena.tournamentsData?.Tournaments
+		(state) => state.arena.tournamentsData?.tournaments
 	)
 
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(

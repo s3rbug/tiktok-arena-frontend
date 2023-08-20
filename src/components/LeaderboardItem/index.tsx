@@ -17,10 +17,10 @@ export const LeaderboardItem = ({
 		if (timesPlayed <= 0) {
 			return 0
 		}
-		return (100.0 * tiktok.Wins) / timesPlayed
+		return (100.0 * tiktok.wins) / timesPlayed
 	}
 
-	const isWinner = tiktok.URL === winnerURL
+	const isWinner = tiktok.url === winnerURL
 
 	return (
 		<VStack align={"flex-start"} w={"100%"}>
@@ -35,7 +35,7 @@ export const LeaderboardItem = ({
 				{`${getProgressValue().toFixed(2)}%`}
 			</Badge>
 
-			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.Name}</Text>
+			<Text fontWeight={isWinner ? "bold" : "normal"}>{tiktok.name}</Text>
 			<Box w={"100%"}>
 				<Progress
 					as={motion.div}

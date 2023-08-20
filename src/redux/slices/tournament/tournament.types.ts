@@ -1,33 +1,32 @@
 import { UserType } from "../auth/auth.types"
 
 export type TournamentType = {
-	ID: string
-	Name: string
-	Size: number
-	UserId: string
-	TimesPlayed: number
-	checked?: boolean
+	id: string
+	name: string
+	size: number
+	userID: string
+	timesPlayed: number
 	isPrivate: boolean
-	PhotoURL?: string | null
+	photoURL?: string | null
 }
 
 export type TournamentsDataType = {
-	Tournaments: TournamentType[]
-	User: UserType
-	TotalTournamentCount: number
+	tournaments: TournamentType[]
+	user: UserType
+	totalTournamentCount: number
 }
 
 export type TournamentDataType = {
-	Tournament: TournamentType
-	User: UserType
+	tournament: TournamentType
+	user: UserType
 }
 
 export type UserTournamentDataType = TournamentDataType & {
-	TournamentCount: number
+	tournamentCount: number
 }
 
 export type TournamentWithUserType = TournamentType & {
-	User: UserType
+	user: UserType
 }
 
 export enum TournamentFormat {
@@ -38,7 +37,7 @@ export enum TournamentFormat {
 export type TournamentFormType = {
 	name: string
 	photoURL: string | null
-	// isPrivate: boolean
+	isPrivate: boolean
 	tiktoks: {
 		url: string
 		name: string
@@ -46,9 +45,9 @@ export type TournamentFormType = {
 }
 
 export type TikTok = {
-	TournamentID: string
-	URL: string
-	Wins: number
-	Name: string
+	tournamentID: string
+	url: string
+	wins: number
+	name: string
 	thumbnailUrl: string | null
 }

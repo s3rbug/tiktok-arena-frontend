@@ -25,12 +25,12 @@ export function ProfilePage() {
 	const currentUser = useAuth()
 
 	const profileUser = useTypedSelector(
-		(state) => state.arena.userTournaments?.User
+		(state) => state.arena.userTournamentsData?.user
 	)
 
 	const { userId } = useParams()
 
-	const isProfileOwner = !userId || userId === currentUser?.ID
+	const isProfileOwner = !userId || userId === currentUser?.id
 
 	const user = isProfileOwner ? currentUser : profileUser
 
@@ -39,11 +39,15 @@ export function ProfilePage() {
 	const dialogRef = useRef(null)
 
 	const tournaments = useTypedSelector(
-		(state) => state.arena.userTournaments?.Tournaments
+		(state) => state.arena.userTournamentsData?.tournaments
 	)
 
 	const searchField = useTypedSelector(
 		(state) => state.arena.tournamentSearch.user
+	)
+
+	const tournamentIdsToDelete = useTypedSelector(
+		(state) => state.arena.checkedTournamentsToDelete
 	)
 
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
@@ -51,7 +55,7 @@ export function ProfilePage() {
 	)
 
 	useEffect(() => {
-		const userIdToFetch = userId || user?.ID
+		const userIdToFetch = userId || user?.id
 
 		if (!currentPage || !pageSize || !userIdToFetch) {
 			return
@@ -65,7 +69,7 @@ export function ProfilePage() {
 				userId: userIdToFetch,
 			})
 		)
-	}, [dispatch, user?.ID, currentPage, pageSize, searchField, userId])
+	}, [dispatch, user?.id, currentPage, pageSize, searchField, userId])
 
 	useEffect(() => {
 		return () => {
@@ -87,17 +91,15 @@ export function ProfilePage() {
 	}
 
 	function handleDelete() {
-		if (!tournaments || !currentUser?.Token) {
+		if (!tournaments || !currentUser?.token) {
 			return
 		}
 
 		const tournamentsToDelete: DeleteTournamentsPayload = {
-			TournamentIds: tournaments
-				.filter((tournament) => tournament?.checked)
-				.map((tournament) => tournament.ID),
+			tournamentIds: tournamentIdsToDelete,
 		}
 
-		if (tournamentsToDelete.TournamentIds.length === 0) {
+		if (tournamentsToDelete.tournamentIds.length === 0) {
 			showToast("Delete error", "No tournaments chosen!")
 			return
 		}
@@ -115,11 +117,11 @@ export function ProfilePage() {
 				<ProfileHeader
 					gap={16}
 					isProfileOwner={isProfileOwner}
-					avatarSrc={user?.PhotoURL || UserSvg}
+					avatarSrc={user?.photoURL || UserSvg}
 				/>
 				<Flex mt={16} align="center" justifyContent={"space-between"}>
 					<Heading size="md">
-						{isProfileOwner ? "My tournaments" : `${user.Name}'s tournaments`}
+						{isProfileOwner ? "My tournaments" : `${user.name}'s tournaments`}
 					</Heading>
 					{isProfileOwner && (
 						<Flex gap={4}>

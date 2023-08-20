@@ -22,9 +22,9 @@ export const tournamentApi = {
 		search,
 	}: GetTournamentsPayload) {
 		return jsonFetch.get<{
-			TournamentCount: number
-			Tournaments: TournamentType[]
-			User: UserType
+			tournamentCount: number
+			tournaments: TournamentType[]
+			user: UserType
 		}>(
 			`/tournament/tournaments?page=${page}&count=${pageSize}&search=${
 				search || ""
@@ -58,9 +58,9 @@ export const tournamentApi = {
 		userId,
 	}: GetUserTournamentsPayload & AuthTokenType) {
 		return jsonFetch.get<{
-			TournamentCount: number
-			Tournaments: TournamentType[]
-			User: UserType
+			tournamentCount: number
+			tournaments: TournamentType[]
+			user: UserType
 		}>(
 			`/user/profile/${userId}?page=${page}&count=${pageSize}&search=${
 				search || ""

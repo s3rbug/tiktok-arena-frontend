@@ -53,8 +53,8 @@ export function Arena({ tournamentId, format }: PropsType) {
 	)
 
 	const currentMatch = useTypedSelector((state) => {
-		if (state.contest.currentContest.Rounds) {
-			return state.contest.currentContest.Rounds[roundIndex].Matches[matchIndex]
+		if (state.contest.currentContest.rounds) {
+			return state.contest.currentContest.rounds[roundIndex].matches[matchIndex]
 		}
 		return undefined
 	})
@@ -64,14 +64,14 @@ export function Arena({ tournamentId, format }: PropsType) {
 	}
 
 	const [firstTikTokURL, secondTikTokURL] = [
-		currentMatch.FirstOption.TiktokURL,
-		currentMatch.SecondOption.TiktokURL,
+		currentMatch.firstOption.tiktokURL,
+		currentMatch.secondOption.tiktokURL,
 	]
 
 	if (isContestOver) {
 		const winnerURL = currentMatch.firstOptionChosen
-			? currentMatch.FirstOption.TiktokURL
-			: currentMatch.SecondOption.TiktokURL
+			? currentMatch.firstOption.tiktokURL
+			: currentMatch.secondOption.tiktokURL
 
 		if (!winnerURL) {
 			return <Loading />

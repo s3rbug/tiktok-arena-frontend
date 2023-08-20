@@ -23,15 +23,15 @@ export const getTournaments =
 					dispatch(
 						tournamentActions.setTournaments({
 							newTournaments: {
-								Tournaments: response.Tournaments,
-								User: response.User,
-								TotalTournamentCount: response.TournamentCount,
+								tournaments: response.tournaments,
+								user: response.user,
+								totalTournamentCount: response.tournamentCount,
 							},
 						})
 					)
 					dispatch(
 						paginationActions.setLastPage({
-							lastPage: Math.ceil(response.TournamentCount / pageSize),
+							lastPage: Math.ceil(response.tournamentCount / pageSize),
 							key: "globalTournaments",
 						})
 					)
@@ -50,12 +50,12 @@ export const getTournament =
 			.getTournament({ tournamentId })
 			.then((tournament) => {
 				if (tournament) {
-					const { User, ...Tournament } = tournament
+					const { user, ...tournamentWithoutUser } = tournament
 					dispatch(
 						tournamentActions.setTournament({
 							tournament: {
-								Tournament,
-								User,
+								tournament: tournamentWithoutUser,
+								user,
 							},
 						})
 					)
@@ -118,27 +118,27 @@ export const getUserTournaments =
 		return tournamentApi
 			.getUserTournaments({ token, page, pageSize, search, userId })
 			.then((response) => {
-				if (response?.Tournaments) {
+				if (response?.tournaments) {
 					dispatch(
 						tournamentActions.setUserTournaments({
 							tournamentsData: {
-								Tournaments: response.Tournaments,
-								User: response.User,
-								TotalTournamentCount: response.TournamentCount,
+								tournaments: response.tournaments,
+								user: response.user,
+								totalTournamentCount: response.tournamentCount,
 							},
 						})
 					)
 
 					dispatch(
 						paginationActions.setLastPage({
-							lastPage: Math.ceil(response.TournamentCount / pageSize),
+							lastPage: Math.ceil(response.tournamentCount / pageSize),
 							key: "userTournaments",
 						})
 					)
 
 					dispatch(
 						paginationActions.setTotal({
-							total: response.TournamentCount,
+							total: response.tournamentCount,
 							key: "userTournaments",
 						})
 					)
@@ -155,7 +155,7 @@ export const deleteTournaments =
 	async (dispatch, getState) => {
 		const token = getToken(getState)
 		const { currentPage, pageSize } = getState().pagination.userTournaments
-		const userId = getState().auth.user?.ID
+		const userId = getState().auth.user?.id
 
 		if (!token || !currentPage || !userId) {
 			return
@@ -183,7 +183,7 @@ export const getTikToks =
 				}
 
 				dispatch(
-					tournamentActions.setTiktoks({ newTiktoks: tiktokData.TiktoksStats })
+					tournamentActions.setTiktoks({ newTiktoks: tiktokData.tiktoksStats })
 				)
 			})
 			.catch((error) => {

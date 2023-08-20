@@ -9,7 +9,8 @@ const initialState = {
 	tournamentsData: null as TournamentsDataType | null,
 	tiktoks: null as TikTok[] | null,
 	tournamentData: null as TournamentDataType | null,
-	userTournaments: null as TournamentsDataType | null,
+	userTournamentsData: null as TournamentsDataType | null,
+	checkedTournamentsToDelete: [] as string[],
 	tournamentSearch: {
 		global: null as string | null,
 		user: null as string | null,
@@ -34,13 +35,13 @@ const tournamentSlice = createSlice({
 			const { tournamentsData } = action.payload
 
 			if (!tournamentsData) {
-				state.userTournaments = null
+				state.userTournamentsData = null
 				return
 			}
 
-			state.userTournaments = {
+			state.userTournamentsData = {
 				...tournamentsData,
-				Tournaments: tournamentsData.Tournaments.map((tournament) => ({
+				tournaments: tournamentsData.tournaments.map((tournament) => ({
 					...tournament,
 					checked: false,
 				})),
@@ -50,20 +51,6 @@ const tournamentSlice = createSlice({
 			const { newTiktoks } = action.payload
 
 			state.tiktoks = newTiktoks
-		},
-		setChecked(
-			state,
-			action: PayloadAction<{ tournamentId: string; checked: boolean }>
-		) {
-			const { tournamentId, checked } = action.payload
-
-			if (state.userTournaments) {
-				state.userTournaments.Tournaments.forEach((tournament) => {
-					if (tournament.ID === tournamentId) {
-						tournament.checked = checked
-					}
-				})
-			}
 		},
 		setTournament: (
 			state,
@@ -81,6 +68,29 @@ const tournamentSlice = createSlice({
 		) => {
 			const { searchField, key } = action.payload
 			state.tournamentSearch[key] = searchField
+		},
+		setChecked: (
+			state,
+			action: PayloadAction<{ tournamentId: string; checked: boolean }>
+		) => {
+			const { checked, tournamentId } = action.payload
+
+			if (!checked) {
+				state.checkedTournamentsToDelete =
+					state.checkedTournamentsToDelete.filter(
+						(checkedId) => checkedId !== tournamentId
+					)
+				return
+			}
+			if (!state.checkedTournamentsToDelete.includes(tournamentId)) {
+				state.checkedTournamentsToDelete = [
+					...state.checkedTournamentsToDelete,
+					tournamentId,
+				]
+			}
+		},
+		resetChecked: (state) => {
+			state.checkedTournamentsToDelete = []
 		},
 	},
 })

@@ -9,11 +9,11 @@ export type GetTournamentPayloadType = {
 
 export type CreateTournamentPayloadType = {
 	size: number
-	PhotoURL?: string | null
+	photoURL?: string | null
 } & TournamentFormType
 
 export type DeleteTournamentsPayload = {
-	TournamentIds: string[]
+	tournamentIds: string[]
 }
 
 export type GetTikToksPayloadType = {
@@ -31,5 +31,5 @@ export type GetUserTournamentsPayload = GetTournamentsPayload & {
 }
 
 export type GetTiktoksType = {
-	TiktoksStats: TikTok[]
+	tiktoksStats: TikTok[]
 }

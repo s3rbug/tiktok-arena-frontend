@@ -10,8 +10,9 @@ import { useAuth } from "../../hooks/useAuth"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { Loading } from "../../components"
 import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
+import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
 
-export function EditPage() {
+export function EditTournamentPage() {
 	const { tournamentId } = useParams()
 
 	const user = useAuth()
@@ -19,7 +20,7 @@ export function EditPage() {
 	const dispatch = useTypedDispatch()
 
 	useEffect(() => {
-		if (tournamentId && user?.Token) {
+		if (tournamentId && user?.token) {
 			dispatch(getTikToks({ data: { tournamentId } }))
 			dispatch(getTournament({ tournamentId }))
 		}
@@ -28,10 +29,10 @@ export function EditPage() {
 			dispatch(tournamentActions.setTiktoks({ newTiktoks: null }))
 			dispatch(tournamentActions.setTournament({ tournament: null }))
 		}
-	}, [dispatch, tournamentId, user?.Token])
+	}, [dispatch, tournamentId, user?.token])
 
 	const tournament = useTypedSelector(
-		(state) => state.arena?.tournamentData?.Tournament
+		(state) => state.arena?.tournamentData?.tournament
 	)
 
 	const tiktoks = useTypedSelector((state) => state.arena?.tiktoks)
@@ -50,22 +51,23 @@ export function EditPage() {
 		return <Loading />
 	}
 
-	const defaultValue = {
-		name: tournament.Name,
-		photoURL: tournament.PhotoURL || null,
+	const defaultValue: TournamentFormType = {
+		name: tournament.name,
+		photoURL: tournament.photoURL || null,
+		isPrivate: tournament.isPrivate,
 		tiktoks: [
-			...tiktoks.map((tiktok) => ({ url: tiktok.URL, name: tiktok.Name })),
+			...tiktoks.map((tiktok) => ({ url: tiktok.url, name: tiktok.name })),
 		],
 	}
 
 	function onSubmit(data: CreateTournamentPayloadType) {
-		if (user?.Token && tournamentId) {
+		if (user?.token && tournamentId) {
 			dispatch(
 				editTournament({
 					data: {
 						...data,
 						size: data.tiktoks.length,
-						photoURL: data.PhotoURL || null,
+						photoURL: data.photoURL || null,
 					},
 					tournamentId,
 				})

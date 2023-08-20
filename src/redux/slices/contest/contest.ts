@@ -31,51 +31,28 @@ const contestSlice = createSlice({
 		contestChoiceMade(state, action: PayloadAction<{ winnerURL: string }>) {
 			const { winnerURL } = action.payload
 
-			const [roundIndex, matchIndex] = [
-				state.contestProgress.roundIndex,
-				state.contestProgress.matchIndex,
-			]
+			const { roundIndex, matchIndex } = state.contestProgress
 
-			state.currentContest.Rounds[roundIndex].Matches[
-				matchIndex
-			].firstOptionChosen =
-				state.currentContest.Rounds[roundIndex].Matches[matchIndex].FirstOption
-					.TiktokURL === winnerURL
+			const currentRound = state.currentContest.rounds[roundIndex]
 
-			const roundLength = state.currentContest.Rounds.length
-			const matchLength = state.currentContest.Rounds[roundIndex].Matches.length
+			const currentMatch = currentRound.matches[matchIndex]
 
-			const currentMatchID =
-				state.currentContest.Rounds[roundIndex].Matches[matchIndex].MatchID
+			currentMatch.firstOptionChosen =
+				currentMatch.firstOption.tiktokURL === winnerURL
 
-			state.currentContest.Rounds = state.currentContest.Rounds.map(
-				(round) => ({
-					...round,
-					Matches: [
-						...round.Matches.map((round) => {
-							if (round.FirstOption?.MatchID === currentMatchID) {
-								return {
-									...round,
-									FirstOption: {
-										...round.FirstOption,
-										TiktokURL: winnerURL,
-									},
-								}
-							}
-							if (round.SecondOption?.MatchID === currentMatchID) {
-								return {
-									...round,
-									SecondOption: {
-										...round.SecondOption,
-										TiktokURL: winnerURL,
-									},
-								}
-							}
-							return round
-						}),
-					],
+			state.currentContest.rounds.forEach((round) => {
+				round.matches.forEach((match) => {
+					if (match.firstOption.matchID === currentMatch.matchID) {
+						match.firstOption.tiktokURL = winnerURL
+					}
+					if (match.secondOption.matchID === currentMatch.matchID) {
+						match.secondOption.tiktokURL = winnerURL
+					}
 				})
-			)
+			})
+
+			const roundLength = state.currentContest.rounds.length
+			const matchLength = currentRound.matches.length
 
 			if (roundIndex + 1 === roundLength && matchIndex + 1 === matchLength) {
 				state.contestProgress.isContestOver = true
@@ -83,7 +60,7 @@ const contestSlice = createSlice({
 			}
 
 			if (matchIndex + 1 !== matchLength) {
-				++state.contestProgress.matchIndex
+				state.contestProgress.matchIndex++
 				return
 			}
 

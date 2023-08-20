@@ -8,7 +8,7 @@ export function ContestDetails() {
 	)
 
 	const matchesInRound = useTypedSelector(
-		(state) => state.contest.currentContest.Rounds?.[roundIndex].Matches.length
+		(state) => state.contest.currentContest.rounds?.[roundIndex].matches.length
 	)
 
 	if (!matchesInRound) {

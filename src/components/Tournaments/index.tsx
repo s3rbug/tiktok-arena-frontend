@@ -35,7 +35,7 @@ export function Tournaments({ tournaments, isEditable }: PropsType) {
 					return (
 						<GridItem
 							as={motion.div}
-							key={tournament.ID}
+							key={tournament.id}
 							w="100%"
 							variants={gridVariants}
 							initial={"initial"}
@@ -44,11 +44,10 @@ export function Tournaments({ tournaments, isEditable }: PropsType) {
 							justifySelf="center"
 						>
 							<TournamentCard
-								id={tournament.ID}
-								title={tournament.Name}
+								id={tournament.id}
+								title={tournament.name}
 								isEditable={isEditable}
-								checked={tournament?.checked}
-								photoURL={tournament.PhotoURL}
+								photoURL={tournament.photoURL}
 								borderWidth={2}
 								borderColor="gray.300"
 							/>

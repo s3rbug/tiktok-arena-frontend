@@ -4,6 +4,7 @@ import {
 	Badge,
 	Box,
 	Button,
+	Checkbox,
 	Flex,
 	FormControl,
 	HStack,
@@ -152,7 +153,7 @@ export function TikToksForm({
 				.then((url) => {
 					changeStoreOnSubmit({
 						...data,
-						PhotoURL: url || null,
+						photoURL: url || null,
 						size: data.tiktoks.length,
 					})
 				})
@@ -162,7 +163,7 @@ export function TikToksForm({
 		} else {
 			changeStoreOnSubmit({
 				...data,
-				PhotoURL: null,
+				photoURL: null,
 				size: data.tiktoks.length,
 			})
 		}
@@ -209,31 +210,42 @@ export function TikToksForm({
 					isInvalid={!!errors?.name?.message}
 					mb={2}
 				>
-					<Controller
-						name={"name"}
-						control={control}
-						rules={{
-							required: "Tournament name is required",
-							minLength: {
-								value: tournamentNameLength.min,
-								message: `Min tournament name length is ${tournamentNameLength.min}`,
-							},
-							maxLength: {
-								value: tournamentNameLength.max,
-								message: `Max tournament name length is ${tournamentNameLength.max}`,
-							},
-						}}
-						render={({ field }) => (
-							<Input
-								tabIndex={1}
-								isInvalid={!!errors?.name}
-								errorBorderColor="crimson"
-								placeholder="Tournament name"
-								{...field}
-								w="fit-content"
-							/>
-						)}
-					/>
+					<HStack gap={4}>
+						<Controller
+							name={"name"}
+							control={control}
+							rules={{
+								required: "Tournament name is required",
+								minLength: {
+									value: tournamentNameLength.min,
+									message: `Min tournament name length is ${tournamentNameLength.min}`,
+								},
+								maxLength: {
+									value: tournamentNameLength.max,
+									message: `Max tournament name length is ${tournamentNameLength.max}`,
+								},
+							}}
+							render={({ field }) => (
+								<Input
+									tabIndex={1}
+									isInvalid={!!errors?.name}
+									errorBorderColor="crimson"
+									placeholder="Tournament name"
+									{...field}
+									w="fit-content"
+								/>
+							)}
+						/>
+						<Controller
+							name="isPrivate"
+							control={control}
+							render={({ field: { onChange, value, ref } }) => (
+								<Checkbox onChange={onChange} isChecked={value} ref={ref}>
+									Private
+								</Checkbox>
+							)}
+						/>
+					</HStack>
 					<FormError error={errors?.name?.message} />
 				</FormControl>
 

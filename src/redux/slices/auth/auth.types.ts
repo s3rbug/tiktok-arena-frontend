@@ -1,6 +1,6 @@
 export type UserType = {
-	ID: string
-	Name: string
-	Token: string | null
-	PhotoURL: string | null
+	id: string
+	name: string
+	token: string | null
+	photoURL: string | null
 }

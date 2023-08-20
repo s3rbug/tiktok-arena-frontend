@@ -13,7 +13,7 @@ export const LeaderboardPage = ({ winnerURL }: PropsType) => {
 	const dispatch = useTypedDispatch()
 
 	const tournament = useTypedSelector(
-		(state) => state.arena.tournamentData?.Tournament
+		(state) => state.arena.tournamentData?.tournament
 	)
 	const tiktoks = useTypedSelector((state) => state.arena.tiktoks)
 
@@ -36,12 +36,12 @@ export const LeaderboardPage = ({ winnerURL }: PropsType) => {
 			<VStack gap={2} flexGrow={1}>
 				<Text fontSize={"2xl"}>Leaderboard</Text>
 				{[...tiktoks]
-					.sort((tiktok1, tiktok2) => tiktok2.Wins - tiktok1.Wins)
+					.sort((tiktok1, tiktok2) => tiktok2.wins - tiktok1.wins)
 					.map((tiktok) => {
 						return (
 							<LeaderboardItem
-								timesPlayed={tournament.TimesPlayed}
-								key={tiktok.URL}
+								timesPlayed={tournament.timesPlayed}
+								key={tiktok.url}
 								winnerURL={winnerURL}
 								tiktok={tiktok}
 							/>

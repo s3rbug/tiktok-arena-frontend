@@ -27,11 +27,11 @@ type PropsType = {
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	const dispatch = useTypedDispatch()
 	const tournament = useTypedSelector(
-		(state) => state.arena.tournamentData?.Tournament
+		(state) => state.arena.tournamentData?.tournament
 	)
 
 	const ownerUser = useTypedSelector(
-		(state) => state.arena.tournamentData?.User
+		(state) => state.arena.tournamentData?.user
 	)
 
 	useEffect(() => {
@@ -41,10 +41,10 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	}, [dispatch])
 
 	useEffect(() => {
-		if (tournamentId && tournamentId !== tournament?.ID) {
+		if (tournamentId && tournamentId !== tournament?.id) {
 			dispatch(getTournament({ tournamentId }))
 		}
-	}, [dispatch, tournamentId, tournament?.ID])
+	}, [dispatch, tournamentId, tournament?.id])
 
 	if (!tournament) {
 		return <Loading />
@@ -64,7 +64,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 					gap={5}
 				>
 					<Image
-						src={tournament?.PhotoURL || LogoSvg}
+						src={tournament?.photoURL || LogoSvg}
 						alt="Tournament"
 						as={motion.img}
 						initial={{ scale: 0.5, opacity: 0 }}
@@ -74,16 +74,16 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						maxH={"400px"}
 					/>
 					<VStack>
-						<Heading size="lg">{tournament?.Name || ""}</Heading>
+						<Heading size="lg">{tournament?.name || ""}</Heading>
 						<Text fontSize="md">
 							{"Made by "}
 							<ChakraLink
 								as={ReactRouterLink}
 								fontWeight="bold"
 								color="teal.500"
-								to={`/user/${ownerUser?.ID}`}
+								to={`/user/${ownerUser?.id}`}
 							>
-								{`${ownerUser?.Name || ""}`}
+								{`${ownerUser?.name || ""}`}
 							</ChakraLink>
 						</Text>
 					</VStack>
