@@ -6,3 +6,7 @@ export type AuthPayloadType = {
 export type AuthTokenType = {
 	token: string
 }
+
+export type MessageType = {
+	message: string
+}

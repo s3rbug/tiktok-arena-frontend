@@ -4,6 +4,7 @@ import { imageApi } from "../../../api/image/image"
 import { PhotoIcon } from "../../../assets/chakraIcons"
 import { changeUserPicture } from "../../../redux/middleware/user"
 import { useTypedDispatch, useTypedSelector } from "../../../redux/store"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	avatarSrc: string
@@ -16,6 +17,7 @@ export const ProfileHeader = ({
 	...flexProps
 }: PropsType) => {
 	const dispatch = useTypedDispatch()
+	const { t } = useTranslation()
 
 	const username = useTypedSelector(
 		(state) => state.arena.userTournamentsData?.user?.name || ""
@@ -74,10 +76,12 @@ export const ProfileHeader = ({
 			</Avatar>
 			<Flex flexDirection={"column"} gap={2}>
 				<Text fontSize={"lg"}>
-					Name: <b>{username}</b>
+					{`${t("profile.name")}: `}
+					<b>{username}</b>
 				</Text>
 				<Text fontSize={"lg"}>
-					Tournament count: <b>{totalTournaments}</b>
+					{`${t("profile.tournament-count")}: `}
+					<b>{totalTournaments}</b>
 				</Text>
 			</Flex>
 		</Flex>

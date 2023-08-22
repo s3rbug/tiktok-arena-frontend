@@ -10,6 +10,7 @@ import {
 import { useState } from "react"
 import { Control, Controller, FieldError, UseFormWatch } from "react-hook-form"
 import { FormInputType } from ".."
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	error?: FieldError
@@ -43,6 +44,8 @@ export const AuthInput = ({
 }: PropsType) => {
 	const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
+	const { t } = useTranslation()
+
 	const togglePasswordHidden = () => {
 		setIsPasswordHidden(!isPasswordHidden)
 	}
@@ -63,21 +66,27 @@ export const AuthInput = ({
 					name={name}
 					control={control}
 					rules={{
-						required: `${title} is required`,
+						required: t("form-message.required", { field: title }),
 						minLength: {
 							value: minLength,
-							message: `Minimum ${title.toLowerCase()} length is ${minLength}`,
+							message: t("form-message.min-length", {
+								field: title,
+								minLength,
+							}),
 						},
 						maxLength: {
 							value: maxLength,
-							message: `Maximum ${title.toLowerCase()} length is ${maxLength}`,
+							message: t("form-message.max-length", {
+								field: title,
+								maxLength,
+							}),
 						},
 						validate:
 							name === "confirmPassword"
 								? {
 										checkIfPasswordsMatch: (value) => {
 											if (watch && value !== watch("password")) {
-												return "Passwords do not match!"
+												return t("form-message.passwords-dont-match")
 											}
 										},
 								  }

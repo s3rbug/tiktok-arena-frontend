@@ -5,9 +5,11 @@ import { FormInputType } from "../../components"
 import { useAuth } from "../../hooks/useAuth"
 import { login } from "../../redux/middleware/auth"
 import { useTypedDispatch } from "../../redux/store"
+import { useTranslation } from "react-i18next"
 
 export function LoginPage() {
 	const dispatch = useTypedDispatch()
+	const { t } = useTranslation()
 	const user = useAuth()
 
 	const onSubmit: SubmitHandler<FormInputType> = (data) => {
@@ -18,5 +20,5 @@ export function LoginPage() {
 		return <Navigate replace to="/tournaments?page=1" />
 	}
 
-	return <Auth onSubmit={onSubmit} title={"Login"} />
+	return <Auth onSubmit={onSubmit} title={t("auth.login")} />
 }

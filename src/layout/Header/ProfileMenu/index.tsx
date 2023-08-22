@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { localToken } from "../../../localStorage/token"
 import { authActions } from "../../../redux/slices/auth/auth"
 import { useTypedDispatch } from "../../../redux/store"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	photoURL: string
@@ -10,6 +11,7 @@ type PropsType = {
 
 export function ProfileMenu({ photoURL }: PropsType) {
 	const dispatch = useTypedDispatch()
+	const { t } = useTranslation()
 
 	function handleLogout() {
 		localToken.clearToken()
@@ -29,7 +31,7 @@ export function ProfileMenu({ photoURL }: PropsType) {
 							replace
 							style={{ display: "inline-block", width: "100%" }}
 						>
-							<MenuItem>My profile</MenuItem>
+							<MenuItem>{t("profile-menu.my-profile")}</MenuItem>
 						</Link>
 
 						<Link
@@ -37,9 +39,11 @@ export function ProfileMenu({ photoURL }: PropsType) {
 							replace
 							style={{ display: "inline-block", width: "100%" }}
 						>
-							<MenuItem>Create tournament</MenuItem>
+							<MenuItem>{t("profile-menu.create-tournament")}</MenuItem>
 						</Link>
-						<MenuItem onClick={handleLogout}>Logout</MenuItem>
+						<MenuItem onClick={handleLogout}>
+							{t("profile-menu.logout")}
+						</MenuItem>
 					</MenuList>
 				</>
 			)}

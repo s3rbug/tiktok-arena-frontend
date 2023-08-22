@@ -4,9 +4,11 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import { TikToksForm } from "../../components/TikToksForm"
 import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
 import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
+import { useTranslation } from "react-i18next"
 
 export function CreateTournamentPage() {
 	const dispatch = useTypedDispatch()
+	const { t } = useTranslation()
 
 	const serverError = useTypedSelector(
 		(state) => state.ui.errors?.createTournament
@@ -43,7 +45,7 @@ export function CreateTournamentPage() {
 
 	return (
 		<TikToksForm
-			submitText="Create tournament"
+			submitText={t("create-tournament.title")}
 			success={success}
 			successRedirect={"/user"}
 			serverError={serverError}

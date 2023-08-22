@@ -18,6 +18,7 @@ import LogoSvg from "../../assets/logo.svg"
 import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { motion } from "framer-motion"
 import { Link as ReactRouterLink } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	setFormat: (format: TournamentFormat | null) => void
@@ -26,10 +27,10 @@ type PropsType = {
 
 export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 	const dispatch = useTypedDispatch()
+	const { t } = useTranslation()
 	const tournament = useTypedSelector(
 		(state) => state.arena.tournamentData?.tournament
 	)
-
 	const ownerUser = useTypedSelector(
 		(state) => state.arena.tournamentData?.user
 	)
@@ -76,7 +77,7 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 					<VStack>
 						<Heading size="lg">{tournament?.name || ""}</Heading>
 						<Text fontSize="md">
-							{"Made by "}
+							{`${t("tournament.made-by")} `}
 							<ChakraLink
 								as={ReactRouterLink}
 								fontWeight="bold"
@@ -99,14 +100,14 @@ export function ChooseFormat({ setFormat, tournamentId }: PropsType) {
 						format={TournamentFormat.SINGLE_ELIMINATION}
 						setFormat={setFormat}
 					>
-						Standart
+						{t("tournament-formats.standart.title")}
 					</FormatButton>
 					<FormatButton
 						animationDirection="right"
 						format={TournamentFormat.KING_OF_THE_HILL}
 						setFormat={setFormat}
 					>
-						King of the hill
+						{t("tournament-formats.king-of-the-hill.title")}
 					</FormatButton>
 				</Flex>
 			</Card>

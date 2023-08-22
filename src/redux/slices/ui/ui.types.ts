@@ -11,4 +11,9 @@ export type SuccessType = {
 	endTournament?: null | boolean
 }
 
+export enum LOCALS {
+	EN = "en",
+	UA = "uk-UA",
+}
+
 export type ValueOf<T> = T[keyof T]

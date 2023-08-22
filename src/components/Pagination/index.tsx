@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { useRoutePagination } from "../../hooks/useRoutePagination"
 import { getPaginationItems } from "../../utils/pagination/pagination"
 import PaginationLink from "./PaginationLink"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	currentPage: number | null
@@ -28,6 +29,7 @@ export const Pagination = ({
 		searchField,
 		setSearchField,
 	})
+	const { t } = useTranslation()
 
 	if (!currentPage || !lastPage) {
 		return null
@@ -52,7 +54,7 @@ export const Pagination = ({
 				onClick={() => changeCurrentPage(currentPage - 1)}
 				isDisabled={currentPage === 1}
 			>
-				Previous
+				{t("pagination.previous")}
 			</PaginationLink>
 			{pageNumbers.map((pageNumber, index) => {
 				if (isNaN(pageNumber)) {
@@ -76,7 +78,7 @@ export const Pagination = ({
 				onClick={() => changeCurrentPage(currentPage + 1)}
 				isDisabled={currentPage === lastPage}
 			>
-				Next
+				{t("pagination.next")}
 			</PaginationLink>
 		</Flex>
 	)

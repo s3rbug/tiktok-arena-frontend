@@ -1,4 +1,5 @@
 import { ContestType } from "../../redux/slices/contest/contest.types"
+import { MessageType } from "../auth/auth.types"
 import { jsonFetch } from "../jsonFetch"
 import { EndContestPayloadType, GetContestPayloadType } from "./contest.types"
 
@@ -15,7 +16,7 @@ export const contestApi = {
 		tournamentId,
 		winnerURL,
 	}: EndContestPayloadType) {
-		return jsonFetch.put(`/tournament/winner/${tournamentId}`, {
+		return jsonFetch.put<MessageType>(`/tournament/winner/${tournamentId}`, {
 			body: JSON.stringify({ TiktokURL: winnerURL }),
 		})
 	},

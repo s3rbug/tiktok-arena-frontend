@@ -1,0 +1,83 @@
+{
+	"auth": {
+		"login": "Login",
+		"register": "Register",
+		"username": "Username",
+		"password": "Password",
+		"confirm-password": "Confirm password"
+	},
+	"dialog-buttons": {
+		"delete": "Delete",
+		"close": "Close",
+		"preview": "Preview",
+		"cancel": "Cancel"
+	},
+	"dialog-actions": {
+		"are-you-sure": "Are you sure?",
+		"delete-checked-tournaments": "Do you really want to delete checked tournaments?"
+	},
+	"form-message": {
+		"required": "{{field}} is required",
+		"min-length": "Minimum {{field, lowercase}} length is {{minLength}}",
+		"max-length": "Maximum {{field, lowercase}} length is {{maxLength}}",
+		"passwords-dont-match": "Passwords do not match!",
+		"duplicate": "Duplicate {{field}}",
+		"cant-delete": "Can not delete {{field}}",
+		"cant-create": "Can not create {{field}}",
+		"incorrect": "Incorrect {{field}}",
+		"failed-to-load": "Failed to load {{field}} for {{url}}"
+	},
+	"search": {
+		"user-tournament": "Search user tournament",
+		"tournament": "Search tournament"
+	},
+	"pagination": {
+		"previous": "Previous",
+		"next": "Next"
+	},
+	"profile-menu": {
+		"my-profile": "My profile",
+		"create-tournament": "Create tournament",
+		"logout": "Logout"
+	},
+	"profile": {
+		"name": "Name",
+		"tournament-count": "Tournament count",
+		"my-tournaments": "My tournaments",
+		"user-tournaments": "{{user}}'s tournaments",
+		"create-new": "Create new",
+		"delete-chosen": "Delete chosen"
+	},
+	"create-tournament": {
+		"title": "Create tournament",
+		"tiktok": "tiktok",
+		"tiktok-name": "TikTok name",
+		"tiktok-count": "TikTok count",
+		"tiktok-url": "TikTok URL",
+		"tournament-name": "Tournament name",
+		"private": "Private",
+		"change-picture": "Change tournament picture",
+		"add-tiktok": "Add tiktok",
+		"load-name": "Load name"
+	},
+	"edit-tournament": {
+		"reset-warning": "Be carefull! Changing TikTok URL resets its tournament's statistics."
+	},
+	"tournament-formats": {
+		"standart": {
+			"title": "Standart",
+			"description": "Each match loser is immediately eliminated from the tournament. Each winner will play another in the next round, until the final match, whose winner becomes the tournament champion"
+		},
+		"king-of-the-hill": {
+			"title": "King of the hill",
+			"description": "Winner plays in the next match against a new opponent. The loser is out of the tournament."
+		}
+	},
+	"tournament": {
+		"made-by": "Made by",
+		"round": "Round",
+		"choose": "Choose",
+		"your-winner": "Your winner",
+		"leaderboard": "Leaderboard"
+	}
+}

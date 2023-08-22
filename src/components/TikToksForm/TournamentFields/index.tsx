@@ -1,4 +1,4 @@
-import { Button, Flex, FormControl, HStack, Input } from "@chakra-ui/react"
+import { Button, Flex, FormControl, Input } from "@chakra-ui/react"
 import {
 	Control,
 	Controller,
@@ -13,6 +13,7 @@ import { TournamentFormType } from "../../../redux/slices/tournament/tournament.
 import { tiktokApi } from "../../../api/tiktok/tiktok"
 import { FormError } from "../FormError"
 import { PreviewTiktok } from "../PreviewTiktok"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	control: Control<TournamentFormType>
@@ -43,6 +44,8 @@ export const TournamentFields = ({
 	setError,
 	clearAllErrors,
 }: PropsType) => {
+	const { t } = useTranslation()
+
 	function customOnChange(
 		event: React.FormEvent<HTMLInputElement>,
 		field:
@@ -59,7 +62,9 @@ export const TournamentFields = ({
 		if (url === "") {
 			setError(`tiktoks.${index}.name`, {
 				type: "required",
-				message: "No URL given",
+				message: t("form-message.required", {
+					field: t("create-tournament.tiktok-url"),
+				}),
 			})
 			return
 		}
@@ -74,7 +79,10 @@ export const TournamentFields = ({
 			})
 			.catch(() => {
 				setError(`tiktoks.${index}.name`, {
-					message: `Failed to load name for ${url}`,
+					message: t("form-message.failed-to-load", {
+						field: t("create-tournament.tiktok-name"),
+						url,
+					}),
 				})
 			})
 	}
@@ -84,26 +92,41 @@ export const TournamentFields = ({
 			{fields.map((field, index) => {
 				return (
 					<Flex key={field.id} gap={2}>
-						<Flex flexDirection="column" w={"100%"}>
-							<HStack align={"flex-start"}>
+						<Flex
+							flexDirection={{ lg: "row", sm: "column" }}
+							flexGrow={1}
+							align="flex-start"
+							gap={2}
+						>
+							<Flex flexGrow={1} gap={4} w={"100%"}>
 								<FormControl
+									w="initial"
+									flexGrow={1}
 									isInvalid={!!errors?.tiktoks?.[index]?.name}
 									display="flex"
-									flexDirection={"column"}
-									alignItems={"flex-start"}
+									flexDirection="column"
+									alignItems="flex-start"
 								>
 									<Controller
 										name={`tiktoks.${index}.name`}
 										control={control}
 										rules={{
-											required: "TikTok name is required",
+											required: t("form-message.required", {
+												field: t("create-tournament.tiktok-name"),
+											}),
 											minLength: {
 												value: tiktokNameLength.min,
-												message: `Minimum tiktok name length is ${tiktokNameLength.min}`,
+												message: t("form-message.min-length", {
+													field: t("create-tournament.tiktok-name"),
+													minLength: tiktokNameLength.min,
+												}),
 											},
 											maxLength: {
 												value: tiktokNameLength.max,
-												message: `Maximum tiktok name length is ${tiktokNameLength.max}`,
+												message: t("form-message.max-length", {
+													field: t("create-tournament.tiktok-name"),
+													minLength: tiktokNameLength.max,
+												}),
 											},
 										}}
 										render={({ field }) => (
@@ -111,7 +134,7 @@ export const TournamentFields = ({
 												tabIndex={index + 2}
 												isInvalid={!!errors?.tiktoks?.[index]?.name}
 												errorBorderColor="crimson"
-												placeholder="TikTok name"
+												placeholder={t("create-tournament.tiktok-name")}
 												{...field}
 												onChange={(e) => customOnChange(e, field)}
 											/>
@@ -123,26 +146,33 @@ export const TournamentFields = ({
 									onClick={handleLoadNameClick(index)}
 									variant={"outline"}
 									colorScheme={"blue"}
-									minW={"120px"}
+									w={{ lg: "initial", sm: "40%" }}
 								>
-									{"Load name"}
+									{t("create-tournament.load-name")}
 								</Button>
+							</Flex>
+							<Flex flexGrow={1} gap={4} w={"100%"}>
 								<FormControl
+									w="initial"
+									flexGrow={1}
 									isInvalid={!!errors?.tiktoks?.[index]?.url}
 									display="flex"
-									flexDirection={"column"}
-									alignItems={"flex-start"}
-									w={"100%"}
+									flexDirection="column"
+									alignItems="flex-start"
 								>
 									<Controller
 										name={`tiktoks.${index}.url`}
 										control={control}
 										rules={{
-											required: "TikTok URL is required",
+											required: t("form-message.required", {
+												field: t("create-tournament.tiktok-url"),
+											}),
 											validate: {
 												correctTikTokUrl: (value) =>
 													TiktokUrl.isCorrectUrl(value) ||
-													"Incorrect TikTok URL",
+													t("form-message.incorrect", {
+														field: t("create-tournament.tiktok-url"),
+													}),
 											},
 										}}
 										render={({ field }) => (
@@ -150,7 +180,7 @@ export const TournamentFields = ({
 												tabIndex={index + 2}
 												isInvalid={!!errors?.tiktoks?.[index]?.url}
 												errorBorderColor="crimson"
-												placeholder="TikTok URL"
+												placeholder={t("create-tournament.tiktok-url")}
 												{...field}
 												onChange={(e) => customOnChange(e, field)}
 											/>
@@ -158,15 +188,27 @@ export const TournamentFields = ({
 									/>
 									<FormError error={errors?.tiktoks?.[index]?.url?.message} />
 								</FormControl>
-								<PreviewTiktok url={tiktoks[index]?.url} />
-							</HStack>
+								<Flex
+									gap={2}
+									w={{ lg: "initial", sm: "40%" }}
+									justifyContent={"stretch"}
+								>
+									<PreviewTiktok
+										flexGrow={1}
+										w="100%"
+										url={tiktoks[index]?.url}
+									/>
+
+									<Button
+										onClick={() => handleDeleteTiktok(index)}
+										flexGrow={1}
+										colorScheme="blue"
+									>
+										{t("dialog-buttons.delete")}
+									</Button>
+								</Flex>
+							</Flex>
 						</Flex>
-						<Button
-							onClick={() => handleDeleteTiktok(index)}
-							colorScheme={"blue"}
-						>
-							Delete
-						</Button>
 					</Flex>
 				)
 			})}

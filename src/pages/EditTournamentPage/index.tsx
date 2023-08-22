@@ -11,11 +11,13 @@ import { tournamentActions } from "../../redux/slices/tournament/tournament"
 import { Loading } from "../../components"
 import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
 import { TournamentFormType } from "../../redux/slices/tournament/tournament.types"
+import { useTranslation } from "react-i18next"
 
 export function EditTournamentPage() {
 	const { tournamentId } = useParams()
 
 	const user = useAuth()
+	const { t } = useTranslation()
 
 	const dispatch = useTypedDispatch()
 
@@ -83,7 +85,7 @@ export function EditTournamentPage() {
 	return (
 		<TikToksForm
 			submitText="Edit tournament"
-			warning="Be carefull! Changing TikTok URL resets its tournament's statistics."
+			warning={t("edit-tournament.reset-warning")}
 			success={success}
 			successRedirect={"/user"}
 			serverError={serverError}

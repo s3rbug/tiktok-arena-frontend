@@ -5,6 +5,7 @@ import { tournamentActions } from "../../../redux/slices/tournament/tournament"
 import { useTypedDispatch, useTypedSelector } from "../../../redux/store"
 import { useEffect } from "react"
 import { useMatch, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 type SearchFormType = {
 	searchField: string
@@ -12,13 +13,10 @@ type SearchFormType = {
 
 export function Search() {
 	const dispatch = useTypedDispatch()
-
+	const { t } = useTranslation()
 	const navigate = useNavigate()
-
 	const isUserRoute = useMatch("/user")
-
 	const search = useTypedSelector((state) => state.arena.tournamentSearch)
-
 	const searchField = isUserRoute ? search.user : search.global
 
 	const { handleSubmit, control, setValue, watch } = useForm<SearchFormType>({
@@ -68,7 +66,7 @@ export function Search() {
 						borderColor={"blue.300"}
 						variant="outline"
 						placeholder={
-							isUserRoute ? `Search user tournament` : "Search tournament"
+							isUserRoute ? t("search.user-tournament") : t("search.tournament")
 						}
 					/>
 				)}

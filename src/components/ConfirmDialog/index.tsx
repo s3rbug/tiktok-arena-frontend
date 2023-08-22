@@ -8,6 +8,7 @@ import {
 	Button,
 } from "@chakra-ui/react"
 import { RefObject } from "react"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	isOpen: boolean
@@ -31,14 +32,12 @@ export const ConfirmDialog = ({
 	onClose,
 	destructiveRef,
 }: PropsType) => {
-	function handleClose() {
-		onClose()
-	}
-
+	const { t } = useTranslation()
 	function handleSubmit() {
 		onSubmit()
 		onClose()
 	}
+
 	return (
 		<AlertDialog
 			leastDestructiveRef={destructiveRef}
@@ -54,7 +53,9 @@ export const ConfirmDialog = ({
 					<AlertDialogBody>{description}</AlertDialogBody>
 
 					<AlertDialogFooter>
-						<Button onClick={handleClose}>Cancel</Button>
+						<Button onClick={() => onClose()}>
+							{t("dialog-buttons.cancel")}
+						</Button>
 						<Button
 							colorScheme={submitButtonColorScheme}
 							onClick={handleSubmit}

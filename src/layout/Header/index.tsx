@@ -1,4 +1,4 @@
-import { Box, Flex, Button, Image } from "@chakra-ui/react"
+import { Box, Flex, Button, Image, HStack } from "@chakra-ui/react"
 import { Search } from "../../components"
 import LogoSvg from "../../assets/logo.svg"
 import { Link } from "react-router-dom"
@@ -7,6 +7,8 @@ import { useAuth } from "../../hooks/useAuth"
 import UserSvg from "../../assets/userIcon.svg"
 import { ContestDetails } from "./ContestDetails.tsx"
 import { ProfileMenu } from "./ProfileMenu"
+import { LanguageMenu } from "../../components/LanguageMenu"
+import { useTranslation } from "react-i18next"
 
 export function Header() {
 	const { isContestInProgress } = useTypedSelector(
@@ -14,6 +16,7 @@ export function Header() {
 	)
 
 	const user = useAuth()
+	const { t } = useTranslation()
 
 	return (
 		<Box
@@ -45,18 +48,19 @@ export function Header() {
 						transitionProperty="filter"
 					/>
 				</Link>
-
 				{isContestInProgress ? <ContestDetails /> : <Search />}
-
-				{user ? (
-					<ProfileMenu photoURL={user?.photoURL || UserSvg} />
-				) : (
-					<Link to="/login" replace>
-						<Button variant={"solid"} colorScheme="blue">
-							Login
-						</Button>
-					</Link>
-				)}
+				<HStack>
+					<LanguageMenu />
+					{user ? (
+						<ProfileMenu photoURL={user?.photoURL || UserSvg} />
+					) : (
+						<Link to="/login" replace>
+							<Button variant={"solid"} colorScheme="blue">
+								{t("auth.login")}
+							</Button>
+						</Link>
+					)}
+				</HStack>
 			</Flex>
 		</Box>
 	)

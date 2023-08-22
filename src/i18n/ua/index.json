@@ -1,0 +1,83 @@
+{
+	"auth": {
+		"login": "Вхід",
+		"register": "Реєстрація",
+		"username": "Ім'я користувача",
+		"password": "Пароль",
+		"confirm-password": "Підтвердження пароля"
+	},
+	"dialog-buttons": {
+		"delete": "Видалити",
+		"close": "Закрити",
+		"preview": "Перегляд",
+		"cancel": "Відмінити"
+	},
+	"dialog-actions": {
+		"are-you-sure": "Ви упевнені?",
+		"delete-checked-tournaments": "Ви дійсно хочете видалити обрані турніри?"
+	},
+	"form-message": {
+		"required": "Поле {{field}} обов'язкове",
+		"min-length": "Мінімальна довжина поля {{field, lowercase}} - {{minLength}}",
+		"max-length": "Максимальна довжина поля {{field, lowercase}} - {{maxLength}}",
+		"passwords-dont-match": "Паролі повинні співпадати!",
+		"duplicate": "Дублікат {{field}}",
+		"cant-delete": "Неможливо видалити {{field}}",
+		"cant-create": "Неможливо створити {{field}}",
+		"incorrect": "Некоректне {{field}}",
+		"failed-to-load": "Не вдалось завантажити {{field}} для {{url}}"
+	},
+	"search": {
+		"user-tournament": "Пошук турніру користувача",
+		"tournament": "Пошук турніру"
+	},
+	"pagination": {
+		"previous": "Попередня",
+		"next": "Наступна"
+	},
+	"profile-menu": {
+		"my-profile": "Профіль",
+		"create-tournament": "Створити турнір",
+		"logout": "Вийти"
+	},
+	"profile": {
+		"name": "Ім'я",
+		"tournament-count": "Кількість турнірів",
+		"my-tournaments": "Мої турніри",
+		"user-tournaments": "Турніри користувача {{user}}",
+		"create-new": "Створити новий",
+		"delete-chosen": "Видалити обрані"
+	},
+	"create-tournament": {
+		"title": "Створити турнір",
+		"tiktok": "тікток",
+		"tiktok-name": "Назва тіктоку",
+		"tiktok-count": "Кількість тіктоків",
+		"tiktok-url": "URL-адреса TikTok",
+		"tournament-name": "Назва турніру",
+		"private": "Приватний",
+		"change-picture": "Змінити картинку турніру",
+		"add-tiktok": "Додати тікток",
+		"load-name": "Завантажити назву"
+	},
+	"edit-tournament": {
+		"reset-warning": "Будьте обережні! Зміна URL-адреси TikTok обнуляє статистику турніру."
+	},
+	"tournament-formats": {
+		"standart": {
+			"title": "Стандартний",
+			"description": "Той, хто програє в кожному матчі, негайно вибуває з турніру. Кожен переможець грає з іншим у наступному раунді, аж до фінального матчу, переможець якого стає чемпіоном турніру"
+		},
+		"king-of-the-hill": {
+			"title": "Король гори",
+			"description": "Переможець грає в наступному матчі з новим суперником. Переможений вибуває з турніру."
+		}
+	},
+	"tournament": {
+		"made-by": "Створив користувач",
+		"round": "Раунд",
+		"choose": "Обрати",
+		"your-winner": "Ваш переможець",
+		"leaderboard": "Таблиця лідерів"
+	}
+}

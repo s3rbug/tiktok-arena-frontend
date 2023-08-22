@@ -1,6 +1,8 @@
+import { UserType } from "../../redux/slices/auth/auth.types"
 import {
 	TikTok,
 	TournamentFormType,
+	TournamentType,
 } from "../../redux/slices/tournament/tournament.types"
 
 export type GetTournamentPayloadType = {
@@ -33,3 +35,11 @@ export type GetUserTournamentsPayload = GetTournamentsPayload & {
 export type GetTiktoksType = {
 	tiktoksStats: TikTok[]
 }
+
+export type GetTournamentsType = {
+	tournamentCount: number
+	tournaments: TournamentType[]
+	user: UserType
+}
+
+export type GetUserTournamentsType = GetTournamentsType

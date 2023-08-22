@@ -16,40 +16,33 @@ import { useTypedDispatch, useTypedSelector } from "../../redux/store"
 import UserSvg from "../../assets/userIcon.svg"
 import { useCustomToast } from "../../hooks/useCustomToast"
 import { ProfileHeader } from "./ProfileHeader/ProfileHeader"
+import { useTranslation } from "react-i18next"
 
 export function ProfilePage() {
 	const dispatch = useTypedDispatch()
-
-	const { isOpen, onOpen, onClose } = useDisclosure()
-
+	const { t } = useTranslation()
 	const currentUser = useAuth()
+	const { showToast } = useCustomToast()
+	const dialogRef = useRef(null)
+	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const profileUser = useTypedSelector(
 		(state) => state.arena.userTournamentsData?.user
 	)
-
 	const { userId } = useParams()
 
 	const isProfileOwner = !userId || userId === currentUser?.id
-
 	const user = isProfileOwner ? currentUser : profileUser
-
-	const { showToast } = useCustomToast()
-
-	const dialogRef = useRef(null)
 
 	const tournaments = useTypedSelector(
 		(state) => state.arena.userTournamentsData?.tournaments
 	)
-
 	const searchField = useTypedSelector(
 		(state) => state.arena.tournamentSearch.user
 	)
-
 	const tournamentIdsToDelete = useTypedSelector(
 		(state) => state.arena.checkedTournamentsToDelete
 	)
-
 	const { currentPage, lastPage, maxLength, pageSize } = useTypedSelector(
 		(state) => state.pagination.userTournaments
 	)
@@ -121,7 +114,9 @@ export function ProfilePage() {
 				/>
 				<Flex mt={16} align="center" justifyContent={"space-between"}>
 					<Heading size="md">
-						{isProfileOwner ? "My tournaments" : `${user.name}'s tournaments`}
+						{isProfileOwner
+							? t("profile.my-tournaments")
+							: t("profile.user-tournaments", { user: user.name })}
 					</Heading>
 					{isProfileOwner && (
 						<Flex gap={4}>
@@ -130,10 +125,10 @@ export function ProfilePage() {
 								colorScheme={"red"}
 								onClick={() => onOpen()}
 							>
-								Delete chosen
+								{t("profile.delete-chosen")}
 							</Button>
 							<Button colorScheme={"blue"}>
-								<Link to="/user/create">Create new</Link>
+								<Link to="/user/create">{t("profile.create-new")}</Link>
 							</Button>
 						</Flex>
 					)}
@@ -154,9 +149,9 @@ export function ProfilePage() {
 				<ConfirmDialog
 					isOpen={isOpen}
 					onClose={onClose}
-					title="Are you sure?"
-					description="Do you really want to delete checked tournaments?"
-					submitButtonText="Delete"
+					title={t("dialog-actions.are-you-sure")}
+					description={t("dialog-actions.delete-checked-tournaments")}
+					submitButtonText={t("dialog-buttons.delete")}
 					submitButtonColorScheme="red"
 					destructiveRef={dialogRef}
 					onSubmit={handleDelete}

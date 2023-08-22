@@ -37,7 +37,7 @@ export enum TournamentFormat {
 export type TournamentFormType = {
 	name: string
 	photoURL: string | null
-	isPrivate: boolean
+	isPrivate?: boolean
 	tiktoks: {
 		url: string
 		name: string

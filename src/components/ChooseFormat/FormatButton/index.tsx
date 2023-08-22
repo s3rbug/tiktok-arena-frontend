@@ -3,6 +3,7 @@ import { Box, Button, Tooltip } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import { ReactNode } from "react"
 import { TournamentFormat } from "../../../redux/slices/tournament/tournament.types"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	format: TournamentFormat
@@ -11,19 +12,23 @@ type PropsType = {
 	children: ReactNode
 }
 
-const FORMAT_EXPLANATION = {
-	[TournamentFormat.SINGLE_ELIMINATION]:
-		"Each match-up is immediately eliminated from the tournament. Each winner will play another in the next round, until the final match-up, whose winner becomes the tournament champion",
-	[TournamentFormat.KING_OF_THE_HILL]:
-		"Winner plays in the next match against a new opponent. The loser is out of the tournament.",
-}
-
 export function FormatButton({
 	setFormat,
 	format,
 	animationDirection,
 	children,
 }: PropsType) {
+	const { t } = useTranslation()
+
+	const FORMAT_EXPLANATION = {
+		[TournamentFormat.SINGLE_ELIMINATION]: t(
+			"tournament-formats.standart.description"
+		),
+		[TournamentFormat.KING_OF_THE_HILL]: t(
+			"tournament-formats.king-of-the-hill.description"
+		),
+	}
+
 	return (
 		<Button
 			as={motion.button}

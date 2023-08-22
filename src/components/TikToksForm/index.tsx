@@ -25,6 +25,7 @@ import { useCustomToast } from "../../hooks/useCustomToast"
 import { FormError } from "./FormError"
 import { imageApi } from "../../api/image/image"
 import { CreateTournamentPayloadType } from "../../api/tournament/tournament.types"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	defaultValues: TournamentFormType
@@ -100,7 +101,7 @@ export function TikToksForm({
 	const [errorUnique, setErrorUnique] = useState<null | string>(null)
 
 	const dispatch = useTypedDispatch()
-
+	const { t } = useTranslation()
 	const { showToast } = useCustomToast()
 
 	const navigate = useNavigate()
@@ -137,11 +138,19 @@ export function TikToksForm({
 		const uniqueNames = new Set(tiktoks.map((field) => field.name))
 
 		if (uniqueURLs.size !== fields.length) {
-			setErrorUnique("Duplicate tiktok URL")
+			setErrorUnique(
+				t("form-message.duplicate", {
+					field: t("create-tournament.tiktok-url"),
+				})
+			)
 			return
 		}
 		if (uniqueNames.size !== fields.length) {
-			setErrorUnique("Duplicate tiktok name")
+			setErrorUnique(
+				t("form-message.duplicate", {
+					field: t("create-tournament.tiktok-name"),
+				})
+			)
 			return
 		}
 
@@ -174,8 +183,11 @@ export function TikToksForm({
 			append({ url: "", name: "" })
 		} else {
 			showToast(
-				"Can not add tiktok",
-				`Maximum tiktok count is ${tiktoksCount.max}`
+				t("form-message.cant-create", { field: t("create-tournament.tiktok") }),
+				t("form-message.max-length", {
+					field: t("create-tournament.tiktok-count"),
+					maxLength: tiktoksCount.max,
+				})
 			)
 		}
 	}
@@ -185,8 +197,11 @@ export function TikToksForm({
 			remove(index)
 		} else {
 			showToast(
-				"Can not delete tiktok",
-				`Minimum tiktok count is ${tiktoksCount.min}`
+				t("form-message.cant-delete", { field: t("create-tournament.tiktok") }),
+				t("form-message.min-length", {
+					field: t("create-tournament.tiktok-count"),
+					minLength: tiktoksCount.min,
+				})
 			)
 		}
 	}
@@ -202,7 +217,7 @@ export function TikToksForm({
 	}
 
 	return (
-		<Box p={8} as="form" onSubmit={handleSubmit(onSubmit)}>
+		<Box p={{ lg: 6, sm: 4 }} as="form" onSubmit={handleSubmit(onSubmit)}>
 			<VStack gap={4} alignItems="stretch">
 				<FormControl
 					display={"flex"}
@@ -210,27 +225,39 @@ export function TikToksForm({
 					isInvalid={!!errors?.name?.message}
 					mb={2}
 				>
-					<HStack gap={4}>
+					<HStack
+						gap={4}
+						justifyContent={{ lg: "flex-start", sm: "space-between" }}
+					>
 						<Controller
 							name={"name"}
 							control={control}
 							rules={{
-								required: "Tournament name is required",
+								required: t("form-message.required", {
+									field: t("create-tournament.tournament-name"),
+								}),
 								minLength: {
 									value: tournamentNameLength.min,
-									message: `Min tournament name length is ${tournamentNameLength.min}`,
+									message: t("form-message.min-length", {
+										field: t("create-tournament.tournament-name"),
+										minLength: tournamentNameLength.min,
+									}),
 								},
 								maxLength: {
 									value: tournamentNameLength.max,
-									message: `Max tournament name length is ${tournamentNameLength.max}`,
+									message: t("form-message.max-length", {
+										field: t("create-tournament.tournament-name"),
+										minLength: tournamentNameLength.max,
+									}),
 								},
 							}}
 							render={({ field }) => (
 								<Input
 									tabIndex={1}
+									flexGrow={{ lg: 0, sm: 1 }}
 									isInvalid={!!errors?.name}
 									errorBorderColor="crimson"
-									placeholder="Tournament name"
+									placeholder={t("create-tournament.tournament-name")}
 									{...field}
 									w="fit-content"
 								/>
@@ -240,8 +267,14 @@ export function TikToksForm({
 							name="isPrivate"
 							control={control}
 							render={({ field: { onChange, value, ref } }) => (
-								<Checkbox onChange={onChange} isChecked={value} ref={ref}>
-									Private
+								<Checkbox
+									onChange={onChange}
+									isChecked={value}
+									ref={ref}
+									color={"initial"}
+									isInvalid={false}
+								>
+									{t("create-tournament.private")}
 								</Checkbox>
 							)}
 						/>
@@ -264,57 +297,60 @@ export function TikToksForm({
 					<FormError error={serverError} />
 				</FormControl>
 			</VStack>
-			<HStack>
-				<HStack as="label">
-					<VStack>
-						<Button as="div" colorScheme={"blue"} variant="outline">
-							Change tournament picture
-						</Button>
-
-						{image && (
-							<Badge
-								maxW="200px"
-								overflow={"hidden"}
-								textOverflow="ellipsis"
-								fontSize={"sm"}
-								colorScheme="cyan"
-							>
-								{image.name}
-							</Badge>
-						)}
-					</VStack>
-					<input
-						style={{ display: "none" }}
-						onChange={uploadImage}
-						type="file"
-						name="image"
-						accept="image/png, image/jpeg"
-					/>
-				</HStack>
-				<Flex w="100%" justifyContent={"flex-start"}>
-					{imageURL && (
-						<Image src={imageURL} ml={16} h="350px" w="fit-content" />
-					)}
-				</Flex>
-			</HStack>
-			{warning && (
-				<Alert status="warning" mt={6}>
-					<AlertIcon />
-					{warning}
-				</Alert>
-			)}
-			<Flex justifyContent={"space-between"} align="flex-start" mt={6}>
-				<Button type="submit" colorScheme={"blue"}>
-					{submitText}
-				</Button>
-				<Button
-					onClick={handleCreateTiktok}
-					variant={"link"}
-					colorScheme={"blue"}
+			<VStack alignItems={"flex-start"} gap={4}>
+				<Flex
+					flexDirection={{ lg: "row", sm: "column-reverse" }}
+					gap={{ lg: 16, sm: 4 }}
+					w="100%"
 				>
-					Add tiktok
-				</Button>
-			</Flex>
+					<HStack as="label">
+						<VStack justifyItems="center" w="100%">
+							<Button as="div" colorScheme="blue" variant="outline">
+								{t("create-tournament.change-picture")}
+							</Button>
+							{image && (
+								<Badge
+									maxW="200px"
+									overflow="hidden"
+									textOverflow="ellipsis"
+									fontSize="sm"
+									colorScheme="cyan"
+								>
+									{image.name}
+								</Badge>
+							)}
+						</VStack>
+						<input
+							style={{ display: "none" }}
+							onChange={uploadImage}
+							type="file"
+							name="image"
+							accept="image/png, image/jpeg"
+						/>
+					</HStack>
+					<Flex w="100%" justifyContent={{ lg: "flex-start", sm: "center" }}>
+						{imageURL && <Image src={imageURL} maxH="350px" maxW="100%" />}
+					</Flex>
+				</Flex>
+				{warning && (
+					<Alert status="warning">
+						<AlertIcon />
+						{warning}
+					</Alert>
+				)}
+				<Flex justifyContent="space-between" w="100%">
+					<Button type="submit" colorScheme="blue">
+						{submitText}
+					</Button>
+					<Button
+						onClick={handleCreateTiktok}
+						variant="link"
+						colorScheme="blue"
+					>
+						{t("create-tournament.add-tiktok")}
+					</Button>
+				</Flex>
+			</VStack>
 		</Box>
 	)
 }

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { ErrorType, ValueOf, SuccessType } from "./ui.types"
+import { ErrorType, ValueOf, SuccessType, LOCALS } from "./ui.types"
 
 const initialState = {
+	language: LOCALS.EN,
 	errors: {
 		login: null,
 		register: null,
@@ -47,6 +48,10 @@ const ui = createSlice({
 				}
 				return value
 			})
+		},
+		setLanguage: (state, action: PayloadAction<{ language: LOCALS }>) => {
+			const { language } = action.payload
+			state.language = language
 		},
 	},
 })

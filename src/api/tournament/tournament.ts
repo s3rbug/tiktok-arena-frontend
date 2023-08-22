@@ -1,9 +1,6 @@
-import {
-	TournamentType,
-	TournamentWithUserType,
-} from "../../redux/slices/tournament/tournament.types"
+import { TournamentWithUserType } from "../../redux/slices/tournament/tournament.types"
 import { jsonFetch } from "../jsonFetch"
-import { AuthTokenType } from "../auth/auth.types"
+import { AuthTokenType, MessageType } from "../auth/auth.types"
 import {
 	CreateTournamentPayloadType,
 	DeleteTournamentsPayload,
@@ -11,9 +8,10 @@ import {
 	GetTiktoksType,
 	GetTournamentPayloadType,
 	GetTournamentsPayload,
+	GetTournamentsType,
 	GetUserTournamentsPayload,
+	GetUserTournamentsType,
 } from "./tournament.types"
-import { UserType } from "../../redux/slices/auth/auth.types"
 
 export const tournamentApi = {
 	getTournaments: async function ({
@@ -21,11 +19,7 @@ export const tournamentApi = {
 		pageSize,
 		search,
 	}: GetTournamentsPayload) {
-		return jsonFetch.get<{
-			tournamentCount: number
-			tournaments: TournamentType[]
-			user: UserType
-		}>(
+		return jsonFetch.get<GetTournamentsType>(
 			`/tournament/tournaments?page=${page}&count=${pageSize}&search=${
 				search || ""
 			}`
@@ -42,7 +36,7 @@ export const tournamentApi = {
 		data,
 		token,
 	}: { data: CreateTournamentPayloadType } & AuthTokenType) {
-		return jsonFetch.post("/tournament/create", {
+		return jsonFetch.post<MessageType>("/tournament/create", {
 			body: JSON.stringify(data),
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -57,11 +51,7 @@ export const tournamentApi = {
 		search,
 		userId,
 	}: GetUserTournamentsPayload & AuthTokenType) {
-		return jsonFetch.get<{
-			tournamentCount: number
-			tournaments: TournamentType[]
-			user: UserType
-		}>(
+		return jsonFetch.get<GetUserTournamentsType>(
 			`/user/profile/${userId}?page=${page}&count=${pageSize}&search=${
 				search || ""
 			}`,
@@ -77,7 +67,7 @@ export const tournamentApi = {
 		data,
 		token,
 	}: { data: DeleteTournamentsPayload } & AuthTokenType) {
-		return jsonFetch.delete("/tournament/delete", {
+		return jsonFetch.delete<MessageType>("/tournament/delete", {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -99,7 +89,7 @@ export const tournamentApi = {
 		tournamentId: string
 		data: CreateTournamentPayloadType
 	} & AuthTokenType) {
-		return jsonFetch.put(`/tournament/edit/${tournamentId}`, {
+		return jsonFetch.put<MessageType>(`/tournament/edit/${tournamentId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

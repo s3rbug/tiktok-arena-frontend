@@ -14,6 +14,7 @@ import { AuthInput } from "./AuthInput"
 import { AuthRedirectButton } from "./AuthRedirectButton"
 import { useCardShadow } from "../../hooks/useCardShadow"
 import { motion } from "framer-motion"
+import { useTranslation } from "react-i18next"
 
 export type FormInputType = {
 	name: string
@@ -68,6 +69,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 
 	const dispatch = useTypedDispatch()
 	const navigate = useNavigate()
+	const { t } = useTranslation()
 
 	const clearAuthError = () => {
 		if (isRegister && authErrorMessage) {
@@ -97,7 +99,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1, transition: { duration: 0.5 } }}
 			width="full"
-			align={"center"}
+			align="center"
 			justifyContent="center"
 			mt={8}
 		>
@@ -107,7 +109,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 				</Box>
 				<Box as="form" p={8} onSubmit={handleSubmit(onSubmit)}>
 					<AuthInput
-						title="Username"
+						title={t("auth.username")}
 						name="name"
 						changeFocus={changeFocus}
 						clearAuthError={clearAuthError}
@@ -118,7 +120,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 						tabIndex={{ input: tabIndex.USER }}
 					/>
 					<AuthInput
-						title="Password"
+						title={t("auth.password")}
 						name="password"
 						changeFocus={changeFocus}
 						clearAuthError={clearAuthError}
@@ -134,7 +136,7 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 					/>
 					{isRegister && (
 						<AuthInput
-							title="Confirm password"
+							title={t("auth.confirm-password")}
 							name="confirmPassword"
 							changeFocus={changeFocus}
 							clearAuthError={clearAuthError}
@@ -166,13 +168,13 @@ export function Auth({ onSubmit, title, isRegister }: PropsType) {
 						<AuthRedirectButton
 							tabIndex={tabIndex.REDIRECT}
 							handleClick={handleLoginButton}
-							title="Login"
+							title={t("auth.login")}
 						/>
 					) : (
 						<AuthRedirectButton
 							tabIndex={tabIndex.REDIRECT}
 							handleClick={handleRegisterButton}
-							title="Register"
+							title={t("auth.register")}
 						/>
 					)}
 				</Box>

@@ -2,6 +2,7 @@ import { Button, VStack } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import { Choice } from ".."
 import { TikTokVideo } from "../../TikTokVideo"
+import { useTranslation } from "react-i18next"
 
 type PropsType = {
 	url: string
@@ -16,6 +17,7 @@ export function ArenaItem({
 	onClick,
 	animateDirection,
 }: PropsType) {
+	const { t } = useTranslation()
 	return (
 		<VStack
 			alignItems="stretch"
@@ -41,7 +43,7 @@ export function ArenaItem({
 				position={"sticky"}
 				bottom={4}
 			>
-				Choose
+				{t("tournament.choose")}
 			</Button>
 		</VStack>
 	)
